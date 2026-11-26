@@ -2968,6 +2968,17 @@
       .map.full .zm button {
         animation-name: growFull;
       }
+      /* ===== PATCH-20: matikan transisi CSS saat animasi intro (agar tidak "telat" dari rAF) ===== */
+      body.intro .bfill,
+      body.intro .bfade,
+      body.intro .bmk,
+      body.intro .scr,
+      body.intro .stream path,
+      body.intro .ut i,
+      body.intro .ut u,
+      body.intro .crew .t i {
+        transition: none !important;
+      }
     </style>
   </head>
   <body>
@@ -5055,9 +5066,48 @@
       })();
       new ResizeObserver(() => fit()).observe($("map"));
 
+      /* ===== PATCH-20: animasi intro — dari 06:00 (0) menuju jam saat halaman dimuat ===== */
+      const INTRO = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+      function endIntro() {
+        if (!S.intro) return;
+        S.intro = false;
+        document.body.classList.remove("intro");
+        RAWH = jakartaHour();
+        NOWH = Math.min(18, Math.max(6, RAWH));
+        if (S.live && S.day === TODAY) S.t = NOWH;
+        renderAll();
+      }
+      function playIntro() {
+        if (!S.intro) return;
+        const t0 = performance.now(),
+          D = 2800; // durasi animasi (ms)
+        const step = (now) => {
+          if (!S.intro) return;
+          RAWH = jakartaHour();
+          NOWH = Math.min(18, Math.max(6, RAWH)); // target = jam nyata saat ini
+          const p = Math.min(1, Math.max(0, (now - t0) / D)),
+            e = 1 - Math.pow(1 - p, 3); // ease-out
+          S.t = 6 + (NOWH - 6) * e;
+          renderTL();
+          renderLeft();
+          renderMap();
+          renderRight();
+          if (p < 1) requestAnimationFrame(step);
+          else endIntro();
+        };
+        requestAnimationFrame(step);
+      }
+      // sentuhan pengguna membatalkan intro
+      document.addEventListener(
+        "pointerdown",
+        () => {
+          if (S.intro) endIntro();
+        },
+        true,
+      );
       /* ===== LIVE SIMULATOR ===== */
       setInterval(() => {
-        if (S.pd || document.hidden) return;
+        if (S.pd || document.hidden || S.intro) return;
         S.tick++;
         RAWH = jakartaHour();
         NOWH = Math.min(18, Math.max(6, RAWH));
@@ -5106,7 +5156,7 @@
         renderRight();
       }, 2000);
       setInterval(() => {
-        if (S.pd || !isLive() || document.hidden) return;
+        if (S.pd || !isLive() || document.hidden || S.intro) return;
         const fl = fleet();
         document.querySelectorAll("[data-up]").forEach((el) => {
           const u = fl.find((x) => x.id === el.dataset.up);
@@ -5114,13 +5164,17 @@
         });
       }, 1000);
 
+      if (INTRO) {
+        S.intro = true;
+        S.t = 6; // mulai dari kondisi 0
+        document.body.classList.add("intro");
+      }
       hgiProbe();
       renderAll();
       fit();
       window.__ready = 1;
       setTimeout(() => $("side").classList.remove("nt"), 150);
-      if (document.fonts && document.fonts.ready)
-        document.fonts.ready.then(hgiProbe);
+      if (INTRO) setTimeout(playIntro, 700); // tunggu animasi masuk kartu/peta dulu
     </script>
   </body>
 </html>
