@@ -37,7 +37,9 @@
         --ease: cubic-bezier(0.65, 0, 0.25, 1);
         --spring: cubic-bezier(0.34, 1.45, 0.5, 1);
       }
-      * {
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
@@ -66,7 +68,6 @@
           background 0.2s,
           color 0.2s,
           transform 0.2s,
-          box-shadow 0.2s,
           opacity 0.2s;
       }
       button:active {
@@ -90,6 +91,7 @@
         stroke-linecap: round;
         stroke-linejoin: round;
         flex: none;
+        overflow: visible;
       }
       i.i {
         display: inline-block;
@@ -101,6 +103,7 @@
         flex: none;
         font-style: normal;
       }
+
       @keyframes up {
         from {
           opacity: 0;
@@ -139,25 +142,6 @@
           transform: none;
         }
       }
-      @keyframes bl {
-        50% {
-          opacity: 0.25;
-        }
-      }
-      @keyframes sq {
-        0% {
-          transform: scale(1);
-        }
-        30% {
-          transform: scale(1.3, 0.84);
-        }
-        65% {
-          transform: scale(0.93, 1.09);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
       @keyframes sc {
         from {
           top: -30%;
@@ -166,13 +150,239 @@
           top: 100%;
         }
       }
-      body.dragging * {
-        transition: none !important;
+      @keyframes grow {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
       }
+      @keyframes hintin {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(14px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%);
+        }
+      }
+      @keyframes sideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-28px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes itemIn {
+        from {
+          opacity: 0;
+          transform: translateX(-14px) scale(0.85);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20%,
+        60% {
+          transform: translateX(-6px);
+        }
+        40%,
+        80% {
+          transform: translateX(6px);
+        }
+      }
+
+      /* ---------- LOGIN SCREEN ---------- */
+      .login-view {
+        position: fixed;
+        inset: 0;
+        z-index: 500;
+        background-color: var(--bg);
+        background-image: radial-gradient(#d3d7d3 1px, transparent 1.2px);
+        background-size: 16px 16px;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        transition:
+          opacity 0.55s var(--ease),
+          transform 0.55s var(--ease);
+      }
+      .login-view.hide {
+        opacity: 0;
+        transform: scale(1.03);
+        pointer-events: none;
+      }
+      .login-card {
+        width: min(420px, 100%);
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 32px;
+        padding: 38px 34px 32px;
+        box-shadow: 0 20px 60px rgba(29, 32, 30, 0.06);
+        animation: pop 0.6s var(--spring) both;
+      }
+      .login-card.err-shake {
+        animation: shake 0.38s var(--ease);
+      }
+      .login-logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+      .login-logo svg {
+        width: 100%;
+        max-width: 270px;
+        height: auto;
+        display: block;
+      }
+      .login-head {
+        text-align: center;
+        margin-bottom: 26px;
+      }
+      .login-head h2 {
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: -0.3px;
+        color: var(--ink);
+      }
+      .login-head p {
+        font-size: 13.5px;
+        color: var(--mut);
+        margin-top: 6px;
+      }
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .fgroup {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .fgroup label {
+        font-size: 12.5px;
+        font-weight: 500;
+        color: #555a57;
+        padding-left: 2px;
+      }
+      .finput-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .finput {
+        width: 100%;
+        height: 48px;
+        border: 1px solid var(--line);
+        background: #f7f8f6;
+        border-radius: 15px;
+        padding: 0 16px;
+        font-size: 14.5px;
+        color: var(--ink);
+        outline: 0;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .finput:focus {
+        border-color: var(--ink);
+        background: #fff;
+      }
+      .finput-wrap .finput {
+        padding-right: 46px;
+      }
+      .eye-btn {
+        position: absolute;
+        right: 8px;
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        color: var(--mut);
+      }
+      .eye-btn:hover {
+        background: #eceeeb;
+        color: var(--ink);
+      }
+      .login-err {
+        font-size: 13px;
+        color: var(--red2);
+        background: #fdecea;
+        border-radius: 12px;
+        padding: 10px 14px;
+        display: none;
+        align-items: center;
+        gap: 8px;
+        animation: up 0.25s var(--ease);
+      }
+      .login-err.show {
+        display: flex;
+      }
+      .login-submit {
+        margin-top: 6px;
+        height: 50px;
+        width: 100%;
+        border-radius: 16px;
+        background: var(--ink);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .login-submit:hover {
+        background: #2f3431;
+      }
+      .login-foot {
+        margin-top: 22px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+        text-align: center;
+        font-size: 12px;
+        color: var(--mut);
+      }
+
+      /* ---------- SHELL VISIBILITY ---------- */
       .shell {
         display: flex;
         min-height: 100dvh;
       }
+      body.locked .shell {
+        display: none;
+      }
+
+      body.dragging * {
+        transition: none !important;
+      }
+      body.intro .bfill,
+      body.intro .bfade,
+      body.intro .bmk,
+      body.intro .scr,
+      body.intro .stream path,
+      body.intro .ut i,
+      body.intro .ut u,
+      body.intro .crew .t i {
+        transition: none !important;
+      }
+
       /* ---------- sidebar ---------- */
       .side {
         position: sticky;
@@ -190,32 +400,11 @@
         z-index: 40;
         transition: width 0.5s var(--ease);
         box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+        animation: sideIn 0.7s var(--ease) backwards;
       }
-      .side.open {
-        width: 264px;
-      }
-      .tg {
-        position: absolute;
-        right: -13px;
-        top: 34px;
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        background: #fff;
-        border: 1px solid var(--line);
-        display: grid;
-        place-items: center;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        z-index: 5;
-      }
-      .tg .i {
-        width: 14px;
-        height: 14px;
-        font-size: 14px;
-      }
-      .tg:hover {
-        background: var(--ink);
-        color: #fff;
+      .side.nt,
+      .side.nt * {
+        transition: none !important;
       }
       .logo {
         display: flex;
@@ -224,17 +413,12 @@
         height: 44px;
         padding: 0 6px 0 7px;
         margin-bottom: 12px;
+        animation: itemIn 0.55s var(--spring) backwards 0.25s;
       }
       .logo svg {
         height: 30px;
         width: auto;
         flex: none;
-      }
-      .logo .lt {
-        font-weight: 600;
-        font-size: 17px;
-        letter-spacing: -0.2px;
-        white-space: nowrap;
       }
       .sch {
         display: flex;
@@ -247,41 +431,29 @@
         color: var(--mut);
         width: 100%;
         overflow: hidden;
+        animation: itemIn 0.55s var(--spring) backwards 0.31s;
       }
       .sch:hover {
         background: #f7f8f6;
       }
-      .sch kbd {
-        margin-left: auto;
-        font: 500 11px Inter;
-        background: #f0f2ef;
-        border-radius: 6px;
-        padding: 3px 7px;
-        white-space: nowrap;
-      }
       .sec {
-        font-size: 11px;
+        font-size: 9.5px;
         letter-spacing: 0.8px;
         color: var(--mut);
         font-weight: 500;
-        margin: 18px 0 8px 8px;
-        white-space: nowrap;
-        transition: 0.3s;
-      }
-      .rail .sec {
-        margin-left: 0;
+        margin: 18px 0 8px;
         text-align: center;
-        font-size: 9.5px;
+        white-space: nowrap;
+        animation: fade 0.5s var(--ease) backwards 0.38s;
       }
-      .nv {
+      .sec ~ .sec {
+        animation-delay: 0.7s;
+      }
+      .nv,
+      .areas {
         display: flex;
         flex-direction: column;
         gap: 4px;
-      }
-      .open .nv {
-        overflow-y: auto;
-        scrollbar-width: none;
-        min-height: 0;
       }
       .it {
         display: flex;
@@ -294,6 +466,7 @@
         color: #555a57;
         white-space: nowrap;
         position: relative;
+        animation: itemIn 0.55s var(--spring) backwards;
       }
       .it:hover {
         background: #f4f5f3;
@@ -314,55 +487,64 @@
         border-radius: 3px;
         background: var(--ink);
       }
-      .lb {
-        transition:
-          opacity 0.3s,
-          width 0.3s;
-        white-space: nowrap;
+      .grp {
+        position: relative;
+        animation: itemIn 0.55s var(--spring) backwards 0.64s;
       }
-      .rail .lb {
+      .nv > :nth-child(1) {
+        animation-delay: 0.4s;
+      }
+      .nv > :nth-child(2) {
+        animation-delay: 0.46s;
+      }
+      .nv > :nth-child(3) {
+        animation-delay: 0.52s;
+      }
+      .nv > :nth-child(4) {
+        animation-delay: 0.58s;
+      }
+      .areas .it:nth-child(1) {
+        animation-delay: 0.74s;
+      }
+      .areas .it:nth-child(2) {
+        animation-delay: 0.8s;
+      }
+      .areas .it:nth-child(3) {
+        animation-delay: 0.86s;
+      }
+      .lb {
         opacity: 0;
         width: 0;
         overflow: hidden;
         pointer-events: none;
-      }
-      .open .lb {
-        opacity: 1;
-      }
-      .it .lb:nth-child(2) {
-        flex: 1;
-        text-align: left;
-      }
-      .it .cv {
-        margin-left: auto;
-        display: grid;
-        transition: transform 0.3s;
-      }
-      .grp.op .cv {
-        transform: rotate(180deg);
-      }
-      .cv .i {
-        width: 15px;
-        height: 15px;
-        font-size: 15px;
-      }
-      .grp {
-        position: relative;
+        white-space: nowrap;
       }
       .kids {
-        display: grid;
-        grid-template-rows: 0fr;
-        transition: grid-template-rows 0.4s var(--ease);
-      }
-      .grp.op .kids {
-        grid-template-rows: 1fr;
+        display: block;
+        position: absolute;
+        left: 100%;
+        top: -6px;
+        padding-left: 14px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(-8px);
+        transition: 0.25s var(--ease);
+        z-index: 60;
       }
       .ki {
-        min-height: 0;
-        overflow: hidden;
-        margin-left: 25px;
-        padding-left: 12px;
-        border-left: 1.5px solid var(--line);
+        min-width: 230px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 14px 44px rgba(0, 0, 0, 0.16);
+        padding: 6px;
+        max-height: 72dvh;
+        overflow: auto;
+      }
+      .grp:hover .kids,
+      .grp:focus-within .kids {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
       }
       .kid {
         display: flex;
@@ -385,134 +567,26 @@
         color: var(--ink);
         font-weight: 500;
       }
-      .rail .kids {
-        display: block;
-        position: absolute;
-        left: 100%;
-        top: -6px;
-        padding-left: 14px;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateX(-8px);
-        transition: 0.25s var(--ease);
-        z-index: 60;
-      }
-      .rail .ki {
-        margin: 0;
-        border: 0;
-        min-width: 230px;
-        background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 14px 44px rgba(0, 0, 0, 0.16);
-        padding: 6px;
-        max-height: 72dvh;
-        overflow: auto;
-      }
-      .rail .grp:hover .kids,
-      .rail .grp:focus-within .kids {
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-      }
-      .areas {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-      .ar {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        height: 44px;
-        padding: 0 11px;
-        border-radius: 14px;
-        width: 100%;
-        white-space: nowrap;
-      }
-      .ar:hover {
-        background: #f4f5f3;
-      }
-      .ar.cur {
-        background: #f1f3f0;
-        font-weight: 500;
-      }
-      .av {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: grid;
-        place-items: center;
-        font: 600 10px Inter;
-        font-style: normal;
-        flex: none;
-        transition: transform 0.3s var(--spring);
-      }
-      .ar:hover .av,
-      .ar.cur .av {
-        transform: scale(1.1);
-      }
-      .c0 {
-        background: #ffe9a8;
-        color: #6b4a00;
-      }
-      .c1 {
-        background: #cde7d3;
-        color: #245a30;
-      }
-      .c2 {
-        background: #cfe0fb;
-        color: #1d4a97;
-      }
-      .usr {
+      .usr.nick {
         margin-top: auto;
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 8px;
-        border-radius: 18px;
-        width: 100%;
-        text-align: left;
-        background: #f7f8f6;
-        overflow: hidden;
-      }
-      .usr:hover {
-        background: #eef0ed;
-      }
-      .usr svg {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        flex: none;
-      }
-      .usr b {
-        display: block;
-        font-weight: 500;
-        font-size: 14px;
-      }
-      .usr small {
-        color: var(--mut);
-        font-size: 12px;
-      }
-      .rail .usr {
-        background: none;
-        padding: 8px 6px;
-      }
-      .usr.nick {
         justify-content: center;
         height: 44px;
-        padding: 0;
+        width: 100%;
         background: #f1f3f0;
         border-radius: 22px;
+        animation: itemIn 0.55s var(--spring) backwards 0.94s;
       }
-      .rail .usr.nick {
-        background: #f1f3f0;
-        padding: 0;
+      .usr.nick:hover {
+        background: #eef0ed;
       }
       .nk {
         font-weight: 600;
         font-size: 13px;
         letter-spacing: 0.2px;
       }
+
       /* ---------- main ---------- */
       .main {
         flex: 1;
@@ -533,20 +607,24 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
       }
       .ttl h1 {
         font-size: clamp(24px, 3vw, 36px);
         font-weight: 400;
         letter-spacing: -0.5px;
         white-space: nowrap;
+        line-height: 1;
+        padding-bottom: 0.06em;
       }
       .rf {
+        flex: none;
         width: 34px;
         height: 34px;
         border-radius: 50%;
-        display: grid;
-        place-items: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .rf:hover {
         background: #fff;
@@ -554,26 +632,17 @@
       .rf:active .i {
         transform: rotate(180deg);
       }
-      .rf .i {
+      .rf .i,
+      .rf svg.i {
+        display: block;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
         transition: transform 0.5s var(--ease);
       }
-      .live {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 11px;
-        color: var(--gp);
-        background: #e6ece7;
-        border-radius: 12px;
-        padding: 4px 10px;
-        white-space: nowrap;
-      }
-      .live i {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--green);
-        animation: bl 1.4s infinite;
+      .rf .i::before {
+        display: block;
+        line-height: 20px;
       }
       .sels {
         display: flex;
@@ -633,6 +702,11 @@
         z-index: 50;
         font-size: 14px;
         animation: pop 0.22s var(--spring);
+        transform-origin: top left;
+      }
+      .pop.l {
+        left: 0;
+        right: auto;
         transform-origin: top left;
       }
       .pop.r {
@@ -699,7 +773,6 @@
       }
       .rb:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
       }
       .rb .dot {
         position: absolute;
@@ -723,13 +796,10 @@
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        overflow: hidden;
         border: 2px solid #fff;
       }
-      .ava svg {
-        width: 100%;
-        height: 100%;
-      }
+
+      /* ---------- timeline ---------- */
       .tlrow {
         display: grid;
         grid-template-columns: 330px minmax(0, 1fr);
@@ -752,18 +822,28 @@
         height: 30px;
         border-radius: 15px;
         background: var(--red);
-        display: grid;
-        place-items: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: #fff;
       }
       .daypill .al.ok {
         background: #cfe3d1;
         color: var(--gp);
       }
-      .daypill .al .i {
+      .daypill .al .i,
+      .daypill .al svg.i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 17px;
         height: 17px;
         font-size: 17px;
+        line-height: 17px;
+      }
+      .daypill .al .i::before {
+        display: block;
+        line-height: 17px;
       }
       .daypill .dd > button {
         padding: 0 4px;
@@ -821,6 +901,7 @@
         font-size: 13px;
         color: var(--mut);
         transform: translateX(-50%);
+        white-space: nowrap;
       }
       .tag {
         position: absolute;
@@ -832,6 +913,8 @@
         border-radius: 7px;
         transform: translateX(-50%);
         font-weight: 500;
+        z-index: 2;
+        white-space: nowrap;
       }
       .alwin {
         position: absolute;
@@ -882,7 +965,11 @@
         border-radius: 8px;
         padding: 2px 7px;
         font-weight: 500;
+        z-index: 3;
+        white-space: nowrap;
       }
+
+      /* ---------- grid & left cards ---------- */
       .grid {
         flex: 1;
         min-height: 0;
@@ -907,24 +994,29 @@
       }
       .cd {
         flex: none;
-        background: #fff;
+        background: transparent;
         border-radius: 28px;
         padding: 22px 24px;
-        border: 1.5px solid transparent;
+        border: 1px solid var(--line);
         cursor: pointer;
         transition:
           border-color 0.25s,
-          transform 0.35s var(--spring),
-          box-shadow 0.25s;
+          transform 0.35s var(--spring);
         animation: up 0.55s var(--ease) both;
         animation-delay: calc(var(--d, 0) * 70ms);
       }
       .cd:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+        border-color: #c9cdc9;
       }
-      .cd.sel {
-        border-color: var(--ink);
+      .cd.sel,
+      .cd.sel:hover {
+        border: 1.5px solid var(--ink);
+      }
+      .cd:has(.pop),
+      .blk:has(.pop),
+      .unit:has(.pop) {
+        position: relative;
+        z-index: 60;
       }
       .cd .top2 {
         display: flex;
@@ -968,6 +1060,9 @@
         gap: 14px 12px;
         margin-top: 18px;
       }
+      .mg > div {
+        min-width: 0;
+      }
       .mg label {
         font-size: 14px;
         display: flex;
@@ -978,10 +1073,11 @@
         color: var(--mut);
       }
       .mg .v {
-        font-size: 32px;
+        font-size: clamp(22px, 2.1vw, 30px);
         letter-spacing: -0.8px;
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         gap: 6px;
         margin-top: 2px;
       }
@@ -1026,6 +1122,10 @@
         flex-direction: column;
         align-items: center;
         white-space: nowrap;
+        z-index: 2;
+        background: var(--bg);
+        padding: 0 3px;
+        border-radius: 4px;
         transition: left 0.9s var(--ease);
       }
       .bmk::before {
@@ -1040,8 +1140,7 @@
         justify-content: space-between;
         font-size: 11px;
         color: var(--mut);
-        margin-top: 6px;
-        height: 34px;
+        margin-top: 36px;
       }
       .cfoot {
         display: flex;
@@ -1049,14 +1148,34 @@
         justify-content: space-between;
         margin-top: 6px;
       }
+      .cfoot .dd {
+        min-width: 0;
+        overflow: visible;
+      }
       .cfoot .dd > button {
         padding: 0;
         font-size: 15px;
         gap: 8px;
         height: 34px;
+        white-space: nowrap;
+        overflow: visible;
       }
       .cfoot .dd > button:hover {
         background: none;
+      }
+      .cfoot .dd > button .i,
+      .cfoot .dd > button svg.i {
+        flex: none;
+        display: block;
+        overflow: visible;
+      }
+      .cfoot .dd > button .i {
+        height: 15px;
+        line-height: 15px;
+      }
+      .cfoot .dd > button .i::before {
+        display: block;
+        line-height: 15px;
       }
       .cfoot .ic {
         display: flex;
@@ -1071,7 +1190,7 @@
         position: relative;
       }
       .cfoot .ic button:hover {
-        background: #f1f3f0;
+        background: #fff;
       }
       .cfoot .ic .i {
         width: 22px;
@@ -1087,6 +1206,7 @@
         background: var(--red2);
         border-radius: 50%;
       }
+
       /* ---------- map ---------- */
       .map {
         position: relative;
@@ -1104,8 +1224,12 @@
         inset: 0;
         z-index: 90;
         border-radius: 0;
-        background-color: #f4f5f3;
-        animation: fade 0.3s;
+        width: auto;
+        height: auto !important;
+      }
+      .map.fsing {
+        position: fixed;
+        z-index: 90;
       }
       .map.grab {
         cursor: grabbing;
@@ -1113,16 +1237,29 @@
       .tools,
       .zm {
         position: absolute;
-        top: 0;
+        top: 8px;
         display: flex;
         gap: 10px;
         z-index: 5;
       }
       .tools {
-        left: 0;
+        left: 8px;
       }
       .zm {
-        right: 0;
+        right: 8px;
+      }
+      .map.full .tools,
+      .map.full .zm {
+        top: 16px;
+      }
+      .map.full .tools {
+        left: 50%;
+        transform: translateX(calc(-100% - 8px));
+      }
+      .map.full .zm {
+        left: 50%;
+        right: auto;
+        transform: translateX(8px);
       }
       .tools button,
       .zm button {
@@ -1133,29 +1270,66 @@
         border: 1px solid var(--line);
         display: grid;
         place-items: center;
+        animation: grow 0.55s var(--spring) backwards;
       }
-      .tools button:hover,
-      .zm button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+      .tools button:nth-child(1) {
+        animation-delay: 0.25s;
+      }
+      .tools button:nth-child(2) {
+        animation-delay: 0.31s;
+      }
+      .tools button:nth-child(3) {
+        animation-delay: 0.37s;
+      }
+      .zm button:nth-child(1) {
+        animation-delay: 0.43s;
+      }
+      .zm button:nth-child(2) {
+        animation-delay: 0.49s;
+      }
+      .zm button:nth-child(3) {
+        animation-delay: 0.55s;
+      }
+      .tools button .i,
+      .zm button .i {
+        display: block;
+        width: 22px;
+        height: 22px;
+        font-size: 22px;
+        line-height: 22px;
+      }
+      .tools button .i::before,
+      .zm button .i::before {
+        display: block;
+        line-height: 22px;
       }
       .tools button.on {
         background: var(--bl);
         color: #fff;
         border-color: var(--bl);
       }
+      .map.fsing .tools button,
+      .map.fsing .zm button,
+      .map.fsing .hint {
+        animation: none !important;
+        opacity: 0;
+      }
       #world {
         position: absolute;
         left: 0;
         top: 0;
         transform-origin: 0 0;
-        width: max-content;
+        display: flex;
+        flex-direction: column;
         transition: transform 0.35s var(--ease);
+        animation: fade 0.5s var(--ease) backwards 0.1s;
       }
       .mh {
+        flex: none;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
         margin-bottom: 16px;
         gap: 12px;
       }
@@ -1180,14 +1354,19 @@
       .pills {
         display: flex;
         gap: 8px;
+        flex-wrap: wrap;
       }
       .frame {
+        flex: 1;
+        min-height: 0;
         border: 2px solid #7d9283;
         border-radius: 26px;
         padding: 18px;
         display: grid;
-        grid-template-columns: 148px 148px 280px 148px;
-        grid-template-rows: 135px 135px 28px 200px;
+        grid-template-columns:
+          minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.9fr)
+          minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) 28px minmax(0, 1.5fr);
         gap: 16px;
         background: rgba(255, 255, 255, 0.25);
       }
@@ -1199,9 +1378,7 @@
         color: #fff;
         font-size: 15px;
         transition:
-          box-shadow 0.25s,
           opacity 0.3s,
-          transform 0.3s var(--spring),
           background 0.3s;
         animation: pop 0.5s var(--spring) both;
         animation-delay: calc(var(--d, 0) * 45ms);
@@ -1211,9 +1388,16 @@
         color: var(--ink);
         cursor: pointer;
       }
-      .blk.act:hover {
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        transform: translateY(-3px);
+      .blk.idle {
+        background: #e9ebe8;
+        color: var(--mut);
+      }
+      .blk.idle .bt > span:first-child {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .blk.idle .m {
+        color: #5d625f;
       }
       .blk.sel {
         outline: 2.5px solid var(--gp);
@@ -1223,34 +1407,104 @@
         opacity: 0.5;
       }
       .blk .bt {
+        height: 24px;
+        margin-top: -2px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        height: 20px;
+        gap: 4px;
+        min-width: 0;
+      }
+      .blk .bt > span:first-child {
+        flex: none;
+      }
+      .blk .fl {
+        flex: 0 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-flex;
+        align-items: center;
+        font-size: 9px;
+        font-weight: 600;
+        height: 18px;
+        line-height: 18px;
+        padding: 0 5px;
+        border-radius: 6px;
+        background: var(--or);
+        color: #3a2800;
+      }
+      .blk .fl.rs {
+        background: var(--red2);
+        color: #fff;
+      }
+      .blk .fl.gy {
+        background: #d3d7d3;
+        color: #555a57;
+      }
+      .blk .bt .dd {
+        position: static;
+        flex: none;
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        height: 24px;
       }
       .blk .bt .dd > button {
-        height: 26px;
-        padding: 0 2px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 24px;
+        padding: 0;
         color: var(--mut);
+      }
+      .blk .bt .dd > button .i {
+        display: none;
+      }
+      .blk .bt .dd > button::before {
+        content: "";
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow:
+          -6px 0 0 currentColor,
+          6px 0 0 currentColor;
+      }
+      .blk .pop {
+        max-width: min(260px, 80vw);
+        top: 44px;
+      }
+      .blk .pop.l {
+        left: 8px;
+        right: auto;
+      }
+      .blk .pop.r {
+        right: 8px;
+        left: auto;
       }
       .blk .m {
         position: absolute;
         left: 16px;
-        right: 12px;
+        right: 8px;
         bottom: 12px;
         display: flex;
         flex-direction: column;
-        gap: 9px;
-        font-size: 15px;
+        gap: 8px;
+        font-size: 13px;
       }
       .blk .m div {
         display: flex;
         gap: 7px;
         align-items: center;
         white-space: nowrap;
+        min-width: 0;
       }
       .blk .m div.p {
-        gap: 14px;
+        gap: 10px;
       }
       .blk .m .i {
         width: 16px;
@@ -1282,21 +1536,6 @@
       .blk.restr.act::after {
         background: var(--red2);
       }
-      .blk .fl {
-        position: absolute;
-        top: 13px;
-        right: 36px;
-        font-size: 10px;
-        font-weight: 600;
-        padding: 2px 6px;
-        border-radius: 6px;
-        background: var(--or);
-        color: #3a2800;
-      }
-      .blk .fl.rs {
-        background: var(--red2);
-        color: #fff;
-      }
       .stdot {
         display: inline-block;
         width: 7px;
@@ -1315,26 +1554,54 @@
         height: 20px;
         align-self: center;
       }
-      .na {
-        grid-column: 4;
-        grid-row: 1/5;
+      .infra {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-top: 26px;
+      }
+      .infra .ir {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #5d625f;
+      }
+      .infra .ir span {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .infra small {
+        font-size: 11px;
+        color: var(--mut);
+      }
+      .infra b {
+        font-weight: 500;
+        font-size: 14px;
+        color: var(--ink);
+        white-space: nowrap;
       }
       .hint {
         position: absolute;
-        left: 10px;
+        left: 50%;
         bottom: 10px;
+        width: max-content;
+        max-width: calc(100% - 20px);
+        text-align: center;
+        transform: translateX(-50%);
         font-size: 11px;
         color: var(--mut);
         background: #fff;
         border-radius: 12px;
         padding: 6px 10px;
         z-index: 4;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        max-width: calc(100% - 20px);
+        transition: opacity 0.2s;
+        animation: hintin 0.6s var(--ease) backwards 0.9s;
       }
+
       /* ---------- right panel ---------- */
       .rp {
-        background: #fff;
+        background: transparent;
         border-radius: 28px;
         padding: 26px 26px 10px;
         min-height: 0;
@@ -1368,16 +1635,15 @@
         border: 1px solid var(--line);
         display: grid;
         place-items: center;
-        background: #fff;
+        background: transparent;
       }
       .cb:hover {
-        background: #f1f3f0;
+        background: #fff;
       }
       .tabs {
         display: flex;
         margin-top: 22px;
         border-bottom: 1px solid var(--line);
-        position: relative;
       }
       .tabs button {
         flex: 1;
@@ -1440,6 +1706,9 @@
         transition:
           d 0.8s var(--ease),
           fill 0.3s;
+      }
+      .stream rect[fill^="rgba"] {
+        fill: rgba(244, 245, 243, 0.6);
       }
       .nums {
         display: flex;
@@ -1608,13 +1877,16 @@
       }
       .unit.warn {
         border-color: #f3b8b4;
-        background: #fffafa;
+        background: rgba(244, 131, 125, 0.08);
       }
       .ur {
         display: grid;
         grid-template-columns: 1.25fr 1fr 1fr 28px;
         gap: 8px;
         align-items: start;
+      }
+      .ur > div {
+        min-width: 0;
       }
       .ur b {
         font-weight: 400;
@@ -1626,10 +1898,7 @@
         color: var(--mut);
         font-size: 13px;
         margin-top: 4px;
-      }
-      .ur sup {
-        font-size: 9px;
-        color: var(--mut);
+        overflow-wrap: anywhere;
       }
       .ld {
         display: flex;
@@ -1663,6 +1932,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        z-index: 2;
+        background: var(--bg);
+        padding: 0 3px;
+        border-radius: 4px;
         transition: left 1.8s linear;
       }
       .ut u::before {
@@ -1674,11 +1947,14 @@
       .ue {
         display: flex;
         justify-content: space-between;
-        gap: 8px;
+        flex-wrap: wrap;
+        gap: 2px 8px;
         font-size: 11px;
         color: var(--mut);
-        margin-top: 4px;
-        height: 30px;
+        margin-top: 36px;
+      }
+      .ue span:last-child {
+        text-align: right;
       }
       .ua {
         display: flex;
@@ -1706,7 +1982,8 @@
         height: 19px;
         font-size: 19px;
       }
-      /* ---------- modal / toast ---------- */
+
+      /* ---------- modal / report / toast ---------- */
       .mbg {
         position: fixed;
         inset: 0;
@@ -1727,6 +2004,9 @@
         padding: 28px 30px;
         animation: pop 0.35s var(--spring);
       }
+      .modal:has(.rpt) {
+        width: min(900px, 100%);
+      }
       .modal h3 {
         font-size: 21px;
         font-weight: 500;
@@ -1740,8 +2020,6 @@
         width: 100%;
         border-collapse: collapse;
         font-size: 14px;
-        display: block;
-        overflow-x: auto;
       }
       .modal th,
       .modal td {
@@ -1749,13 +2027,6 @@
         padding: 9px 8px;
         border-bottom: 1px solid var(--line);
         white-space: nowrap;
-      }
-      .modal th {
-        color: var(--mut);
-        font-weight: 500;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
       }
       .modal p,
       .modal li {
@@ -1768,9 +2039,6 @@
         display: grid;
         gap: 8px;
       }
-      .modal a {
-        color: var(--bl);
-      }
       .btn {
         background: var(--ink);
         color: #fff;
@@ -1781,6 +2049,15 @@
       .btn.l {
         background: #eef0ed;
         color: var(--ink);
+      }
+      .btn.danger {
+        background: #fdecea;
+        color: var(--red2);
+        font-weight: 500;
+      }
+      .btn.danger:hover {
+        background: var(--red2);
+        color: #fff;
       }
       .sinput {
         width: 100%;
@@ -1828,24 +2105,261 @@
         top: 8px;
         color: #ff6b6b;
       }
-      .lgrid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+      .rpt .meta {
+        font-size: 15px;
+        color: var(--mut);
       }
-      .lgrid button {
+      .rpt .meta b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .rpt .sh {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 14px;
-        border-radius: 16px;
-        background: #f4f5f3;
-        text-align: left;
-        font-size: 14px;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 26px 0 12px;
       }
-      .lgrid button.on {
+      .rpt .sh.first {
+        margin-top: 4px;
+      }
+      .rpt .sh h4 {
+        font-size: 17px;
+        font-weight: 500;
+      }
+      .rpt .hint2 {
+        font-size: 13px;
+        color: var(--mut);
+        background: #f4f5f3;
+        padding: 5px 12px;
+        border-radius: 12px;
+      }
+      .rpt .acts2 {
+        display: flex;
+        gap: 8px;
+      }
+      .rpt .bo {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 40px;
+        padding: 0 14px;
+        font-size: 14px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .rpt .bo:hover {
+        background: #f4f5f3;
+      }
+      .rpt .bo .i {
+        width: 18px;
+        height: 18px;
+        font-size: 18px;
+      }
+      .rpt .tw {
+        overflow-x: auto;
+      }
+      .rpt table {
+        min-width: 520px;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      .rpt thead th {
+        background: #f4f5f3;
+        color: #555a57;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 12px 14px;
+        border: 0;
+      }
+      .rpt thead th:first-child {
+        border-radius: 12px 0 0 12px;
+      }
+      .rpt thead th:last-child {
+        border-radius: 0 12px 12px 0;
+      }
+      .rpt tbody td {
+        padding: 16px 14px;
+        font-size: 14.5px;
+        color: var(--ink);
+        border-bottom: 1px solid var(--line);
+      }
+      .rpt tbody td b {
+        font-weight: 500;
+      }
+      .rpt tbody tr:last-child td {
+        border-bottom: 0;
+      }
+      .rpt tbody tr:hover td {
+        background: #fafbf9;
+      }
+      .rpt .pl {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 10px;
+        font-size: 13px;
+        background: #e6ece7;
+        color: var(--gp);
+      }
+      .rpt .pl.wet,
+      .rpt .pl.mock {
+        background: #fff1d6;
+        color: #8a5a00;
+      }
+      .rpt .pl.restr {
+        background: #fdecea;
+        color: #c0353a;
+      }
+      .sys .tw {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 6px 8px 2px;
+      }
+      .sys table {
+        min-width: 480px;
+      }
+      .sys th,
+      .sys td {
+        white-space: normal;
+        vertical-align: top;
+      }
+      .sys tbody td:first-child {
+        font-weight: 500;
+      }
+      .sys tbody td:last-child {
+        color: #555a57;
+      }
+      .anl,
+      .refl {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .an {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 14.5px;
+        background: #f4f5f3;
+      }
+      .an .ai {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        flex: none;
+        background: #fff;
+      }
+      .an.warn {
+        background: #fff6e5;
+      }
+      .an.warn .ai {
+        color: #b97a00;
+      }
+      .an.crit {
+        background: #fdecea;
+      }
+      .an.crit .ai {
+        color: var(--red2);
+      }
+      .an.ok {
+        background: #eaf3ec;
+      }
+      .an.ok .ai {
+        color: var(--green);
+      }
+      .rf2 {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+        line-height: 1.55;
+        color: #434846;
+      }
+      .rf2:last-child {
+        border-bottom: 0;
+      }
+      .rf2 .ai {
+        width: 28px;
+        height: 28px;
+        border-radius: 9px;
+        background: #f1f3f0;
+        display: grid;
+        place-items: center;
+        flex: none;
+        color: var(--mut);
+      }
+      .rf2 .ai .i {
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+      }
+      .rf2 a {
+        color: var(--bl);
+        text-decoration: none;
+        overflow-wrap: anywhere;
+      }
+      .rf2 a:hover {
+        text-decoration: underline;
+      }
+      .note {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin-top: 22px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: #f4f5f3;
+        color: var(--mut);
+      }
+      .note .i {
+        margin-top: 2px;
+      }
+      .note p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #555a57;
+      }
+      .note b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .usr-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: #f7f8f6;
+        border: 1px solid var(--line);
+        margin-bottom: 18px;
+      }
+      .usr-info {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .usr-badge {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
         background: var(--ink);
         color: #fff;
+        font-weight: 600;
+        font-size: 14px;
+        display: grid;
+        place-items: center;
+        flex: none;
       }
       .toast {
         position: fixed;
@@ -1857,7 +2371,7 @@
         padding: 12px 20px;
         border-radius: 22px;
         font-size: 14px;
-        z-index: 300;
+        z-index: 600;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
         animation: sl 0.35s var(--spring);
         max-width: calc(100vw - 32px);
@@ -1871,96 +2385,33 @@
         margin-right: 8px;
       }
       .nlist button {
-        align-items: flex-start !important;
-        white-space: normal !important;
+        align-items: flex-start;
+        white-space: normal;
       }
-      /* ---------- dock (portrait) ---------- */
-      .dock {
-        display: none;
-        position: fixed;
-        left: 50%;
-        bottom: calc(14px + env(safe-area-inset-bottom));
-        transform: translateX(-50%);
-        width: min(440px, calc(100% - 28px));
-        height: 62px;
-        border-radius: 31px;
-        background: linear-gradient(#242525, #0b0b0b);
-        box-shadow:
-          0 14px 40px rgba(0, 0, 0, 0.35),
-          inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        z-index: 70;
-        grid-template-columns: repeat(5, 1fr);
-      }
-      .dk {
-        position: relative;
-        z-index: 2;
-        display: grid;
-        place-items: center;
-        color: #7b7d7c;
-      }
-      .dk .i {
-        width: 23px;
-        height: 23px;
-        font-size: 23px;
-        transition: opacity 0.25s;
-      }
-      .dk.on .i {
-        opacity: 0;
-      }
-      .lens {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 20%;
-        transform: translateX(calc(var(--i) * 100%));
-        transition: transform 0.6s var(--spring);
-        z-index: 3;
-        pointer-events: none;
-        display: grid;
-        place-items: center;
-      }
-      .bub {
-        width: min(76px, 100%);
-        aspect-ratio: 1;
-        border-radius: 50%;
-        background: radial-gradient(
-          circle at 30% 20%,
-          rgba(255, 255, 255, 0.2),
-          rgba(255, 255, 255, 0.04) 60%
-        );
-        backdrop-filter: blur(3px) saturate(1.7) brightness(1.2);
-        -webkit-backdrop-filter: blur(3px) saturate(1.7) brightness(1.2);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow:
-          inset 0 0 0 1px rgba(90, 167, 246, 0.4),
-          inset 0 -10px 16px rgba(90, 167, 246, 0.2),
-          0 8px 26px rgba(0, 0, 0, 0.4);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 3px;
-        color: #fff;
-        font-size: 11px;
-        font-weight: 500;
-      }
-      .bub.sq {
-        animation: sq 0.55s var(--ease);
-      }
-      .bub .i {
-        width: 22px;
-        height: 22px;
-        font-size: 22px;
-      }
+
       /* ---------- responsive ---------- */
+      @media (min-width: 800px) {
+        .top {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+          gap: 10px 14px;
+        }
+        .ttl {
+          justify-self: start;
+        }
+        .sels {
+          justify-self: center;
+        }
+        .hacts {
+          justify-self: end;
+          margin-left: 0;
+        }
+      }
       @media (min-width: 1100px) {
         .main {
           height: 100dvh;
           overflow: hidden;
-        }
-        .grid .map {
-          height: auto;
         }
       }
       @media (min-width: 1300px) {
@@ -2030,9 +2481,6 @@
           justify-content: space-between;
           overflow-x: auto;
         }
-        .hacts {
-          margin-left: auto;
-        }
         .acts {
           margin-right: 0;
         }
@@ -2058,15 +2506,13 @@
         .mg .v {
           font-size: 28px;
         }
-        .modal {
-          padding: 22px 20px;
-        }
         .mbg {
           align-items: end;
           padding: 0;
         }
         .modal {
           width: 100%;
+          padding: 22px 20px;
           border-radius: 28px 28px 0 0;
           max-height: 82dvh;
           animation: sl 0.45s var(--spring);
@@ -2093,10 +2539,10 @@
       }
       @media print {
         .side,
-        .dock,
         .hacts,
         .tools,
-        .zm {
+        .zm,
+        .login-view {
           display: none !important;
         }
         .main {
@@ -2104,1134 +2550,185 @@
           overflow: visible;
         }
       }
-
-      /* ===== FIX: anti-tumpang-tindih ===== */
-      /* bar progres: baris label ujung dipindah di bawah penanda nilai */
-      .bend {
-        margin-top: 36px;
-        height: auto;
-      }
-      .ue {
-        margin-top: 36px;
-        height: auto;
-        flex-wrap: wrap;
-        row-gap: 2px;
-      }
-      .ue span:last-child {
-        text-align: right;
-      }
-      .bmk,
-      .ut u {
-        z-index: 2;
-        background: #fff;
-        padding: 0 3px;
-        border-radius: 4px;
-      }
-
-      /* timeline */
-      .tag {
-        z-index: 2;
-        white-space: nowrap;
-      }
-      .scr b {
-        z-index: 3;
-        white-space: nowrap;
-      }
-      .hl {
-        white-space: nowrap;
-      }
-
-      /* kartu kiri: angka besar tidak melewati kolomnya */
-      .mg > div {
-        min-width: 0;
-      }
-      .mg .v {
-        font-size: clamp(22px, 2.1vw, 30px);
-        flex-wrap: wrap;
-      }
-      .cfoot .dd {
-        min-width: 0;
-      }
-      .cfoot .dd > button {
-        max-width: 190px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      /* blok peta: teks lebih kecil agar muat di kolom 148px */
-      .blk .m {
-        font-size: 13px;
-        gap: 8px;
-        right: 8px;
-      }
-      .blk .m div {
-        min-width: 0;
-      }
-      .blk .m div.p {
-        gap: 10px;
-      }
-      .mh {
-        flex-wrap: wrap;
-      }
-      .mh .pills {
-        flex-wrap: wrap;
-      }
-
-      /* panel kanan */
-      .ur > div {
-        min-width: 0;
-      }
-      .ur small {
-        overflow-wrap: anywhere;
-      }
-
-      /* popup menu selalu di atas elemen tetangga */
-      .blk:has(.pop),
-      .cd:has(.pop),
-      .unit:has(.pop) {
-        position: relative;
-        z-index: 60;
-      }
-      /* ===== FIX: badge WET MUCK / RESTRICTED sejajar titik tiga ===== */
-      .blk .bt {
-        height: 26px;
-        margin-top: -3px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .blk .bt > span:first-child {
-        margin-right: auto;
-      }
-      .blk .fl {
-        position: static;
-        top: auto;
-        right: auto;
-        display: inline-flex;
-        align-items: center;
-        height: 20px;
-        line-height: 1;
-        padding: 0 6px;
-        margin: 0;
-      }
-      .blk .bt .dd {
-        display: inline-flex;
-        align-items: center;
-        height: 26px;
-      }
-      .blk .bt .dd > button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 26px;
-        width: 26px;
-        padding: 0;
-      }
-
-      /* ===== FIX: icon tools & zoom tidak terpotong ===== */
-      .tools,
-      .zm {
-        top: 8px;
-      }
-      .tools {
-        left: 8px;
-      }
-      .zm {
-        right: 8px;
-      }
-      .tools button,
-      .zm button {
-        padding: 0;
-        overflow: visible;
-      }
-      .tools button .i,
-      .zm button .i {
-        display: block;
-        width: 22px;
-        height: 22px;
-        font-size: 22px;
-        line-height: 22px;
-        overflow: visible;
-      }
-      .tools button .i::before,
-      .zm button .i::before {
-        display: block;
-        line-height: 22px;
-      }
-      svg.i {
-        overflow: visible;
-      }
-
-      /* ===== FIX: icon warning di pill "Day" tepat di tengah ===== */
-      .daypill .al {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-      }
-      .daypill .al .i {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 17px;
-        height: 17px;
-        font-size: 17px;
-        line-height: 17px;
-        margin: 0;
-      }
-      .daypill .al .i::before {
-        display: block;
-        line-height: 17px;
-      }
-      .daypill .al svg.i {
-        display: block;
-      }
-
-      /* ===== FIX: fullscreen, tools & zoom dikelompokkan rapi di tengah atas ===== */
-      .map.full .tools,
-      .map.full .zm {
-        top: 16px;
-      }
-      .map.full .tools {
-        left: 50%;
-        right: auto;
-        transform: translateX(calc(-100% - 8px));
-      }
-      .map.full .zm {
-        left: 50%;
-        right: auto;
-        transform: translateX(8px);
-      }
-      /* ===== PATCH-2: badge & titik tiga benar-benar sejajar ===== */
-      .blk .bt {
-        --dot-y: -4px; /* geser titik tiga: makin negatif = makin naik */
-        height: 24px !important;
-        margin-top: -2px;
-        display: flex !important;
-        align-items: center !important;
-        gap: 6px;
-      }
-      .blk .bt .fl {
-        position: static !important;
-        display: inline-flex !important;
-        align-items: center;
-        height: 20px;
-        line-height: 20px !important;
-        padding: 0 7px !important;
-        margin: 0 !important;
-      }
-      .blk .bt .dd {
-        display: flex !important;
-        align-items: center;
-        height: 24px;
-      }
-      .blk .bt .dd > button {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        height: 24px !important;
-        width: 24px;
-        padding: 0 !important;
-        line-height: 1;
-      }
-      .blk .bt .dd > button .i {
-        display: block !important;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        transform: translateY(var(--dot-y));
-      }
-      .blk .bt .dd > button .i::before {
-        display: block;
-        line-height: 20px;
-      }
-      /* ===== PATCH-3: titik tiga digambar dengan CSS (tepat di tengah) ===== */
-      .blk .bt {
-        height: 24px !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 6px;
-      }
-      .blk .bt .fl {
-        position: static !important;
-        display: inline-flex !important;
-        align-items: center;
-        height: 20px;
-        line-height: 1 !important;
-        padding: 0 7px !important;
-        margin: 0 !important;
-      }
-      .blk .bt .dd {
-        display: flex !important;
-        align-items: center;
-        height: 24px;
-      }
-      .blk .bt .dd > button {
-        position: relative;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px !important;
-        padding: 0 !important;
-      }
-      /* sembunyikan icon bawaan, ganti 3 titik buatan sendiri */
-      .blk .bt .dd > button .i {
-        display: none !important;
-      }
-      .blk .bt .dd > button::before {
-        content: "";
-        width: 3px;
-        height: 3px;
-        border-radius: 50%;
-        background: currentColor;
-        box-shadow:
-          -6px 0 0 currentColor,
-          6px 0 0 currentColor;
-      }
-      /* ===== PATCH-4: hilangkan shadow bento grid & background putih panel kanan ===== */
-
-      /* 1. Hilangkan semua shadow pada kartu kiri, peta, dan panel kanan */
-      .cd,
-      .cd:hover,
-      .blk,
-      .blk.act:hover,
-      .tools button:hover,
-      .zm button:hover,
-      .hint,
-      .rp,
-      .rb:hover {
-        box-shadow: none !important;
-      }
-
-      /* (opsional) hilangkan juga efek "terangkat" saat hover */
-      .cd:hover,
-      .blk.act:hover,
-      .tools button:hover,
-      .zm button:hover {
-        transform: none;
-      }
-
-      /* 2. Panel kanan: tanpa background putih */
-      .rp {
-        background: transparent !important;
-      }
-
-      /* elemen di dalam panel kanan yang tadinya putih ikut transparan */
-      .rp .cb {
-        background: transparent;
-      }
-      .rp .cb:hover {
-        background: #fff;
-      }
-      .rp .unit.warn {
-        background: rgba(244, 131, 125, 0.08);
-      }
-
-      /* label penanda di bar unit tadinya putih (untuk anti-tumpang-tindih),
-         sekarang disamakan dengan warna latar halaman */
-      .rp .ut u {
-        background: var(--bg);
-      }
-
-      /* overlay putih pada grafik stream disamakan dengan warna latar */
-      .rp .stream rect[fill^="rgba"] {
-        fill: rgba(244, 245, 243, 0.6);
-      }
-      /* ===== PATCH-5: kartu kiri transparan seperti kartu Fleet ===== */
-
-      .cd {
-        background: transparent !important;
-        border: 1px solid var(--line);
-        box-shadow: none !important;
-      }
-
-      /* kartu yang dipilih: border tegas */
-      .cd.sel {
-        border-color: var(--ink);
-      }
-
-      /* hover tanpa shadow & tanpa efek terangkat, cukup border lebih gelap */
-      .cd:hover {
-        transform: none;
-        box-shadow: none !important;
-        border-color: #c9cdc9;
-      }
-      .cd.sel:hover {
-        border-color: var(--ink);
-      }
-
-      /* elemen di dalam kartu yang tadinya putih ikut menyatu dengan latar */
-      .cd .bmk {
-        background: var(--bg);
-      }
-      .cd .cfoot .ic button:hover {
-        background: #fff;
-      }
-      /* ===== PATCH-7: arrow dropdown di footer kartu tidak terpotong ===== */
-
-      .cfoot .dd {
-        min-width: 0;
-        overflow: visible;
-      }
-
-      .cfoot .dd > button {
-        max-width: none; /* hapus batas 190px */
-        overflow: visible; /* jangan memotong ikon */
-        text-overflow: clip;
-        white-space: nowrap;
-        height: 34px;
-        gap: 8px;
-      }
-
-      /* ikon pin & arrow tidak boleh menyusut atau terpotong */
-      .cfoot .dd > button .i,
-      .cfoot .dd > button svg.i {
-        flex: none;
-        display: block;
-        overflow: visible;
-      }
-      .cfoot .dd > button .i {
-        height: 15px;
-        line-height: 15px;
-      }
-      .cfoot .dd > button .i::before {
-        display: block;
-        line-height: 15px;
-      }
-      /* ===== PATCH-8: badge WET MUCK / RESTRICTED & titik tiga tidak terpotong ===== */
-
-      /* baris atas blok: id, badge, titik tiga dalam satu baris */
-      .blk .bt {
-        display: flex !important;
-        align-items: center !important;
-        gap: 4px;
-        min-width: 0;
-        height: 24px !important;
-      }
-
-      /* id blok (AD, CB, dst.) tidak menyusut */
-      .blk .bt > span:first-child {
-        flex: none;
-        margin-right: 0;
-      }
-
-      /* badge: satu baris, lebih kecil, boleh menyusut dengan ellipsis */
-      .blk .bt .fl {
-        flex: 0 1 auto;
-        min-width: 0;
-        max-width: 100%;
-        white-space: nowrap !important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 9px !important;
-        letter-spacing: 0 !important;
-        height: 18px !important;
-        line-height: 18px !important;
-        padding: 0 5px !important;
-      }
-
-      /* titik tiga: selalu utuh, menempel di kanan */
-      .blk .bt .dd {
-        flex: none;
-        margin-left: auto;
-        overflow: visible;
-      }
-      .blk .bt .dd > button {
-        flex: none;
-        width: 22px;
-        height: 24px !important;
-        overflow: visible;
-      }
-      /* ===== PATCH-9: menu titik tiga blok tidak terpotong ===== */
-
-      /* menu rata kiri (untuk blok di kolom kiri): terbuka ke arah kanan */
-      .pop.l {
-        left: 0;
-        right: auto;
-        transform-origin: top left;
-      }
-
-      /* titik tiga ada di ujung kanan blok, jadi geser menu agar sejajar dengan tepi kiri blok */
-      .blk .bt .dd {
-        position: static;
-      }
-      .blk .pop {
-        max-width: min(260px, 80vw);
-      }
-      .blk .pop.l {
-        left: 8px;
-        right: auto;
-        top: 44px;
-      }
-      .blk .pop.r {
-        right: 8px;
-        left: auto;
-        top: 44px;
-      }
-
-      /* wadah peta tidak boleh memotong menu */
-      .map,
-      #world,
-      .frame {
-        overflow: visible;
-      }
-      .map {
-        overflow: hidden; /* tetap perlu untuk pan/zoom, jadi menu diposisikan di dalam blok */
-      }
-      /* ===== PATCH-10: sembunyikan badge LIVE · simulasi ===== */
-      .live {
-        display: none !important;
-      }
-      /* ===== PATCH-11: pill GBC / Extraction Level di tengah ===== */
-
-      @media (min-width: 800px) {
-        .top {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          align-items: center;
-          gap: 10px 14px;
-        }
-
-        /* judul tetap di kiri */
-        .ttl {
-          justify-self: start;
-        }
-
-        /* pill pemilih di tengah */
-        .sels {
-          justify-self: center;
-        }
-
-        /* tombol aksi tetap di kanan */
-        .hacts {
-          justify-self: end;
-          margin-left: 0;
-        }
-      }
-      /* ===== PATCH-13: isi blok AA, AB, CA, N/A ===== */
-
-      .blk.idle {
-        background: #e9ebe8;
-        color: var(--mut);
-      }
-      .blk.idle .bt > span:first-child {
-        color: var(--ink);
-        font-weight: 500;
-      }
-      .blk.idle .m {
-        color: #5d625f;
-      }
-      .blk .fl.gy {
-        background: #d3d7d3;
-        color: #555a57;
-      }
-
-      /* daftar infrastruktur di kolom N/A */
-      .infra {
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        margin-top: 26px;
-      }
-      .infra .ir {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #5d625f;
-      }
-      .infra .ir span {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-      }
-      .infra small {
-        font-size: 11px;
-        color: var(--mut);
-      }
-      .infra b {
-        font-weight: 500;
-        font-size: 14px;
-        color: var(--ink);
-        white-space: nowrap;
-      }
-      /* ===== PATCH-14: ikon refresh sejajar dengan judul ===== */
-
-      .ttl {
-        align-items: center;
-        flex-wrap: nowrap;
-      }
-
-      /* tinggi baris judul dirapatkan agar titik tengahnya = titik tengah huruf */
-      .ttl h1 {
-        line-height: 1;
-        padding-bottom: 0.06em; /* kompensasi descender (g, p) supaya terlihat benar-benar sejajar */
-      }
-
-      /* tombol refresh: ukuran tetap, ikon di tengah */
-      .rf {
-        flex: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 34px;
-        height: 34px;
-        padding: 0;
-      }
-      .rf .i,
-      .rf svg.i {
-        display: block;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-      }
-      .rf .i::before {
-        display: block;
-        line-height: 20px;
-      }
-      /* ===== PATCH-15: sidebar tidak beranimasi saat load ===== */
-      .side.nt,
-      .side.nt * {
-        transition: none !important;
-      }
-
-      /* ===== PATCH-16: animasi masuk tools, zoom, hint, peta (kecil → besar) ===== */
-      @keyframes grow {
-        from {
-          opacity: 0;
-          transform: scale(0.5);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-      @keyframes hintin {
-        from {
-          opacity: 0;
-          transform: translateY(14px) scale(0.96);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-
-      /* "backwards" (bukan "both") supaya efek :active / hover tidak tertimpa */
-      .tools button,
-      .zm button {
-        animation: grow 0.55s var(--spring) backwards;
-      }
-      .tools button:nth-child(1) {
-        animation-delay: 0.25s;
-      }
-      .tools button:nth-child(2) {
-        animation-delay: 0.31s;
-      }
-      .tools button:nth-child(3) {
-        animation-delay: 0.37s;
-      }
-      .zm button:nth-child(1) {
-        animation-delay: 0.43s;
-      }
-      .zm button:nth-child(2) {
-        animation-delay: 0.49s;
-      }
-      .zm button:nth-child(3) {
-        animation-delay: 0.55s;
-      }
-
-      /* teks petunjuk: naik pelan + fade, muncul paling akhir */
-      .hint {
-        animation: hintin 0.6s var(--ease) backwards 0.9s;
-      }
-
-      /* peta hanya fade-in (transform-nya dipakai pan/zoom lewat JS) */
-      #world {
-        animation: fade 0.5s var(--ease) backwards 0.1s;
-      }
-
-      /* ===== PATCH-16: animasi masuk tools, zoom, hint, peta (kecil → besar) ===== */
-      @keyframes grow {
-        from {
-          opacity: 0;
-          transform: scale(0.5);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-      @keyframes hintin {
-        from {
-          opacity: 0;
-          transform: translateY(14px) scale(0.96);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-
-      /* "backwards" (bukan "both") supaya efek :active / hover tidak tertimpa */
-      .tools button,
-      .zm button {
-        animation: grow 0.55s var(--spring) backwards;
-      }
-      .tools button:nth-child(1) {
-        animation-delay: 0.25s;
-      }
-      .tools button:nth-child(2) {
-        animation-delay: 0.31s;
-      }
-      .tools button:nth-child(3) {
-        animation-delay: 0.37s;
-      }
-      .zm button:nth-child(1) {
-        animation-delay: 0.43s;
-      }
-      .zm button:nth-child(2) {
-        animation-delay: 0.49s;
-      }
-      .zm button:nth-child(3) {
-        animation-delay: 0.55s;
-      }
-
-      /* teks petunjuk: naik pelan + fade, muncul paling akhir */
-      .hint {
-        animation: hintin 0.6s var(--ease) backwards 0.9s;
-      }
-
-      /* peta hanya fade-in (transform-nya dipakai pan/zoom lewat JS) */
-      #world {
-        animation: fade 0.5s var(--ease) backwards 0.1s;
-      }
-      /* ===== PATCH-17: animasi masuk sidebar saat load / refresh ===== */
-      @keyframes sideIn {
-        from {
-          opacity: 0;
-          transform: translateX(-28px);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-      @keyframes itemIn {
-        from {
-          opacity: 0;
-          transform: translateX(-14px) scale(0.85);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-
-      /* wadah sidebar: slide masuk dari kiri + fade */
-      .side {
-        animation: sideIn 0.7s var(--ease) backwards;
-      }
-
-      /* isi sidebar: muncul berurutan (stagger) */
-      .side .logo,
-      .side .sch,
-      .side .sec,
-      .side .nv > .it,
-      .side .nv > .grp,
-      .side .areas .it,
-      .side .usr {
-        animation: itemIn 0.55s var(--spring) backwards;
-      }
-
-      .side .logo {
-        animation-delay: 0.25s;
-      }
-      .side .sch {
-        animation-delay: 0.31s;
-      }
-      .side .sec:nth-of-type(1) {
-        animation-delay: 0.36s;
-      }
-      .side .nv > :nth-child(1) {
-        animation-delay: 0.4s;
-      }
-      .side .nv > :nth-child(2) {
-        animation-delay: 0.46s;
-      }
-      .side .nv > :nth-child(3) {
-        animation-delay: 0.52s;
-      }
-      .side .nv > :nth-child(4) {
-        animation-delay: 0.58s;
-      }
-      .side .nv > :nth-child(5) {
-        animation-delay: 0.64s;
-      }
-      .side .areas .it:nth-child(1) {
-        animation-delay: 0.74s;
-      }
-      .side .areas .it:nth-child(2) {
-        animation-delay: 0.8s;
-      }
-      .side .areas .it:nth-child(3) {
-        animation-delay: 0.86s;
-      }
-      .side .usr {
-        animation-delay: 0.94s;
-      }
-
-      /* label "MAIN" dan "AREA" fade saja */
-      .side .sec {
-        animation-name: fade;
-        animation-duration: 0.5s;
-        animation-timing-function: var(--ease);
-        animation-delay: 0.38s;
-      }
-      .side .areas {
-      }
-      .side .sec ~ .sec {
-        animation-delay: 0.7s;
-      }
-      /* ===== PATCH-18: hint rata tengah ===== */
-      .hint {
-        left: 50%;
-        right: auto;
-        width: max-content;
-        text-align: center;
-        --hx: -50%;
-      }
-
-      /* animasi masuk disesuaikan supaya translateX(-50%) tidak hilang */
-      @keyframes hintin {
-        from {
-          opacity: 0;
-          transform: translateX(-50%) translateY(14px) scale(0.96);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(-50%);
-        }
-      }
-      .hint {
-        transform: translateX(-50%);
-      }
-      /* ===== PATCH-19: full screen memenuhi halaman + animasi ===== */
-      #world {
-        display: flex;
-        flex-direction: column;
-      }
-      .mh {
-        flex: none;
-      }
-      .frame {
-        flex: 1;
-        min-height: 0;
-        grid-template-columns:
-          minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.9fr)
-          minmax(0, 1fr);
-        grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) 28px minmax(0, 1.5fr);
-      }
-
-      .map.full {
-        animation: none;
-        width: auto;
-        height: auto !important; /* mengalahkan height .map di layar kecil */
-      }
-      .map.fsing {
-        position: fixed;
-        z-index: 90;
-      }
-
-      /* saat animasi: tools, zoom, hint disembunyikan lalu muncul lagi di akhir */
-      .map.fsing .tools button,
-      .map.fsing .zm button,
-      .map.fsing .hint {
-        animation: none !important;
-        opacity: 0;
-      }
-      .hint {
-        transition: opacity 0.2s;
-      }
-      @keyframes growFull {
-        from {
-          opacity: 0;
-          transform: scale(0.5);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-      .map.full .tools button,
-      .map.full .zm button {
-        animation-name: growFull;
-      }
-      /* ===== PATCH-20: matikan transisi CSS saat animasi intro (agar tidak "telat" dari rAF) ===== */
-      body.intro .bfill,
-      body.intro .bfade,
-      body.intro .bmk,
-      body.intro .scr,
-      body.intro .stream path,
-      body.intro .ut i,
-      body.intro .ut u,
-      body.intro .crew .t i {
-        transition: none !important;
-      }
-      /* ===== PATCH-21: tampilan Laporan shift ala dashboard laporan ===== */
-      .modal:has(.rpt) {
-        width: min(900px, 100%);
-      }
-      .rpt .meta {
-        font-size: 15px;
-        color: var(--mut);
-      }
-      .rpt .meta b {
-        color: var(--ink);
-        font-weight: 500;
-      }
-      .rpt .sh {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin: 26px 0 12px;
-      }
-      .rpt .sh h4 {
-        font-size: 17px;
-        font-weight: 500;
-      }
-      .rpt .acts2 {
-        display: flex;
-        gap: 8px;
-      }
-      .rpt .bo {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        height: 40px;
-        padding: 0 14px;
-        font-size: 14px;
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-      }
-      .rpt .bo:hover {
-        background: #f4f5f3;
-      }
-      .rpt .bo .i {
-        width: 18px;
-        height: 18px;
-        font-size: 18px;
-      }
-      .rpt .tw {
-        overflow-x: auto;
-      }
-      .rpt table {
-        display: table;
-        width: 100%;
-        min-width: 520px;
-        border-collapse: separate;
-        border-spacing: 0;
-        overflow: visible;
-      }
-      .rpt thead th {
-        background: #f4f5f3;
-        color: #555a57;
-        font-size: 13px;
-        font-weight: 500;
-        text-transform: none;
-        letter-spacing: 0;
-        padding: 12px 14px;
-        border: 0;
-      }
-      .rpt thead th:first-child {
-        border-radius: 12px 0 0 12px;
-      }
-      .rpt thead th:last-child {
-        border-radius: 0 12px 12px 0;
-      }
-      .rpt tbody td {
-        padding: 16px 14px;
-        font-size: 14.5px;
-        color: var(--ink);
-        border-bottom: 1px solid var(--line);
-      }
-      .rpt tbody td b {
-        font-weight: 500;
-      }
-      .rpt tbody tr:last-child td {
-        border-bottom: 0;
-      }
-      .rpt tbody tr:hover td {
-        background: #fafbf9;
-      }
-      .rpt .pl {
-        display: inline-block;
-        padding: 3px 10px;
-        border-radius: 10px;
-        font-size: 13px;
-        background: #e6ece7;
-        color: var(--gp);
-      }
-      .rpt .pl.wet {
-        background: #fff1d6;
-        color: #8a5a00;
-      }
-      .rpt .pl.restr {
-        background: #fdecea;
-        color: #c0353a;
-      }
-      /* ===== PATCH-22: tampilan Status sistem & sumber data ===== */
-      .rpt .sh.first {
-        margin-top: 4px;
-      }
-      .rpt .hint2 {
-        font-size: 13px;
-        color: var(--mut);
-        background: #f4f5f3;
-        padding: 5px 12px;
-        border-radius: 12px;
-      }
-
-      /* tabel: teks boleh turun baris (memperbaiki teks terpotong) */
-      .sys .tw {
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 6px 8px 2px;
-      }
-      .sys table {
-        min-width: 480px;
-      }
-      .sys th,
-      .sys td {
-        white-space: normal !important;
-        vertical-align: top;
-      }
-      .sys tbody td:first-child {
-        font-weight: 500;
-      }
-      .sys tbody td:last-child {
-        color: #555a57;
-      }
-      .rpt .pl.mock {
-        background: #fff1d6;
-        color: #8a5a00;
-      }
-
-      /* kartu anomali */
-      .anl,
-      .refl {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .an {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 14px;
-        border-radius: 14px;
-        font-size: 14.5px;
-        background: #f4f5f3;
-      }
-      .an .ai {
-        width: 32px;
-        height: 32px;
-        border-radius: 10px;
-        display: grid;
-        place-items: center;
-        flex: none;
-        background: #fff;
-      }
-      .an.warn {
-        background: #fff6e5;
-      }
-      .an.warn .ai {
-        color: #b97a00;
-      }
-      .an.crit {
-        background: #fdecea;
-      }
-      .an.crit .ai {
-        color: var(--red2);
-      }
-      .an.ok {
-        background: #eaf3ec;
-      }
-      .an.ok .ai {
-        color: var(--green);
-      }
-
-      /* daftar referensi */
-      .rf2 {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 12px 0;
-        border-bottom: 1px solid var(--line);
-        font-size: 14px;
-        line-height: 1.55;
-        color: #434846;
-      }
-      .rf2:last-child {
-        border-bottom: 0;
-      }
-      .rf2 .ai {
-        width: 28px;
-        height: 28px;
-        border-radius: 9px;
-        background: #f1f3f0;
-        display: grid;
-        place-items: center;
-        flex: none;
-        color: var(--mut);
-      }
-      .rf2 .ai .i {
-        width: 16px;
-        height: 16px;
-        font-size: 16px;
-      }
-      .rf2 a {
-        color: var(--bl);
-        text-decoration: none;
-        overflow-wrap: anywhere;
-      }
-      .rf2 a:hover {
-        text-decoration: underline;
-      }
-
-      /* catatan simulasi */
-      .note {
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-        margin-top: 22px;
-        padding: 14px 16px;
-        border-radius: 14px;
-        background: #f4f5f3;
-        color: var(--mut);
-      }
-      .note .i {
-        margin-top: 2px;
-      }
-      .note p {
-        font-size: 13px;
-        line-height: 1.6;
-        color: #555a57;
-      }
-      .note b {
-        color: var(--ink);
-        font-weight: 500;
-      }
     </style>
   </head>
-  <body>
+  <body class="locked">
+    <!-- ===== LOGIN PAGE ===== -->
+    <section class="login-view" id="loginView" aria-label="Halaman Masuk">
+      <div class="login-card" id="loginCard">
+        <div class="login-logo">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1273.2 111.59"
+            role="img"
+            aria-label="PT Freeport Indonesia"
+          >
+            <defs>
+              <style>
+                .cls-1 {
+                  fill: #ec1c24;
+                }
+                .cls-2 {
+                  fill: #231f20;
+                }
+                .cls-3 {
+                  fill: #00adee;
+                }
+              </style>
+            </defs>
+            <g id="Layer_2" data-name="Layer 2">
+              <g id="Layer_1-2" data-name="Layer 1">
+                <path
+                  class="cls-1"
+                  d="M1273.2,31.83A31.71,31.71,0,0,1,1266.8,51l-3.69-2.78a27.19,27.19,0,0,0,.29-32.35l3.75-2.72a31.71,31.71,0,0,1,6,18.69m-14.51,6a17.85,17.85,0,0,1-2.69,5,16.91,16.91,0,0,1-2.39,2.61,18.32,18.32,0,1,1-12.24-31.95,18,18,0,0,1,7.4,1.56,18.59,18.59,0,0,1,4.11,2.52,16.86,16.86,0,0,1,3.31,3.49,18,18,0,0,1,2.5,4.76h4.52a22.13,22.13,0,0,0-3.51-7.3,22.69,22.69,0,0,0-4.09-4.33,23.1,23.1,0,0,0-5.09-3.1,22.49,22.49,0,0,0-9.15-1.93V4.62a27.33,27.33,0,0,1,11,2.3l1.86-4.21A31.47,31.47,0,0,0,1241.37,0a31.84,31.84,0,1,0,16.32,59.18l-2.37-4a27.14,27.14,0,0,1-14,3.84V54.48a22.51,22.51,0,0,0,11.6-3.19,23.19,23.19,0,0,0,3.54-2.6,22.77,22.77,0,0,0,3-3.24,22.23,22.23,0,0,0,3.74-7.62Zm3.15-8.17a2.17,2.17,0,1,0,2.18,2.17,2.17,2.17,0,0,0-2.18-2.17m-3.6-22.15a2.17,2.17,0,1,0,3.37,2.73,2.17,2.17,0,0,0-3.37-2.73m4.46,44.84a2.16,2.16,0,1,0-.16,3.06,2.15,2.15,0,0,0,.16-3.06"
+                />
+                <rect class="cls-2" y="4.95" width="142.99" height="106.64" />
+                <rect
+                  class="cls-3"
+                  x="53.14"
+                  y="81.19"
+                  width="26.14"
+                  height="13.14"
+                />
+                <polygon
+                  class="cls-3"
+                  points="104.97 55.21 97.73 73.75 97.73 73.61 97.71 73.75 90.48 55.21 53.15 55.21 53.15 68.06 79.09 68.06 79.14 68.3 79.14 68 89.33 94.12 106.09 94.12 116.29 68 116.29 94.12 143.07 94.12 143.07 55.21 104.97 55.21"
+                />
+                <polygon
+                  class="cls-3"
+                  points="53.24 55.12 53.24 42 0.04 42 0.04 94.32 27.17 94.32 27.17 81.24 53.24 81.24 53.24 68.17 27.17 68.17 27.17 55.12 53.24 55.12"
+                />
+                <path
+                  class="cls-2"
+                  d="M175.07,25.25h42.27q18.36,0,18.49,21.54.1,25.38-22.73,25.38H201V95.63H175.07ZM201,57.7h3.4q6.09-1.62,6.22-9,.13-7.59-5-8.73l-4.6.13Z"
+                />
+                <polygon
+                  class="cls-2"
+                  points="299.01 25.21 299.01 41.09 281.38 41.09 281.38 95.59 255.45 95.59 255.45 41.09 238.54 41.09 238.54 25.21 299.01 25.21"
+                />
+                <polygon
+                  class="cls-2"
+                  points="366.75 25.25 366.75 40.96 342.52 40.96 342.52 52.88 365.73 52.88 365.73 67.36 342.43 67.36 342.43 95.63 316.75 95.6 316.8 25.25 366.75 25.25"
+                />
+                <path
+                  class="cls-2"
+                  d="M370.55,39h37.16q11.54,1.35,11.55,13.31c0,3.87-.8,6.82-2.4,8.87s-4.24,3.5-8,4.38a.32.32,0,0,0-.26.43.36.36,0,0,0,.35.33,10.16,10.16,0,0,1,6.91,2.88,10.44,10.44,0,0,1,3.26,6.75V95.29H398.64V75.92a3.74,3.74,0,0,0-1.09-2.63,3.31,3.31,0,0,0-2.52-1.2h-3.71V95.25H370.55Zm20.6,10V60.68h3.19a3.7,3.7,0,0,0,3.58-1.92,10.66,10.66,0,0,0,.72-3.8,7.52,7.52,0,0,0-1.36-4.76A3.35,3.35,0,0,0,394.89,49Z"
+                />
+                <polygon
+                  class="cls-2"
+                  points="464.89 39.18 464.89 51.95 445.65 51.95 445.65 61.35 463.91 61.35 463.91 72.9 445.65 72.9 445.65 82.65 464.89 82.65 464.89 95.46 425.12 95.46 425.12 39.18 464.89 39.18"
+                />
+                <polygon
+                  class="cls-2"
+                  points="510.75 39.18 510.75 51.95 491.51 51.95 491.51 61.35 509.78 61.35 509.78 72.9 491.51 72.9 491.51 82.65 510.75 82.65 510.75 95.46 470.98 95.46 470.98 39.18 510.75 39.18"
+                />
+                <path
+                  class="cls-2"
+                  d="M517.79,39.26h33.84q14.68,0,14.78,17.24.12,20.32-18.18,20.31h-9.71V95.54H517.79Zm20.73,25.55h2.73c3.25-.86,4.92-3.25,5-7.2s-1.28-6.38-4-7h-3.69Z"
+                />
+                <path
+                  class="cls-2"
+                  d="M591.23,38.58h4.55q13.37,0,18.49,6.74,3.83,5,3.82,16V73.58q0,11.74-5.32,17.2t-17,5.46h-4.55q-11.43,0-16.86-5.52t-5.46-17.14V61.36c0-7.31,1.3-12.67,3.88-16q5.15-6.74,18.44-6.74m1.83,11.16q-3.28,0-3.28,4.55V80.61c0,2.92,1.14,4.4,3.41,4.4H594c2.15,0,3.23-1.48,3.23-4.4V54.29q0-4.55-3.16-4.55Z"
+                />
+                <path
+                  class="cls-2"
+                  d="M621.46,39h37.16q11.55,1.35,11.54,13.31c0,3.87-.79,6.82-2.38,8.87s-4.25,3.5-8,4.38a.32.32,0,0,0-.25.43.35.35,0,0,0,.34.33,10.14,10.14,0,0,1,6.91,2.88,10.35,10.35,0,0,1,3.26,6.75V95.29H649.55V75.92a3.74,3.74,0,0,0-1.09-2.63,3.3,3.3,0,0,0-2.52-1.2h-3.71V95.25H621.46Zm20.6,10V60.68h3.2a3.69,3.69,0,0,0,3.57-1.92,10.66,10.66,0,0,0,.72-3.8,7.4,7.4,0,0,0-1.36-4.76A3.34,3.34,0,0,0,645.81,49Z"
+                />
+                <polygon
+                  class="cls-2"
+                  points="722.79 39.13 722.79 51.81 708.7 51.81 708.7 95.42 687.96 95.42 687.96 51.81 674.41 51.81 674.41 39.13 722.79 39.13"
+                />
+                <rect
+                  class="cls-2"
+                  x="742.17"
+                  y="25.22"
+                  width="25.97"
+                  height="70.38"
+                />
+                <polygon
+                  class="cls-2"
+                  points="829.29 95.63 802.21 95.63 792.85 66.3 793.3 95.63 775.13 95.63 775.13 39.35 799.61 39.35 811.58 68.55 811.1 39.35 829.29 39.35 829.29 95.63"
+                />
+                <path
+                  class="cls-2"
+                  d="M835.75,39.22l29.6,0c5.41,0,9.92,1.48,13.49,4.44q3.7,3.06,4.95,9.88a96.94,96.94,0,0,1,.76,13.49,82.68,82.68,0,0,1-.8,13.83,19.13,19.13,0,0,1-5.16,10.48,14.83,14.83,0,0,1-10.82,4.16h-32Zm20,11.54V84.87h4.88c2.4-.83,3.59-2.61,3.59-5.37V55.69c0-2.86-1.12-4.51-3.36-4.93Z"
+                />
+                <path
+                  class="cls-2"
+                  d="M909.63,38.58h4.55q13.37,0,18.48,6.74,3.84,5,3.83,16V73.58q0,11.74-5.31,17.2t-17,5.46h-4.55q-11.43,0-16.87-5.52t-5.45-17.14V61.36c0-7.31,1.3-12.67,3.88-16q5.14-6.74,18.44-6.74m1.82,11.16c-2.19,0-3.27,1.52-3.27,4.55V80.61c0,2.92,1.13,4.4,3.4,4.4h.8c2.16,0,3.25-1.48,3.25-4.4V54.29q0-4.55-3.16-4.55Z"
+                />
+                <polygon
+                  class="cls-2"
+                  points="994.36 95.63 967.27 95.63 957.91 66.3 958.37 95.63 940.19 95.63 940.19 39.35 964.67 39.35 976.64 68.55 976.17 39.35 994.36 39.35 994.36 95.63"
+                />
+                <polygon
+                  class="cls-2"
+                  points="1041.02 39.18 1041.02 51.95 1021.78 51.95 1021.78 61.35 1040.04 61.35 1040.04 72.9 1021.78 72.9 1021.78 82.65 1041.02 82.65 1041.02 95.46 1001.24 95.46 1001.24 39.18 1041.02 39.18"
+                />
+                <path
+                  class="cls-2"
+                  d="M1074.74,53.4c0-2.4-1.26-3.59-3.75-3.63s-3.73,1.25-3.79,3.83,1.42,4.46,4.48,5.55c5.7,2,9.67,3.34,11.87,4.08,4,1.36,6.82,3.19,8.52,5.51s2.56,5.59,2.6,9.82q.12,17.53-21.42,17.62a65.25,65.25,0,0,1-12-.69q-11.33-2.16-12.89-13.19V76.72h19.24V81.5c0,3.08,1.23,4.62,3.71,4.59a3.56,3.56,0,0,0,3-1.15,5.86,5.86,0,0,0,.68-3.27c0-2.64-1.86-4.62-5.57-5.92-5.13-1.74-8.71-2.91-10.69-3.54a16.41,16.41,0,0,1-8.27-5.6q-2.71-3.72-2.72-10.41,0-16.38,21.63-16.3,15.12.09,19.85,5.05a16.6,16.6,0,0,1,4.33,9.77v4h-18.81Z"
+                />
+                <rect
+                  class="cls-2"
+                  x="1100.47"
+                  y="39.09"
+                  width="20.74"
+                  height="56.33"
+                />
+                <path
+                  class="cls-2"
+                  d="M1138.31,39.14h28.91l14.31,56.28h-21l-2.17-9.67h-12.14l-1.91,9.67H1124ZM1148.53,74h7.71l-4-21Z"
+                />
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="login-head">
+          <h2>Mine Operations Portal</h2>
+          <p>Masuk menggunakan kredensial operasional resmi</p>
+        </div>
+        <form class="login-form" id="loginForm" autocomplete="off">
+          <div class="fgroup">
+            <label for="loginUser">Username / ID Karyawan</label>
+            <input
+              class="finput"
+              id="loginUser"
+              type="text"
+              placeholder="Masukkan username"
+              required
+            />
+          </div>
+          <div class="fgroup">
+            <label for="loginPass">Kata Sandi</label>
+            <div class="finput-wrap">
+              <input
+                class="finput"
+                id="loginPass"
+                type="password"
+                placeholder="Masukkan kata sandi"
+                required
+              />
+              <button
+                type="button"
+                class="eye-btn"
+                id="togglePass"
+                aria-label="Tampilkan atau sembunyikan kata sandi"
+              ></button>
+            </div>
+          </div>
+          <div class="login-err" id="loginErr" role="alert"></div>
+          <button type="submit" class="login-submit">Masuk ke Dashboard</button>
+        </form>
+        <div class="login-foot">
+          PT Freeport Indonesia · Underground Operations Control
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DASHBOARD SHELL ===== -->
     <div class="shell">
-      <aside class="side rail" id="side"></aside>
+      <aside class="side nt" id="side"></aside>
       <main class="main">
         <div class="top">
           <div class="ttl" id="ttl"></div>
@@ -3262,7 +2759,66 @@
     <div id="modalroot"></div>
 
     <script>
-      /* ===== Ikon: digambar ulang bergaya Hugeicons stroke-rounded (fallback bila font CDN tidak termuat) ===== */
+      /* ===== ROLE-BASED ACCESS CONTROL (RBAC) ===== */
+      const USERS = [
+        {
+          user: "director.ptfi",
+          pass: "Ptfi@2026",
+          name: "A. Wiratama",
+          role: "Mine Operations Director",
+          initials: "DR",
+          pages: ["production", "personnel", "safety", "ecology"],
+          areas: ["GBC", "DMLZ", "BGS"],
+        },
+        {
+          user: "prod.gbc",
+          pass: "Prod@123",
+          name: "B. Santoso",
+          role: "Production Superintendent",
+          initials: "PR",
+          pages: ["production"],
+          areas: ["GBC", "DMLZ", "BGS"],
+        },
+        {
+          user: "hr.shift",
+          pass: "Hr@12345",
+          name: "R. Kusuma",
+          role: "HR & Workforce Lead",
+          initials: "HR",
+          pages: ["personnel"],
+          areas: ["GBC", "DMLZ", "BGS"],
+        },
+        {
+          user: "safety.ug",
+          pass: "Safe@123",
+          name: "D. Pratama",
+          role: "Underground Safety Officer",
+          initials: "SF",
+          pages: ["safety"],
+          areas: ["GBC", "DMLZ", "BGS"],
+        },
+        {
+          user: "eco.env",
+          pass: "Eco@1234",
+          name: "S. Maharani",
+          role: "Environmental & Tailings Lead",
+          initials: "EC",
+          pages: ["ecology"],
+          areas: ["GBC", "DMLZ", "BGS"],
+        },
+      ];
+
+      let CURRENT_USER = null;
+      const canPage = (p) => !!(CURRENT_USER && CURRENT_USER.pages.includes(p));
+      const canArea = (a) => !!(CURRENT_USER && CURRENT_USER.areas.includes(a));
+      const allowedPages = () =>
+        PAGES.filter((p) => !CURRENT_USER || CURRENT_USER.pages.includes(p[0]));
+      const allowedAreas = () =>
+        Object.keys(AREAS).filter(
+          (k) => !CURRENT_USER || CURRENT_USER.areas.includes(k),
+        );
+
+      /* ===== Ikon: Hugeicons stroke-rounded + fallback SVG inline ===== */
       const PS = {
         bell: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
         bellx:
@@ -3270,8 +2826,6 @@
         search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
         chev: '<path d="M6 9l6 6 6-6"/>',
         chevup: '<path d="M6 15l6-6 6 6"/>',
-        chevl: '<path d="M15 6l-6 6 6 6"/>',
-        chevr: '<path d="M9 6l6 6-6 6"/>',
         plus: '<path d="M12 5v14M5 12h14"/>',
         minus: '<path d="M5 12h14"/>',
         expand: '<path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/>',
@@ -3288,26 +2842,26 @@
         shield:
           '<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
         leaf: '<path d="M5 19C5 9 10 5 20 5c0 10-5 15-14 15M5 19c3-5 6-8 10-10"/>',
-        hat: '<path d="M5 15.5a7 7 0 0 1 14 0"/><path d="M12 8.5v7M8.8 9.6c-.4 1.200-.6 3.200-.6 5.900M15.2 9.6c.4 1.200.6 3.200.6 5.900"/><path d="M3 15.5h18v2.500a.5.5 0 0 1-.5.5h-17a.5.5 0 0 1-.5-.5z"/>',
+        hat: '<path d="M5 15.5a7 7 0 0 1 14 0"/><path d="M12 8.5v7M8.8 9.6c-.4 1.2-.6 3.2-.6 5.9M15.2 9.6c.4 1.2.6 3.2.6 5.9"/><path d="M3 15.5h18v2.5a.5.5 0 0 1-.5.5h-17a.5.5 0 0 1-.5-.5z"/>',
         wheel:
           '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.2"/><path d="M3.5 10.5h6M14.5 10.5h6M12 14v7"/>',
         cube: '<path d="M12 3l8 4v10l-8 4-8-4V7zM4 7l8 4 8-4M12 11v10"/>',
         heart:
-          '<path d="M12 20S4.500 15.500 4.500 9.800a4 4 0 0 1 7.500-2 4 4 0 0 1 7.500 2C19.500 15.500 12 20 12 20z"/><path d="M8 12.500h2l1.200-2.300 1.800 4.300 1.200-2H16.500"/>',
-        wind: '<g><path d="M12 12 9.200 7.300a3.300 3.300 0 0 1 5.600 0z"/></g><path transform="rotate(120 12 12)" d="M12 12 9.200 7.300a3.300 3.300 0 0 1 5.600 0z"/><path transform="rotate(240 12 12)" d="M12 12 9.200 7.300a3.300 3.300 0 0 1 5.600 0z"/><circle cx="12" cy="12" r="8.500"/>',
+          '<path d="M12 20S4.5 15.5 4.5 9.8a4 4 0 0 1 7.5-2 4 4 0 0 1 7.5 2C19.5 15.5 12 20 12 20z"/><path d="M8 12.5h2l1.2-2.3 1.8 4.3 1.2-2H16.5"/>',
+        wind: '<path d="M12 12 9.2 7.3a3.3 3.3 0 0 1 5.6 0z"/><path transform="rotate(120 12 12)" d="M12 12 9.2 7.3a3.3 3.3 0 0 1 5.6 0z"/><path transform="rotate(240 12 12)" d="M12 12 9.2 7.3a3.3 3.3 0 0 1 5.6 0z"/><circle cx="12" cy="12" r="8.5"/>',
         cctv: '<path d="M3 8l12-4 2 6-12 4zM17 9l4 1M8 14l1 5M6 21h6"/>',
-        plan: '<path d="M8 4h9a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H8"/><path d="M8 4a3 3 0 0 0-3 3v8a3 3 0 0 0 3 5"/><path d="M10 17.500h7.500V10z"/>',
+        plan: '<path d="M8 4h9a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H8"/><path d="M8 4a3 3 0 0 0-3 3v8a3 3 0 0 0 3 5"/><path d="M10 17.5h7.5V10z"/>',
         drill:
-          '<path d="M12.500 3.500h-6a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3"/><path d="M3.500 17 11 9.500"/><circle cx="17" cy="7" r="3"/><path d="M19.200 9.200 21 11"/>',
+          '<path d="M12.5 3.5h-6a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3"/><path d="M3.5 17 11 9.5"/><circle cx="17" cy="7" r="3"/><path d="M19.2 9.2 21 11"/>',
         thermo:
-          '<path d="M10 14.500V6a2 2 0 0 1 4 0v8.500a4 4 0 1 1-4 0z"/><circle cx="12" cy="16.500" r="1.200"/><path d="M12 9.500v5.500"/>',
-        food: '<path d="M5 3.500v5a2 2 0 0 0 4 0v-5M7 3.500v17"/><path d="M17 3.500c-2 0-3.500 2-3.500 5s1.500 4 3.500 4 3.500-1 3.500-4-1.500-5-3.500-5zM17 12.500v8"/>',
+          '<path d="M10 14.5V6a2 2 0 0 1 4 0v8.5a4 4 0 1 1-4 0z"/><circle cx="12" cy="16.5" r="1.2"/><path d="M12 9.5v5.5"/>',
+        food: '<path d="M5 3.5v5a2 2 0 0 0 4 0v-5M7 3.5v17"/><path d="M17 3.5c-2 0-3.5 2-3.5 5s1.5 4 3.5 4 3.5-1 3.5-4-1.5-5-3.5-5zM17 12.5v8"/>',
         scan: '<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="10" r="3"/><path d="M7 18c1-3 9-3 10 0"/>',
         vest: '<path d="M8 3l-4 4v14h6V12M16 3l4 4v14h-6V12M8 3c1 3 7 3 8 0"/>',
         route:
-          '<circle cx="6" cy="6" r="2"/><path d="M6 8v8M4.500 18.500l3 3M7.500 18.500l-3 3"/><circle cx="18" cy="19" r="2"/><path d="M18 17V9a2 2 0 0 0-2-2h-4M13.500 5l-2 2 2 2"/>',
+          '<circle cx="6" cy="6" r="2"/><path d="M6 8v8M4.5 18.5l3 3M7.5 18.5l-3 3"/><circle cx="18" cy="19" r="2"/><path d="M18 17V9a2 2 0 0 0-2-2h-4M13.5 5l-2 2 2 2"/>',
         alert: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>',
-        pin: '<circle cx="12" cy="12" r="8.500"/><path d="M6 6l12 12M9.800 7.800 7.800 9.800"/>',
+        pin: '<circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12M9.8 7.8 7.8 9.8"/>',
         link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
         nodes:
           '<rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M9 6h6a3 3 0 0 1 3 3v6M6 9v6a3 3 0 0 0 3 3h6"/>',
@@ -3323,10 +2877,15 @@
         undo: '<path d="M9 7L4 12l5 5M4 12h10a6 6 0 0 1 0 12"/>',
         drop: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
         check: '<path d="M5 12l5 5 9-10"/>',
-        mtn: '<path d="M3 19 9.500 7l3.500 6 2-3 6 9z"/>',
-        deep: '<path d="M12 3v9M8.500 8.500 12 12l3.500-3.500"/><path d="M4 16l8 4 8-4"/>',
-        gem: '<path d="M6.500 4h11L21 9l-9 11L3 9z"/><path d="M3 9h18M9.500 4 8 9l4 11 4-11-1.500-5"/>',
+        mtn: '<path d="M3 19 9.5 7l3.5 6 2-3 6 9z"/>',
+        deep: '<path d="M12 3v9M8.5 8.5 12 12l3.5-3.5"/><path d="M4 16l8 4 8-4"/>',
+        gem: '<path d="M6.5 4h11L21 9l-9 11L3 9z"/><path d="M3 9h18M9.5 4 8 9l4 11 4-11-1.5-5"/>',
         info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+        eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+        eyeoff:
+          '<path d="M9.9 4.2A10.4 10.4 0 0 1 12 4c6.4 0 10 8 10 8a17.5 17.5 0 0 1-2.2 3.2M6.6 6.6A17.3 17.3 0 0 0 2 12s3.6 8 10 8a9.8 9.8 0 0 0 5.4-1.6M2 2l20 20"/>',
+        logout:
+          '<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>',
       };
       const HGC = {
         bell: ["notification-01"],
@@ -3334,8 +2893,6 @@
         search: ["search-01"],
         chev: ["arrow-down-01"],
         chevup: ["arrow-up-01"],
-        chevl: ["arrow-left-01"],
-        chevr: ["arrow-right-01"],
         plus: ["add-01"],
         minus: ["remove-01", "minus-sign"],
         expand: ["full-screen", "arrow-expand-02"],
@@ -3382,9 +2939,11 @@
         mtn: ["mountain", "mountain-01"],
         deep: ["arrow-down-double", "download-01"],
         gem: ["diamond-01", "diamond"],
+        eye: ["view"],
+        eyeoff: ["view-off", "view-off-slash"],
+        logout: ["logout-01", "logout-02"],
       };
       let HG = {};
-      /* Hugeicons asli (icon font) dipakai bila CSS-nya termuat; nama yang tidak ada / CDN terblokir otomatis jatuh ke SVG inline */
       function hgiProbe() {
         const m = {},
           t = document.createElement("i");
@@ -3400,9 +2959,11 @@
             }
           }
         t.remove();
-        const ch = JSON.stringify(m) !== JSON.stringify(HG);
-        HG = m;
-        if (ch && window.__ready) renderAll();
+        if (JSON.stringify(m) !== JSON.stringify(HG)) {
+          HG = m;
+          if ($("togglePass")) updatePassIcon();
+          if (window.__ready && CURRENT_USER) renderAll();
+        }
       }
       const I = (n, c = "") =>
         HG[n]
@@ -3517,38 +3078,32 @@
         "NOV",
         "DES",
       ];
-      /* nomor hari (hari sejak 1970) menurut kalender Asia/Jakarta */
+
+      function jakartaParts(opt) {
+        return new Intl.DateTimeFormat("en-CA", {
+          timeZone: "Asia/Jakarta",
+          ...opt,
+        }).formatToParts(new Date());
+      }
       function jakartaDayNum() {
         try {
-          const p = new Intl.DateTimeFormat("en-CA", {
-            timeZone: "Asia/Jakarta",
+          const p = jakartaParts({
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
-          }).formatToParts(new Date());
+          });
           const g = (t) => +p.find((x) => x.type === t).value;
           return Math.floor(
             Date.UTC(g("year"), g("month") - 1, g("day")) / 864e5,
           );
         } catch (e) {
-          const n = new Date(Date.now() + 7 * 36e5); // fallback: UTC+7
+          const n = new Date(Date.now() + 7 * 36e5);
           return Math.floor(
             Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()) /
               864e5,
           );
         }
       }
-      let TODAY = jakartaDayNum();
-      const dInfo = (n) => {
-        const x = new Date(n * 864e5);
-        return { d: x.getUTCDate(), m: MON[x.getUTCMonth()] };
-      };
-      const dLbl = (n) => {
-        const i = dInfo(n);
-        return i.d + " " + i.m;
-      };
-
-      /* ===== STATE ===== */
       function jakartaHour() {
         try {
           const p = new Intl.DateTimeFormat("en-GB", {
@@ -3564,8 +3119,20 @@
           return 13.5;
         }
       }
-      let RAWH = jakartaHour(); // jam WIB nyata (0–24), tidak di-clamp
-      let NOWH = Math.min(18, Math.max(6, RAWH));
+
+      let TODAY = jakartaDayNum(),
+        RAWH = jakartaHour(),
+        NOWH = Math.min(18, Math.max(6, RAWH));
+      const dInfo = (n) => {
+        const x = new Date(n * 864e5);
+        return { d: x.getUTCDate(), m: MON[x.getUTCMonth()] };
+      };
+      const dLbl = (n) => {
+        const i = dInfo(n);
+        return i.d + " " + i.m;
+      };
+
+      /* ===== STATE ===== */
       const S = {
         page: "production",
         lens: "map",
@@ -3590,39 +3157,34 @@
         pd: false,
         t0: Date.now(),
         view: { x: 0, y: 0, k: 1, W: 812, H: 642 },
-        notes: [],
         locked: {},
         assign: {},
         unitSt: {},
-        side: "rail",
-        lensOpen: true,
-        sheet: false,
-        sq: 0,
+        notes: [
+          {
+            t: "16:48",
+            sev: "warn",
+            txt: "Wet muck terdeteksi di drawpoint BB (GBC · Extraction Level) — akses dibatasi sementara",
+            read: false,
+          },
+          {
+            t: "15:12",
+            sev: "crit",
+            txt: "Zona DA ditandai pembatasan akses geoteknik (restricted)",
+            read: false,
+          },
+          {
+            t: "13:30",
+            sev: "ok",
+            txt: "Rail dispatch GBC normal — 3/3 consist beroperasi",
+            read: true,
+          },
+        ],
       };
       Object.keys(AREAS).forEach((k) => {
-        S.flags[k] = Object.assign({}, AREAS[k].flags);
+        S.flags[k] = { ...AREAS[k].flags };
         S.drift[k] = [0, 0, 0, 0];
       });
-      S.notes = [
-        {
-          t: "16:48",
-          sev: "warn",
-          txt: "Wet muck terdeteksi di drawpoint BB (GBC · Extraction Level) — akses dibatasi sementara",
-          read: false,
-        },
-        {
-          t: "15:12",
-          sev: "crit",
-          txt: "Zona DA ditandai pembatasan akses geoteknik (restricted)",
-          read: false,
-        },
-        {
-          t: "13:30",
-          sev: "ok",
-          txt: "Rail dispatch GBC normal — 3/3 consist beroperasi",
-          read: true,
-        },
-      ];
 
       /* ===== HELPERS ===== */
       function hash(s) {
@@ -3640,44 +3202,24 @@
         return ((a ^ (a >>> 14)) >>> 0) / 4294967296;
       }
       const fmt = (n) => Math.round(n).toLocaleString("en-US"),
-        clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-      const K = (n) =>
-        n >= 1000 ? Math.round(n / 100) / 10 + "K" : String(Math.round(n));
-      const A = () => AREAS[S.area],
+        clamp = (v, a, b) => Math.min(b, Math.max(a, v)),
+        K = (n) =>
+          n >= 1000 ? Math.round(n / 100) / 10 + "K" : String(Math.round(n)),
+        A = () => AREAS[S.area],
         xf = () => clamp((S.t - 6) / 12, 0, 1),
-        dayK = () => 0.92 + 0.16 * rnd("d" + S.day);
-      const hh = (t) => {
-        const h = Math.floor(t),
-          m = Math.floor((t - h) * 60);
-        return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
-      };
-      const $ = (id) => document.getElementById(id);
-      const esc = (s) =>
-        String(s).replace(
-          /[&<>"']/g,
-          (c) =>
-            ({
-              "&": "&amp;",
-              "<": "&lt;",
-              ">": "&gt;",
-              '"': "&quot;",
-              "'": "&#39;",
-            })[c],
-        );
-      const offShift = () => S.day === TODAY && (RAWH < 6 || RAWH >= 18),
-        statusLbl = () =>
-          S.day !== TODAY
-            ? "REPLAY"
-            : offShift()
-              ? RAWH < 6
-                ? "BELUM SHIFT"
-                : "SHIFT SELESAI"
-              : S.live
-                ? "LIVE"
-                : "REPLAY",
+        dayK = () => 0.92 + 0.16 * rnd("d" + S.day),
+        hh = (t) =>
+          String(Math.floor(t)).padStart(2, "0") +
+          ":" +
+          String(Math.floor((t - Math.floor(t)) * 60)).padStart(2, "0"),
+        $ = (id) => document.getElementById(id),
+        offShift = () => S.day === TODAY && (RAWH < 6 || RAWH >= 18),
         isLive = () => S.live && S.day === TODAY && !offShift(),
-        flagsOf = () => S.flags[S.area];
-      const wide = () => matchMedia("(min-width:1100px)").matches;
+        flagsOf = () => S.flags[S.area],
+        wide = () => matchMedia("(min-width:1100px)").matches,
+        dec = (v) => (Math.abs(v) < 100 && v % 1 !== 0 ? v.toFixed(1) : fmt(v)),
+        lvName = () => (S.page === "ecology" ? ECO[S.level] : LEVELS[S.level]);
+
       function toast(m) {
         document.querySelectorAll(".toast").forEach((e) => e.remove());
         const e = document.createElement("div");
@@ -3690,7 +3232,6 @@
           setTimeout(() => e.remove(), 300);
         }, 2200);
       }
-      /* DOM morph: perbarui hanya yang berubah → transisi CSS, hover & scroll tetap hidup */
       function patch(el, html) {
         const t = document.createElement("template");
         t.innerHTML = html;
@@ -3715,33 +3256,26 @@
           }
           if (n.nodeType !== 1) return;
           for (const at of [...o.attributes])
-            if (
-              !n.hasAttribute(at.name) &&
-              !(o.classList.contains("bub") && at.name === "class")
-            )
-              o.removeAttribute(at.name);
-          for (const at of n.attributes) {
-            if (o.classList.contains("bub") && at.name === "class") continue;
+            if (!n.hasAttribute(at.name)) o.removeAttribute(at.name);
+          for (const at of n.attributes)
             if (o.getAttribute(at.name) !== at.value)
               o.setAttribute(at.name, at.value);
-          }
           sync(o, n);
         });
         while (a.childNodes.length > bn.length) a.removeChild(a.lastChild);
       }
-      function reset(...ids) {
+      const reset = (...ids) =>
         ids.forEach((i) => {
           $(i).innerHTML = "";
         });
-      }
 
       /* ===== MODEL ===== */
       function lvl(i) {
         const a = A(),
           plan = (a.np / 2) * (i === 3 ? 0.03 : 1),
           pace = a.pace * LVL_PACE[i],
-          dr = isLive() ? S.drift[S.area][i] : 0;
-        const val = plan * clamp(xf() * pace * dayK() + dr, 0, 1.2);
+          dr = isLive() ? S.drift[S.area][i] : 0,
+          val = plan * clamp(xf() * pace * dayK() + dr, 0, 1.2);
         return {
           plan,
           val,
@@ -3751,12 +3285,11 @@
           pct: (val / plan) * 100,
         };
       }
-      function lvlUnits(i) {
-        const j = isLive() ? ((S.tick + i) % 3) - 1 : 0;
-        return Math.max(1, A().units[i] + j);
-      }
-      const lvlWorkers = (i) => A().workers[i];
-      const remainTotal = () => A().remain - lvl(0).val;
+      const lvlUnits = (i) =>
+          Math.max(1, A().units[i] + (isLive() ? ((S.tick + i) % 3) - 1 : 0)),
+        lvlWorkers = (i) => A().workers[i],
+        remainTotal = () => A().remain - lvl(0).val;
+
       function blocks() {
         const fl = flagsOf(),
           L = S.level,
@@ -3769,22 +3302,21 @@
             0,
           );
         return BLOCKS.map((b) => {
-          if (!b.act) return Object.assign({}, b, { flag: null });
+          if (!b.act) return { ...b, flag: null };
           const f = fl[b.id] || null,
             share = b.w / sw;
-          const u =
-            f === "restr"
-              ? Math.max(1, Math.round(units * 0.03))
-              : Math.round((units * b.w) / sw);
-          const w = f === "restr" ? 0 : Math.round((work * b.w) / sw2);
-          return Object.assign({}, b, {
+          return {
+            ...b,
             flag: f,
-            u,
-            w,
-            ton: rem * share * (0.92 + 0.16 * rnd(S.area + b.id)),
             share,
+            u:
+              f === "restr"
+                ? Math.max(1, Math.round(units * 0.03))
+                : Math.round((units * b.w) / sw),
+            w: f === "restr" ? 0 : Math.round((work * b.w) / sw2),
+            ton: rem * share * (0.92 + 0.16 * rnd(S.area + b.id)),
             eff: 0.78 + 0.12 * rnd(S.area + b.id + "e"),
-          });
+          };
         });
       }
       function selBlocks() {
@@ -3803,12 +3335,11 @@
         const a = A(),
           base = ((a.np / 2) * a.pace * dayK()) / 12,
           live = isLive(),
-          ph = hash(S.area + b.id) % 7; // fase gelombang berbeda tiap blok
+          ph = hash(S.area + b.id) % 7;
         return Array.from({ length: 12 }, (_, i) => {
           const raw =
             base * b.share * (0.72 + 0.56 * rnd(S.area + b.id + "h" + i));
           const f = b.flag === "restr" ? 0.25 : b.flag === "wet" ? 0.8 : 1;
-          // naik-turun ±2,5% mengikuti S.tick (hanya saat LIVE)
           const wob = live
             ? 1 + 0.025 * Math.sin(S.tick / 2 + i * 0.9 + ph)
             : 1;
@@ -3821,9 +3352,8 @@
         return +(s * n).toFixed(d);
       }
       function lensVals(b) {
-        const L = S.lens,
-          fb = b.flag === "restr" ? 2 : b.flag === "wet" ? 1 : 0;
-        switch (L) {
+        const fb = b.flag === "restr" ? 2 : b.flag === "wet" ? 1 : 0;
+        switch (S.lens) {
           case "crew":
             return [
               { i: "hat", v: b.w, u: "", a: "sum" },
@@ -3937,8 +3467,6 @@
           return { i: m.i, v, u: m.u, big: m.big };
         });
       }
-      const dec = (v) =>
-        Math.abs(v) < 100 && v % 1 !== 0 ? v.toFixed(1) : fmt(v);
       function fleet() {
         const a = A(),
           k = S.area;
@@ -3958,17 +3486,15 @@
         Object.keys(cfg).forEach((ty) => {
           for (let i = 1; i <= cfg[ty]; i++) {
             const id = `${ty}-${a.short}-${String(i).padStart(2, "0")}`;
-            const blk =
-                S.assign[id] || ACTIVE[Math.floor(rnd(id) * ACTIVE.length)].id,
-              base = rnd(id + "st") < 0.09 ? "down" : "ok";
             out.push({
               id,
               ty,
               n: T[ty].n,
               cap: T[ty].cap,
               cy: Math.round(T[ty].cy * (0.9 + 0.2 * rnd(id + "c"))),
-              blk,
-              st: S.unitSt[id] || base,
+              blk:
+                S.assign[id] || ACTIVE[Math.floor(rnd(id) * ACTIVE.length)].id,
+              st: S.unitSt[id] || (rnd(id + "st") < 0.09 ? "down" : "ok"),
               off: Math.floor(rnd(id + "o") * 3000),
               av: 0.86 + 0.12 * rnd(id + "a"),
             });
@@ -3993,63 +3519,51 @@
       }
       const T3 = (s) => {
         s = Math.max(0, Math.floor(s));
-        return (
-          Math.floor(s / 3600) +
-          ":" +
-          String(Math.floor(s / 60) % 60).padStart(2, "0") +
-          ":" +
-          String(s % 60).padStart(2, "0")
-        );
+        return `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
       };
       const MS = (s) =>
-        Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
-      const lvName = () =>
-        S.page === "ecology" ? ECO[S.level] : LEVELS[S.level];
+        `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
       /* ===== RENDER ===== */
       const LOGO =
         '<svg viewBox="0 0 143 112"><rect y="5" width="143" height="107" rx="6" fill="#231f20"/><rect fill="#00adee" x="53.1" y="81.2" width="26.1" height="13.1"/><polygon fill="#00adee" points="105,55.2 97.7,73.8 90.5,55.2 53.2,55.2 53.2,68 79.1,68 89.3,94.1 106.1,94.1 116.3,68 116.3,94.1 143,94.1 143,55.2"/><polygon fill="#00adee" points="53.2,55.1 53.2,42 0,42 0,94.3 27.2,94.3 27.2,81.2 53.2,81.2 53.2,68.2 27.2,68.2 27.2,55.1"/></svg>';
-      const AVA =
-        '<svg viewBox="0 0 52 52"><rect width="52" height="52" fill="#dfe6e0"/><circle cx="26" cy="31" r="11" fill="#f0c9a6"/><path d="M12 27a14 14 0 0 1 28 0z" fill="#ffc107"/><rect x="9" y="26" width="34" height="4" rx="2" fill="#f5a800"/><path d="M8 52c2-9 9-11 18-11s16 2 18 11z" fill="#3d5a80"/></svg>';
+
       function renderSide() {
-        const open = S.side === "open",
-          s = $("side");
-        s.className =
-          "side " + (open ? "open" : "rail") + (window.__ready ? "" : " nt");
+        const s = $("side"),
+          pList = allowedPages(),
+          aList = allowedAreas(),
+          init = CURRENT_USER ? CURRENT_USER.initials : "TA";
+        s.className = "side" + (window.__ready ? "" : " nt");
         patch(
           s,
-          `<div class="logo">${LOGO}<span class="lt lb">PTFI Ops</span></div>
-      <button class="sch" data-a="search" aria-label="Cari">${I("search")}<span class="lb">Search</span></button>
+          `<div class="logo">${LOGO}</div>
+      <button class="sch" data-a="search" aria-label="Cari">${I("search")}</button>
       <div class="sec">MAIN</div>
-      <nav class="nv">${PAGES.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}">${I(p[1])}<span class="lb">${p[2]}</span></button>`).join("")}
-       <div class="grp ${S.lensOpen ? "op" : ""}"><button class="it" data-a="lensgrp" aria-label="Lensa Peta">${I("layers")}<span class="lb">Lensa Peta</span><span class="lb cv">${I("chev")}</span></button>
+      <nav class="nv">${pList.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}" title="${p[2]}">${I(p[1])}</button>`).join("")}
+       <div class="grp"><button class="it" aria-label="Lensa Peta">${I("layers")}</button>
         <div class="kids"><div class="ki">${LENSES.map((l) => `<button class="kid ${S.lens === l[0] ? "on" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div></div></div>
       </nav>
       <div class="sec">AREA</div>
-      <div class="areas">${Object.keys(AREAS)
+      <div class="areas">${aList
         .map(
-          (k, i) =>
-            `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}<span class="lb">${AREAS[k].name}</span></button>`,
+          (k) =>
+            `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}</button>`,
         )
         .join("")}</div>
-      <button class="usr nick" data-a="sys" aria-label="TA — status sistem"><span class="nk">TA</span></button>`,
+      <button class="usr nick" data-a="sys" aria-label="${init} — profil & status sistem" title="${CURRENT_USER ? CURRENT_USER.name + " (" + CURRENT_USER.role + ")" : ""}"><span class="nk">${init}</span></button>`,
         );
-      }
-      function squash() {
-        const b = document.querySelector(".bub");
-        if (!b) return;
-        b.classList.remove("sq");
-        void b.offsetWidth;
-        b.classList.add("sq");
       }
       function renderTop() {
         const a = A(),
-          unread = S.notes.filter((n) => !n.read).length;
+          unread = S.notes.filter((n) => !n.read).length,
+          pList = allowedPages(),
+          aList = allowedAreas(),
+          init = CURRENT_USER ? CURRENT_USER.initials : "TA";
         patch(
           $("ttl"),
-          `<h1>${a.name}</h1><button class="rf" data-a="refresh" aria-label="Segarkan data">${I("refresh")}</button><span class="live"><i></i>${isLive() ? "LIVE" : "REPLAY"} · simulasi</span>`,
+          `<h1>${a.name}</h1><button class="rf" data-a="refresh" aria-label="Segarkan data">${I("refresh")}</button>`,
         );
-        const areaPop = `<div class="pop">${Object.keys(AREAS)
+        const areaPop = `<div class="pop">${aList
           .map(
             (k) =>
               `<button class="${k === S.area ? "cur" : ""}" data-a="area" data-v="${k}">${AREAS[k].name}</button>`,
@@ -4058,7 +3572,7 @@
         patch(
           $("sels"),
           `<span class="dd"><button data-a="menu" data-v="areaB">${a.short === "BG" ? "Big Gossan" : a.short}${I("chev")}</button>${S.menu === "areaB" ? areaPop : ""}</span><span class="sep"></span>
-      <span class="sep pgsep"></span><span class="dd pgsel"><button data-a="menu" data-v="pg">${PAGES.find((p) => p[0] === S.page)[2]}${I("chev")}</button>${S.menu === "pg" ? `<div class="pop r" style="max-height:60dvh;overflow:auto"><h6>Halaman</h6>${PAGES.map((p) => `<button class="${S.page === p[0] ? "cur" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}${p[2]}</button>`).join("")}<h6>Lensa peta</h6>${LENSES.map((l) => `<button class="${S.lens === l[0] ? "cur" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>` : ""}</span>
+      <span class="sep pgsep"></span><span class="dd pgsel"><button data-a="menu" data-v="pg">${(PAGES.find((p) => p[0] === S.page) || PAGES[0])[2]}${I("chev")}</button>${S.menu === "pg" ? `<div class="pop r" style="max-height:60dvh;overflow:auto"><h6>Halaman</h6>${pList.map((p) => `<button class="${S.page === p[0] ? "cur" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}${p[2]}</button>`).join("")}<h6>Lensa peta</h6>${LENSES.map((l) => `<button class="${S.lens === l[0] ? "cur" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>` : ""}</span>
       <span class="dd"><button data-a="menu" data-v="level">${lvName()}${I("chev")}</button>${S.menu === "level" ? `<div class="pop">${(S.page === "ecology" ? ECO : LEVELS).map((l, i) => `<button class="${i === S.level ? "cur" : ""}" data-a="level" data-v="${i}">${l}</button>`).join("")}</div>` : ""}</span>`,
         );
         patch(
@@ -4066,7 +3580,7 @@
           `<div class="acts"><button data-a="share" aria-label="Share">${I("share")}<span class="t">Share</span></button><button data-a="report" aria-label="Report">${I("doc")}<span class="t">Report</span></button><button data-a="print" aria-label="Print">${I("print")}<span class="t">Print</span></button></div>
       <span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 28px))"><h6>Notifikasi (simulasi)</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
       <button class="rb" data-a="search" aria-label="Cari">${I("search")}</button>
-      <button class="ava" data-a="sys" aria-label="TA — status sistem">TA</button>`,
+      <button class="ava" data-a="sys" aria-label="${init} — profil & status sistem">${init}</button>`,
         );
       }
       function winPos() {
@@ -4102,7 +3616,7 @@
         for (let v = step; v <= L.plan * 1.05; v += step) {
           const x = v / pc;
           if (x > 0.97) break;
-          if (Math.abs(x - xf()) < 0.045 || x - lastX < 0.07) continue; // hindari penanda waktu & antar-tag
+          if (Math.abs(x - xf()) < 0.045 || x - lastX < 0.07) continue;
           lastX = x;
           h += `<div class="tag" style="left:${x * 100}%">${K(v)}</div>`;
         }
@@ -4114,16 +3628,16 @@
         patch($("tkin"), h);
       }
       function cards() {
-        const a = A(),
-          out = [];
-        for (let i = 0; i < 4; i++) {
+        const a = A();
+        return [0, 1, 2, 3].map((i) => {
           const L = lvl(i),
             w = lvlWorkers(i),
             u = lvlUnits(i),
             code = `${a.short}${String(i + 1).padStart(2, "0")}-${1000 + (hash(a.short + i + S.day) % 9000)}`;
-          let c = { title: LEVELS[i], code };
-          if (S.page === "production") {
-            c = Object.assign(c, {
+          if (S.page === "production")
+            return {
+              i,
+              code,
               A: ["Mined", L.val, L.unit],
               B: ["Plan", L.plan, L.unit],
               C: ["Engaged", u, "wheel"],
@@ -4133,34 +3647,38 @@
               max: L.plan,
               mu: L.unit,
               dl: "Workers",
-            });
-            c.st =
-              L.pct >= 98
-                ? "s"
-                : i === 0 && Object.keys(flagsOf()).length
-                  ? "o"
-                  : a.short === "BG" && i === 3
-                    ? "s2"
-                    : "g";
-          } else if (S.page === "personnel") {
-            const pr = w,
-              ro = Math.ceil(w * 1.04);
-            c = Object.assign(c, {
-              A: ["Present", pr, ""],
+              st:
+                L.pct >= 98
+                  ? "s"
+                  : i === 0 && Object.keys(flagsOf()).length
+                    ? "o"
+                    : a.short === "BG" && i === 3
+                      ? "s2"
+                      : "g",
+            };
+          if (S.page === "personnel") {
+            const ro = Math.ceil(w * 1.04);
+            return {
+              i,
+              code,
+              A: ["Present", w, ""],
               B: ["Roster", ro, ""],
-              C: ["Tagged UG", Math.round(pr * 0.99), "scan"],
-              D: ["", Math.max(1, Math.round(pr / 38)), "user"],
+              C: ["Tagged UG", Math.round(w * 0.99), "scan"],
+              D: ["", Math.max(1, Math.round(w / 38)), "user"],
               bl: "Attendance",
-              pct: (pr / ro) * 100,
+              pct: (w / ro) * 100,
               max: ro,
               mu: "org",
               dl: "Shift boss",
-            });
-            c.st = pr / ro >= 0.99 ? "g" : "o";
-          } else if (S.page === "safety") {
+              st: w / ro >= 0.99 ? "g" : "o",
+            };
+          }
+          if (S.page === "safety") {
             const need = [1800, 900, 2600, 700][i] * (a.np / 150000) + 40,
               got = need * (0.9 + 0.14 * rnd(a.short + i + "v"));
-            c = Object.assign(c, {
+            return {
+              i,
+              code,
               A: ["Airflow", got, "m³/s"],
               B: ["Required", need, "m³/s"],
               C: [
@@ -4174,33 +3692,30 @@
               max: need,
               mu: "m³/s",
               dl: "Seismic",
-            });
-            c.st = got >= need * 0.98 ? "g" : "o";
-          } else {
-            const cap = [480, 120, 350, 260][i] * (a.np / 150000 + 0.3),
-              dep = cap * (0.5 + 0.35 * rnd(a.short + i + "e"));
-            c = Object.assign(c, {
-              title: ECO[i],
-              A: [
-                i === 1 ? "Debit" : i > 1 ? "Reklamasi" : "Deposisi",
-                dep,
-                i === 1 ? "L/s" : "ha",
-              ],
-              B: ["Kapasitas", cap, i === 1 ? "L/s" : "ha"],
-              C: ["pH", 6.2 + rnd(a.short + i + "p") * 1.8, "drop"],
-              D: ["", Math.round(14 + rnd(a.short + i + "t") * 50), "layers"],
-              bl: "Utilisasi",
-              pct: (dep / cap) * 100,
-              max: cap,
-              mu: i === 1 ? "L/s" : "ha",
-              dl: "TSS",
-            });
-            c.st = i === 1 && rnd(a.short + "acid") > 0.6 ? "o" : "g";
+              st: got >= need * 0.98 ? "g" : "o",
+            };
           }
-          c.i = i;
-          out.push(c);
-        }
-        return out;
+          const cap = [480, 120, 350, 260][i] * (a.np / 150000 + 0.3),
+            dep = cap * (0.5 + 0.35 * rnd(a.short + i + "e"));
+          return {
+            i,
+            code,
+            A: [
+              i === 1 ? "Debit" : i > 1 ? "Reklamasi" : "Deposisi",
+              dep,
+              i === 1 ? "L/s" : "ha",
+            ],
+            B: ["Kapasitas", cap, i === 1 ? "L/s" : "ha"],
+            C: ["pH", 6.2 + rnd(a.short + i + "p") * 1.8, "drop"],
+            D: ["", Math.round(14 + rnd(a.short + i + "t") * 50), "layers"],
+            bl: "Utilisasi",
+            pct: (dep / cap) * 100,
+            max: cap,
+            mu: i === 1 ? "L/s" : "ha",
+            dl: "TSS",
+            st: i === 1 && rnd(a.short + "acid") > 0.6 ? "o" : "g",
+          };
+        });
       }
       function renderLeft() {
         const val = (v) =>
@@ -4210,7 +3725,8 @@
                 : fmt(v)
               : v,
           sup = (u) => (u && !PS[u] ? `<sup>${u}</sup>` : ""),
-          ic = (u) => (PS[u] ? I(u) : "");
+          ic = (u) => (PS[u] ? I(u) : ""),
+          aList = allowedAreas();
         patch(
           $("left"),
           '<div class="lcards">' +
@@ -4233,9 +3749,7 @@
        <div class="bend"><span>0 ${c.mu === "org" ? "" : c.mu}</span><span>${K(c.max)} ${c.mu === "org" ? "" : c.mu}</span></div></div>
        <div class="cfoot"><span class="dd"><button data-a="menu" data-v="cl${c.i}">${I("pin")}${A().name}${I("chev")}</button>${
          S.menu === "cl" + c.i
-           ? `<div class="pop" style="bottom:100%;top:auto;margin-bottom:6px">${Object.keys(
-               AREAS,
-             )
+           ? `<div class="pop" style="bottom:100%;top:auto;margin-bottom:6px">${aList
                .map(
                  (k) =>
                    `<button class="${k === S.area ? "cur" : ""}" data-a="area" data-v="${k}">${AREAS[k].name}</button>`,
@@ -4294,9 +3808,7 @@
                   : prog >= 45
                     ? "DEVELOPMENT"
                     : "EKSPLORASI";
-            h += `<div class="blk idle" style="${pos}">
-         <div class="bt"><span>${b.id}</span><span class="fl gy">${st}</span></div>
-         <div class="m"><div><span>${I("drill")}${prog}% dev.</span></div><div><span>${I("flag")}Q${q} 2027</span></div><div><span>${I("cube")}${fmt(res)} mt</span></div></div></div>`;
+            h += `<div class="blk idle" style="${pos}"><div class="bt"><span>${b.id}</span><span class="fl gy">${st}</span></div><div class="m"><div><span>${I("drill")}${prog}% dev.</span></div><div><span>${I("flag")}Q${q} 2027</span></div><div><span>${I("cube")}${fmt(res)} mt</span></div></div></div>`;
             return;
           }
           const lv = lensVals(b),
@@ -4343,18 +3855,14 @@
             Math.round(6 + 6 * rnd(a.short + "ct")) + " operator",
           ],
         ];
-        h += `<div class="blk na idle" style="grid-column:4;grid-row:1/5">
-       <div class="bt"><span>N/A</span><span class="fl gy">INFRA</span></div>
-       <div class="infra">${inf.map((x) => `<div class="ir">${I(x[0])}<span><small>${x[1]}</small><b>${x[2]}</b></span></div>`).join("")}</div></div>`;
+        h += `<div class="blk idle" style="grid-column:4;grid-row:1/5"><div class="bt"><span>N/A</span><span class="fl gy">INFRA</span></div><div class="infra">${inf.map((x) => `<div class="ir">${I(x[0])}<span><small>${x[1]}</small><b>${x[2]}</b></span></div>`).join("")}</div></div>`;
         patch($("frame"), h);
       }
       function streamSVG() {
         const X0 = 22,
           X1 = 528,
-          n = 12;
-        const px = (i) => X0 + (i * (X1 - X0)) / (n - 1);
-
-        /* ---- helper kurva halus (tangen horizontal) ---- */
+          n = 12,
+          px = (i) => X0 + (i * (X1 - X0)) / (n - 1);
         const cs = (p, a = 0, b = p.length - 1) => {
           let d = "";
           for (let i = a + 1; i <= b; i++) {
@@ -4373,65 +3881,52 @@
           let k = 0;
           while (k < pts.length - 2 && x > pts[k + 1][0]) k++;
           const [xa, ya] = pts[k],
-            [xb, yb] = pts[k + 1];
-          const t = clamp((x - xa) / (xb - xa), 0, 1),
-            s = t * t * (3 - 2 * t);
-          return ya + (yb - ya) * s;
+            [xb, yb] = pts[k + 1],
+            t = clamp((x - xa) / (xb - xa), 0, 1);
+          return ya + (yb - ya) * t * t * (3 - 2 * t);
         };
-
-        /* ---- garis batas atas & bawah (6 node) ---- */
         const top = [
-          [22, 106],
-          [124, 95],
-          [225, 100],
-          [325, 81],
-          [427, 83],
-          [528, 62],
-        ];
-        const bot = [
-          [22, 175],
-          [124, 152],
-          [225, 152],
-          [325, 175],
-          [427, 152],
-          [528, 130],
-        ];
-        const hatTop = top.map(([x, y]) => [x, y + 6]);
-        const hatBot = bot.map(([x, y]) => [x, y - 24]);
-
-        /* ---- data produksi (dipengaruhi jam S.t) ---- */
-        const act = blocks().filter((b) => b.act);
-        const ser = act.map((b) => ({ id: b.id, v: prodSeries(b) }));
+            [22, 106],
+            [124, 95],
+            [225, 100],
+            [325, 81],
+            [427, 83],
+            [528, 62],
+          ],
+          bot = [
+            [22, 175],
+            [124, 152],
+            [225, 152],
+            [325, 175],
+            [427, 152],
+            [528, 130],
+          ];
+        const act = blocks().filter((b) => b.act),
+          ser = act.map((b) => ({ id: b.id, v: prodSeries(b) }));
         const tot = Array.from({ length: n }, (_, i) =>
           ser.reduce((s, l) => s + l.v[i], 0),
         );
-        const a = A();
-        const base = ((a.np / 2) * a.pace * dayK()) / 12; // skala stabil, tidak ikut berubah saat jam digeser
-        const sc = 38 / (base * 1.28);
-
+        const sc = 38 / ((((A().np / 2) * A().pace * dayK()) / 12) * 1.28);
         const selIds = S.sel.size ? [...S.sel] : ["BA", "BB"];
         const dk = Array.from({ length: n }, (_, i) =>
           ser
             .filter((l) => selIds.includes(l.id))
             .reduce((s, l) => s + l.v[i], 0),
         );
-
         const botE = [],
           topE = [],
           dkE = [];
         for (let i = 0; i < n; i++) {
           const x = px(i),
-            yb = yAt(bot, x) - 6;
-          const th = Math.max(0.8, tot[i] * sc);
-          const yt = yb - th;
+            yb = yAt(bot, x) - 6,
+            th = Math.max(0.8, tot[i] * sc),
+            yt = yb - th;
           botE.push([x, yb]);
           topE.push([x, yt]);
           dkE.push([x, yt + Math.min(dk[i] * sc, th)]);
         }
-
-        /* ---- segmen & node yang disorot ---- */
-        const topSeg = { AA: 0, AB: 1, BA: 2, CA: 3, DA: 4 };
-        const botSeg = { AC: 0, AD: 1, BB: 2, CB: 3, DA: 4 };
+        const topSeg = { AA: 0, AB: 1, BA: 2, CA: 3, DA: 4 },
+          botSeg = { AC: 0, AD: 1, BB: 2, CB: 3, DA: 4 };
         const tSegs = new Set(),
           bSegs = new Set(),
           dNodes = new Set();
@@ -4447,7 +3942,6 @@
             dNodes.add("b" + (botSeg[id] + 1));
           }
         });
-
         const diamond = ([x, y], dark) => {
           const c = dark ? "#1d201e" : "#9a9e9b";
           return `<polygon points="${x},${y - 5.5} ${x + 5.5},${y} ${x},${y + 5.5} ${x - 5.5},${y}" fill="${c}" stroke="${c}" stroke-width="1.5" stroke-linejoin="round"/>`;
@@ -4456,29 +3950,9 @@
           const on = S.sel.has(id);
           return `<g data-a="blk" data-id="${id}" style="cursor:pointer"><rect x="${cx - 20}" y="${cy - 13}" width="40" height="26" rx="8" fill="${on ? "#cfd3cf" : "#e9ebe8"}"/><text x="${cx}" y="${cy + 5.5}" font-size="15" font-weight="500" text-anchor="middle" fill="${on ? "#1d201e" : "#9a9e9b"}" font-family="Inter,system-ui,sans-serif">${id}</text></g>`;
         };
-        const labelsTop = [
-          ["AA", 73, 64],
-          ["AB", 175, 68],
-          ["BA", 277, 57],
-          ["CA", 376, 50],
-          ["DA", 478, 44],
-        ];
-        const labelsBot = [
-          ["AC", 73, 192],
-          ["AD", 175, 178],
-          ["BB", 277, 196],
-          ["CB", 376, 200],
-          ["DA", 478, 177],
-        ];
-
-        /* ---- overlay: penanda waktu & rentang slider ---- */
-        const tpx = X0 + clamp((S.t - 6) / 12, 0, 1) * (X1 - X0);
-        const rg = S.range;
-        const r0 = X0 + rg[0] * (X1 - X0),
-          r1 = X0 + rg[1] * (X1 - X0);
-        const OY = 28,
-          OH = 190;
-
+        const tpx = X0 + xf() * (X1 - X0),
+          r0 = X0 + S.range[0] * (X1 - X0),
+          r1 = X0 + S.range[1] * (X1 - X0);
         const hl = (pts, set) =>
           [...set]
             .map(
@@ -4488,46 +3962,50 @@
             .join("");
 
         return `<svg class="stream" viewBox="0 28 572 190" role="img" aria-label="Place of development">
-         <defs>
-           <pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-             <rect width="7" height="7" fill="#f3f4f2"/>
-             <line x1="0" y1="0" x2="0" y2="7" stroke="#dcdfdb" stroke-width="3.2"/>
-           </pattern>
-         </defs>
-
-         <path d="${band(hatTop, hatBot)}" fill="url(#ht)"/>
-         <path d="${band(topE, botE)}" fill="#8b8d8e"/>
-         <path d="${band(topE, dkE)}" fill="#2a2c2b"/>
-
-         <path d="${curve(top)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
-         <path d="${curve(bot)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
-         ${hl(top, tSegs)}${hl(bot, bSegs)}
-         ${top.map((p, i) => diamond(p, dNodes.has("t" + i))).join("")}
-         ${bot.map((p, i) => diamond(p, dNodes.has("b" + i))).join("")}
-
-         <rect x="${tpx}" y="${OY}" width="${Math.max(0, X1 + 10 - tpx)}" height="${OH}" fill="rgba(255,255,255,.55)"/>
-         <rect x="0" y="${OY}" width="${r0}" height="${OH}" fill="rgba(255,255,255,.5)"/>
-         <rect x="${r1}" y="${OY}" width="${Math.max(0, 572 - r1)}" height="${OH}" fill="rgba(255,255,255,.5)"/>
-
-         ${labelsTop.map((l) => label(...l)).join("")}
-         ${labelsBot.map((l) => label(...l)).join("")}
-       </svg>`;
+      <defs><pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#f3f4f2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#dcdfdb" stroke-width="3.2"/></pattern></defs>
+      <path d="${band(
+        top.map(([x, y]) => [x, y + 6]),
+        bot.map(([x, y]) => [x, y - 24]),
+      )}" fill="url(#ht)"/>
+      <path d="${band(topE, botE)}" fill="#8b8d8e"/>
+      <path d="${band(topE, dkE)}" fill="#2a2c2b"/>
+      <path d="${curve(top)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+      <path d="${curve(bot)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+      ${hl(top, tSegs)}${hl(bot, bSegs)}
+      ${top.map((p, i) => diamond(p, dNodes.has("t" + i))).join("")}
+      ${bot.map((p, i) => diamond(p, dNodes.has("b" + i))).join("")}
+      <rect x="${tpx}" y="28" width="${Math.max(0, X1 + 10 - tpx)}" height="190" fill="rgba(255,255,255,.55)"/>
+      <rect x="0" y="28" width="${r0}" height="190" fill="rgba(255,255,255,.5)"/>
+      <rect x="${r1}" y="28" width="${Math.max(0, 572 - r1)}" height="190" fill="rgba(255,255,255,.5)"/>
+      ${[
+        ["AA", 73, 64],
+        ["AB", 175, 68],
+        ["BA", 277, 57],
+        ["CA", 376, 50],
+        ["DA", 478, 44],
+        ["AC", 73, 192],
+        ["AD", 175, 178],
+        ["BB", 277, 196],
+        ["CB", 376, 200],
+        ["DA", 478, 177],
+      ]
+        .map((l) => label(...l))
+        .join("")}
+    </svg>`;
       }
       function renderRight() {
         const bs = selBlocks(),
-          a = A();
-        const ore = S.sel.size
-            ? bs.reduce((s, b) => s + b.ton, 0)
-            : remainTotal(),
-          c = conv(ore, S.tab),
+          a = A(),
+          ore = S.sel.size ? bs.reduce((s, b) => s + b.ton, 0) : remainTotal();
+        const c = conv(ore, S.tab),
           sc = conv(
             bs.reduce((s, b) => s + b.ton, 0),
             S.tab,
           ),
           vtxt = c.v >= 100 ? fmt(c.v) : c.v.toFixed(1);
         const dev = bs.filter((b) => b.flag !== "restr").slice(0, 3),
-          ser = bs.map((b) => ({ b, v: prodSeries(b) })),
-          rg = S.range,
+          ser = bs.map((b) => ({ b, v: prodSeries(b) }));
+        const rg = S.range,
           i0 = Math.round(rg[0] * 11),
           i1 = Math.round(rg[1] * 11);
         let bef = 0,
@@ -4573,6 +4051,7 @@
           ["UGT", "Truck"],
           ["RAIL", "Rail"],
         ];
+
         patch(
           $("rp"),
           `<div class="rh"><div><div class="big">${vtxt}<sup>${c.u}</sup></div><p>${lvName()} — ${names[S.tab]} remaining${S.sel.size ? ` (${[...S.sel].join(", ")})` : ""}</p></div><div style="display:flex;gap:8px"><span class="dd"><button class="cb" data-a="menu" data-v="flt" aria-label="Filter" style="padding:0">${I("funnel")}</button>${S.menu === "flt" ? `<div class="pop r"><h6>Filter blok</h6><button data-a="fsel" data-v="all">Semua blok aktif</button><button data-a="fsel" data-v="wet">${I("drop")}Hanya wet muck</button><button data-a="fsel" data-v="restr">${I("lock")}Hanya restricted</button><button data-a="fsel" data-v="ok">${I("check")}Hanya normal</button></div>` : ""}</span><button class="cb" data-a="clear" aria-label="Hapus pilihan">${I("x")}</button></div></div>
@@ -4634,17 +4113,6 @@
       }</div>`,
         );
       }
-      function renderAll() {
-        renderSide();
-        renderTop();
-        dayPill();
-        renderTL();
-        renderLeft();
-        renderTools();
-        renderMap();
-        renderRight();
-        renderModal();
-      }
       function renderModal() {
         const m = $("modalroot");
         if (!S.modal) {
@@ -4659,12 +4127,24 @@
         document.body.style.overflow = "hidden";
         m.innerHTML = `<div class="mbg" data-a="mclose" role="dialog" aria-modal="true"><div class="modal"><h3>${S.modal.title}<button class="cb" style="width:40px;height:40px" data-a="mclose" aria-label="Tutup">${I("x")}</button></h3>${S.modal.html}</div></div>`;
       }
+      function renderAll() {
+        if (!CURRENT_USER) return;
+        renderSide();
+        renderTop();
+        dayPill();
+        renderTL();
+        renderLeft();
+        renderTools();
+        renderMap();
+        renderRight();
+        renderModal();
+      }
       function openModal(k, title, html) {
         S.modal = { k: k + ":" + Date.now(), title, html };
         renderModal();
       }
 
-      /* ===== ACTIONS ===== */
+      /* ===== ACTIONS & MODALS ===== */
       function setFlag(id, v) {
         if (v) flagsOf()[id] = v;
         else delete flagsOf()[id];
@@ -4680,12 +4160,11 @@
       }
       function csv() {
         const a = A();
-        let s =
-          "Area,Blok,Status,Unit aktif,Pekerja,Sisa ore (mt),Cu (t),Au (koz),Ag (koz)\n";
-        blocks()
-          .filter((b) => b.act)
-          .forEach((b) => {
-            s +=
+        return (
+          "Area,Blok,Status,Unit aktif,Pekerja,Sisa ore (mt),Cu (t),Au (koz),Ag (koz)\n" +
+          blocks()
+            .filter((b) => b.act)
+            .map((b) =>
               [
                 a.name,
                 b.id,
@@ -4696,9 +4175,10 @@
                 Math.round(conv(b.ton, "cu").v),
                 conv(b.ton, "au").v.toFixed(1),
                 conv(b.ton, "ag").v.toFixed(1),
-              ].join(",") + "\n";
-          });
-        return s;
+              ].join(","),
+            )
+            .join("\n")
+        );
       }
       function reportHTML() {
         const a = A(),
@@ -4709,46 +4189,29 @@
             return `<tr><td>${LEVELS[i]}</td><td>${L.name}</td><td>${fmt(L.val)} ${L.unit}</td><td>${fmt(L.plan)} ${L.unit}</td><td>${Math.round(L.pct)}%</td></tr>`;
           })
           .join("");
-        const acts = `<div class="acts2"><button class="bo" data-a="csv">${I("doc")}Unduh CSV</button><button class="bo" data-a="print">${I("print")}Cetak / PDF</button></div>`;
-        return `<div class="rpt">
-    <p class="meta">${a.name} · ${dLbl(S.day)} · s.d. ${hh(S.t)} WIB · <b>data simulasi (prototipe)</b></p>
-
-    <div class="sh"><h4>Level</h4>${acts}</div>
-    <div class="tw"><table>
-      <thead><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table></div>
-
-    <div class="sh"><h4>Blok</h4></div>
-    <div class="tw"><table>
-      <thead><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr></thead>
-      <tbody>${bs
-        .map(
-          (b) =>
-            `<tr><td><b>${b.id}</b></td><td><span class="pl ${b.flag || "ok"}">${b.flag || "normal"}</span></td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`,
-        )
-        .join("")}</tbody>
-    </table></div>
-  </div>`;
+        return `<div class="rpt"><p class="meta">${a.name} · ${dLbl(S.day)} · s.d. ${hh(S.t)} WIB · <b>data simulasi (prototipe)</b></p>
+      <div class="sh"><h4>Level</h4><div class="acts2"><button class="bo" data-a="csv">${I("doc")}Unduh CSV</button><button class="bo" data-a="print">${I("print")}Cetak / PDF</button></div></div>
+      <div class="tw"><table><thead><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="sh"><h4>Blok</h4></div>
+      <div class="tw"><table><thead><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr></thead><tbody>${bs.map((b) => `<tr><td><b>${b.id}</b></td><td><span class="pl ${b.flag || "ok"}">${b.flag || "normal"}</span></td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`).join("")}</tbody></table></div></div>`;
       }
       function sysHTML() {
-        const down = fleet().filter((u) => u.st !== "ok"),
-          f = flagsOf(),
-          an = [];
-        Object.keys(f).forEach((k) =>
-          an.push({
-            ic: f[k] === "wet" ? "drop" : "lock",
-            c: f[k] === "wet" ? "warn" : "crit",
-            t: `Drawpoint ${k}: ${f[k] === "wet" ? "wet muck" : "akses dibatasi geoteknik"}`,
-          }),
-        );
-        down.forEach((u) =>
-          an.push({
-            ic: "alert",
-            c: "warn",
-            t: `${u.id}: ${u.st === "maint" ? "maintenance" : "breakdown"}`,
-          }),
-        );
+        const f = flagsOf(),
+          u = CURRENT_USER,
+          an = [
+            ...Object.keys(f).map((k) => ({
+              ic: f[k] === "wet" ? "drop" : "lock",
+              c: f[k] === "wet" ? "warn" : "crit",
+              t: `Drawpoint ${k}: ${f[k] === "wet" ? "wet muck" : "akses dibatasi geoteknik"}`,
+            })),
+            ...fleet()
+              .filter((u) => u.st !== "ok")
+              .map((u) => ({
+                ic: "alert",
+                c: "warn",
+                t: `${u.id}: ${u.st === "maint" ? "maintenance" : "breakdown"}`,
+              })),
+          ];
         const src = [
           [
             "Fleet Management (mis. Cat MineStar / Modular Dispatch)",
@@ -4774,86 +4237,84 @@
             "SEC Technical Report Summary",
           ],
         ];
+        const pageNames = u
+          ? u.pages
+              .map(
+                (pid) => (PAGES.find((p) => p[0] === pid) || [pid, "", pid])[2],
+              )
+              .join(", ")
+          : "";
         return `<div class="rpt sys">
-    <div class="sh first"><h4>Ringkasan anomali</h4><span class="hint2">aturan otomatis, bukan AI generatif</span></div>
-    <div class="anl">${
-      an.length
-        ? an
-            .map(
-              (x) =>
-                `<div class="an ${x.c}"><span class="ai">${I(x.ic)}</span><span>${x.t}</span></div>`,
-            )
-            .join("")
-        : `<div class="an ok"><span class="ai">${I("check")}</span><span>Tidak ada anomali aktif.</span></div>`
-    }</div>
-
-    <div class="sh"><h4>Koneksi sumber data</h4></div>
-    <div class="tw"><table>
-      <thead><tr><th>Sistem</th><th>Status</th><th>Catatan</th></tr></thead>
-      <tbody>${src.map((r) => `<tr><td>${r[0]}</td><td><span class="pl mock">Mock</span></td><td>${r[1]}</td></tr>`).join("")}</tbody>
-    </table></div>
-
-    <div class="sh"><h4>Referensi publik yang dipakai sebagai skala</h4></div>
-    <div class="refl">${refs
-      .map(
-        (r) =>
-          `<div class="rf2"><span class="ai">${I("link")}</span><span>${r[0]} <a href="${r[1]}" target="_blank" rel="noopener">${r[2]}</a></span></div>`,
-      )
-      .join("")}</div>
-
-    <div class="note">${I("info")}<p>Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p></div>
-  </div>`;
+      ${
+        u
+          ? `<div class="usr-box">
+              <div class="usr-info">
+                <div class="usr-badge">${u.initials}</div>
+                <div>
+                  <div style="font-weight:500;font-size:15.5px">${u.name}</div>
+                  <div style="font-size:13px;color:var(--mut);margin-top:2px">${u.role} · Akses Modul: <b style="color:var(--ink);font-weight:500">${pageNames}</b></div>
+                </div>
+              </div>
+              <button class="btn danger" data-a="logout" style="display:inline-flex;align-items:center;gap:8px">${I("logout")}Keluar Sesi</button>
+            </div>`
+          : ""
+      }
+      <div class="sh first"><h4>Ringkasan anomali</h4><span class="hint2">aturan otomatis, bukan AI generatif</span></div>
+      <div class="anl">${an.length ? an.map((x) => `<div class="an ${x.c}"><span class="ai">${I(x.ic)}</span><span>${x.t}</span></div>`).join("") : `<div class="an ok"><span class="ai">${I("check")}</span><span>Tidak ada anomali aktif.</span></div>`}</div>
+      <div class="sh"><h4>Koneksi sumber data</h4></div>
+      <div class="tw"><table><thead><tr><th>Sistem</th><th>Status</th><th>Catatan</th></tr></thead><tbody>${src.map((r) => `<tr><td>${r[0]}</td><td><span class="pl mock">Mock</span></td><td>${r[1]}</td></tr>`).join("")}</tbody></table></div>
+      <div class="sh"><h4>Referensi publik yang dipakai sebagai skala</h4></div>
+      <div class="refl">${refs.map((r) => `<div class="rf2"><span class="ai">${I("link")}</span><span>${r[0]} <a href="${r[1]}" target="_blank" rel="noopener">${r[2]}</a></span></div>`).join("")}</div>
+      <div class="note">${I("info")}<p>Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p></div></div>`;
       }
       function camHTML() {
         return `<p style="margin-bottom:10px">Tampilan simulasi (tidak ada umpan video nyata). Pada sistem produksi, ganti dengan stream RTSP/WebRTC.</p><div class="cams">${["GBC Extraction Level · CAM-03", "GBC Haulage Drift · CAM-07", "Crusher Station · CAM-01", "DMLZ Drawbell · CAM-11", "Rail Loading · CAM-04", "MineGem Remote Bay · CAM-02"].map((n) => `<div class="cam">${n}<b>● REC</b><span style="position:absolute;left:8px;bottom:8px">${hh(S.t)} WIB</span></div>`).join("")}</div>`;
       }
       function searchRes(q) {
         q = (q || "").toLowerCase();
-        const out = [];
-        Object.keys(AREAS).forEach((k) => {
-          if (
-            !q ||
-            AREAS[k].name.toLowerCase().includes(q) ||
-            k.toLowerCase().includes(q)
-          )
-            out.push(
-              `<button class="btn l" data-a="area" data-v="${k}" style="margin:3px">${AREAS[k].name}</button>`,
-            );
-        });
-        ACTIVE.forEach((b) => {
-          if (!q || b.id.toLowerCase().includes(q))
-            out.push(
+        const out = [
+          ...allowedAreas()
+            .filter(
+              (k) =>
+                !q ||
+                AREAS[k].name.toLowerCase().includes(q) ||
+                k.toLowerCase().includes(q),
+            )
+            .map(
+              (k) =>
+                `<button class="btn l" data-a="area" data-v="${k}" style="margin:3px">${AREAS[k].name}</button>`,
+            ),
+          ...ACTIVE.filter((b) => !q || b.id.toLowerCase().includes(q)).map(
+            (b) =>
               `<button class="btn l" data-a="focus" data-id="${b.id}" style="margin:3px">Blok ${b.id}</button>`,
-            );
-        });
-        if (q)
-          fleet().forEach((u) => {
-            if (u.id.toLowerCase().includes(q))
-              out.push(
-                `<button class="btn l" data-a="uact" data-v="loc" data-id="${u.id}" style="margin:3px">${u.id}</button>`,
-              );
-          });
+          ),
+          ...(q
+            ? fleet()
+                .filter((u) => u.id.toLowerCase().includes(q))
+                .map(
+                  (u) =>
+                    `<button class="btn l" data-a="uact" data-v="loc" data-id="${u.id}" style="margin:3px">${u.id}</button>`,
+                )
+            : []),
+        ];
         return out.join("") || "<p>Tidak ada hasil.</p>";
       }
-      function lensSheet() {
-        return `<div class="lgrid">${LENSES.map((l) => `<button class="${S.lens === l[0] ? "on" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>`;
-      }
-      function closeModal() {
-        S.modal = null;
-        S.sheet = false;
-      }
+
       function act(a, d, e) {
         switch (a) {
           case "page":
+            if (!canPage(d.v)) {
+              toast("Akses halaman ini tidak tersedia untuk akun Anda");
+              return;
+            }
             S.page = d.v;
             S.lens = PAGE_LENS[d.v];
             S.level = 0;
             S.menu = null;
-            S.sq = 1;
             reset("left", "rp");
             break;
           case "lens":
-            closeModal();
+            S.modal = null;
             if (d.v === "cctv") {
               openModal("cctv", "Remote Operations & CCTV", camHTML());
               break;
@@ -4862,25 +4323,18 @@
             S.menu = null;
             reset("frame");
             break;
-          case "lenses":
-            S.sheet = true;
-            S.sq = 1;
-            openModal("lenses", "Lensa Peta", lensSheet());
-            break;
-          case "lensgrp":
-            if (S.side === "open") S.lensOpen = !S.lensOpen;
-            break;
-          case "side":
-            S.side = S.side === "open" ? "rail" : "open";
-            break;
           case "menu":
             S.menu = S.menu === d.v ? null : d.v;
             break;
           case "area":
+            if (!canArea(d.v)) {
+              toast("Akses area ini tidak tersedia untuk akun Anda");
+              return;
+            }
             S.area = d.v;
             S.sel.clear();
             S.menu = null;
-            closeModal();
+            S.modal = null;
             reset("left", "frame", "rp");
             break;
           case "level":
@@ -4907,29 +4361,27 @@
           case "overlay":
             S.overlay = !S.overlay;
             break;
-          case "blk": {
+          case "blk":
             if (S.pd) return;
-            const id = d.id;
             S.menu = null;
             if (S.mode === "multi" || e.shiftKey)
-              S.sel.has(id) ? S.sel.delete(id) : S.sel.add(id);
-            else if (S.sel.size === 1 && S.sel.has(id)) S.sel.clear();
+              S.sel.has(d.id) ? S.sel.delete(d.id) : S.sel.add(d.id);
+            else if (S.sel.size === 1 && S.sel.has(d.id)) S.sel.clear();
             else {
               S.sel.clear();
-              S.sel.add(id);
+              S.sel.add(d.id);
             }
             break;
-          }
           case "focus":
             S.sel.clear();
             S.sel.add(d.id);
             S.menu = null;
-            closeModal();
+            S.modal = null;
             break;
           case "clear":
             S.sel.clear();
             break;
-          case "fsel": {
+          case "fsel":
             S.sel.clear();
             if (d.v !== "all")
               blocks()
@@ -4939,7 +4391,6 @@
                 .forEach((b) => S.sel.add(b.id));
             S.menu = null;
             break;
-          }
           case "setflag":
             setFlag(d.id, d.v);
             S.menu = null;
@@ -4967,7 +4418,7 @@
               S.unitSt[d.id] = "down";
               toast(d.id + " ditandai kendala (breakdown)");
             } else if (d.v === "loc") {
-              closeModal();
+              S.modal = null;
               S.sel.clear();
               S.sel.add(u.blk);
               toast(d.id + " berada di blok " + u.blk);
@@ -5009,13 +4460,12 @@
             Object.keys(S.drift).forEach((k) => (S.drift[k] = [0, 0, 0, 0]));
             toast("Data disegarkan");
             break;
-          case "share": {
+          case "share":
             try {
               navigator.clipboard.writeText(location.href);
             } catch (x) {}
             toast("Tautan disalin");
             break;
-          }
           case "report":
             openModal("report", "Laporan shift", reportHTML());
             break;
@@ -5037,15 +4487,15 @@
               "Pencarian global",
               `<input class="sinput" id="sq" placeholder="Cari area, blok (mis. BB), atau unit (mis. LHD-GBC-03)…" autocomplete="off"><div id="sres">${searchRes("")}</div>`,
             );
-            setTimeout(() => {
-              const q = $("sq");
-              if (q) q.focus();
-            }, 60);
+            setTimeout(() => $("sq")?.focus(), 60);
             break;
           case "sys":
             S.menu = null;
-            openModal("sys", "Status sistem & sumber data", sysHTML());
+            openModal("sys", "Profil Akses & Status Sistem", sysHTML());
             break;
+          case "logout":
+            logoutDashboard();
+            return;
           case "alertwin":
             openModal(
               "al",
@@ -5063,16 +4513,14 @@
             toggleFull();
             return;
           case "mclose":
-            closeModal();
+            S.modal = null;
             break;
         }
         renderAll();
-        if (S.sq) {
-          S.sq = 0;
-          squash();
-        }
       }
+
       document.addEventListener("click", (e) => {
+        if (!CURRENT_USER) return;
         const el = e.target.closest("[data-a]");
         if (
           el &&
@@ -5095,20 +4543,17 @@
         if (el) act(el.dataset.a, el.dataset, e);
       });
       document.addEventListener("input", (e) => {
-        if (e.target.id === "sq") {
-          const r = $("sres");
-          if (r) r.innerHTML = searchRes(e.target.value);
-        }
+        if (e.target.id === "sq" && $("sres"))
+          $("sres").innerHTML = searchRes(e.target.value);
       });
       document.addEventListener("keydown", (e) => {
+        if (!CURRENT_USER) return;
         if (e.key === "Escape") {
           if (S.modal || S.menu) {
-            closeModal();
+            S.modal = null;
             S.menu = null;
             renderAll();
-          } else if ($("map").classList.contains("full")) {
-            toggleFull();
-          }
+          } else if ($("map").classList.contains("full")) toggleFull();
         }
         if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
           e.preventDefault();
@@ -5159,9 +4604,8 @@
         const mv = (ev) => {
           const x = clamp((ev.clientX - box.left) / box.width, 0, 1),
             r = S.range.slice();
-          r[idx] = x;
-          if (idx === 0) r[0] = Math.min(x, r[1] - 0.08);
-          else r[1] = Math.max(x, r[0] + 0.08);
+          r[idx] =
+            idx === 0 ? Math.min(x, r[1] - 0.08) : Math.max(x, r[0] + 0.08);
           S.range = r;
           renderRight();
         };
@@ -5178,15 +4622,12 @@
         e.preventDefault();
       });
 
-      /* ===== MAP PAN / ZOOM ===== */
-      /* ukuran alami dunia peta (px) */
+      /* ===== MAP PAN / ZOOM / FULLSCREEN ===== */
       const NW = 812,
         NH = 642;
-
-      function applyView() {
-        $("world").style.transform =
-          `translate(${S.view.x}px,${S.view.y}px) scale(${S.view.k})`;
-      }
+      const applyView = () =>
+        ($("world").style.transform =
+          `translate(${S.view.x}px,${S.view.y}px) scale(${S.view.k})`);
       function applyV(v) {
         Object.assign(S.view, v);
         const w = $("world");
@@ -5194,7 +4635,6 @@
         w.style.height = v.H + "px";
         applyView();
       }
-      /* hitung tampilan untuk kotak peta ukuran mw x mh */
       function viewFor(mw, mh, full) {
         if (!full) {
           const top = 64,
@@ -5209,10 +4649,9 @@
             y: top + Math.max(0, (availH - NH * k) / 2),
           };
         }
-        /* full: dunia dilebarkan agar memenuhi seluruh layar */
         const aw = mw - 40,
-          ah = mh - 76 - 48;
-        const k = Math.max(0.3, Math.min(2, aw / NW, ah / NH));
+          ah = mh - 76 - 48,
+          k = Math.max(0.3, Math.min(2, aw / NW, ah / NH));
         return { k, W: aw / k, H: ah / k, x: 20, y: 76 };
       }
       function fit() {
@@ -5225,8 +4664,7 @@
           m.classList.contains("full"),
         );
         if (!window.__fitted) {
-          w.style.transition =
-            "none"; /* fit pertama: langsung di posisi akhir */
+          w.style.transition = "none";
           applyV(v);
           void w.offsetWidth;
           requestAnimationFrame(() =>
@@ -5237,8 +4675,6 @@
           );
         } else applyV(v);
       }
-
-      /* ===== FULL SCREEN dengan animasi ===== */
       function toggleFull() {
         const m = $("map"),
           w = $("world");
@@ -5246,12 +4682,11 @@
         const opening = !m.classList.contains("full");
         const vw = document.documentElement.clientWidth,
           vh = document.documentElement.clientHeight;
-        const v0 = Object.assign({}, S.view);
+        const v0 = { ...S.view };
         let b0, b1, v1, ph;
-
         if (opening) {
           const r = m.getBoundingClientRect();
-          ph = document.createElement("div"); /* penahan tempat di grid */
+          ph = document.createElement("div");
           ph.id = "mapph";
           if (!wide()) ph.style.cssText = `height:${r.height}px;flex:none`;
           m.before(ph);
@@ -5265,7 +4700,6 @@
           b1 = { x: r.left, y: r.top, w: r.width, h: r.height, r: 24 };
           v1 = viewFor(r.width, r.height, false);
         }
-
         const setBox = (b) => {
           m.style.left = b.x + "px";
           m.style.top = b.y + "px";
@@ -5278,7 +4712,6 @@
         m.classList.remove("full");
         setBox(b0);
         w.style.transition = "none";
-
         const D = 650,
           t0 = performance.now(),
           L = (a, b, t) => a + (b - a) * t,
@@ -5348,14 +4781,14 @@
           { passive: false },
         );
         m.addEventListener("pointerdown", (e) => {
-          if (e.target.closest("button,.pop,.tools,.zm")) return;
-          st = {
-            x: e.clientX,
-            y: e.clientY,
-            vx: S.view.x,
-            vy: S.view.y,
-            mv: false,
-          };
+          if (!e.target.closest("button,.pop,.tools,.zm"))
+            st = {
+              x: e.clientX,
+              y: e.clientY,
+              vx: S.view.x,
+              vy: S.view.y,
+              mv: false,
+            };
         });
         addEventListener("pointermove", (e) => {
           if (!st) return;
@@ -5374,10 +4807,7 @@
           }
         });
         const end = () => {
-          if (st && st.mv)
-            setTimeout(() => {
-              S.pd = false;
-            }, 60);
+          if (st && st.mv) setTimeout(() => (S.pd = false), 60);
           m.classList.remove("grab");
           w.style.transition = "";
           st = null;
@@ -5387,7 +4817,7 @@
       })();
       new ResizeObserver(() => fit()).observe($("map"));
 
-      /* ===== PATCH-20: animasi intro — dari 06:00 (0) menuju jam saat halaman dimuat ===== */
+      /* ===== INTRO & LIVE SIMULATOR ===== */
       const INTRO = !matchMedia("(prefers-reduced-motion: reduce)").matches;
       function endIntro() {
         if (!S.intro) return;
@@ -5401,14 +4831,13 @@
       function playIntro() {
         if (!S.intro) return;
         const t0 = performance.now(),
-          D = 2800; // durasi animasi (ms)
+          D = 2800;
         const step = (now) => {
           if (!S.intro) return;
           RAWH = jakartaHour();
-          NOWH = Math.min(18, Math.max(6, RAWH)); // target = jam nyata saat ini
-          const p = Math.min(1, Math.max(0, (now - t0) / D)),
-            e = 1 - Math.pow(1 - p, 3); // ease-out
-          S.t = 6 + (NOWH - 6) * e;
+          NOWH = Math.min(18, Math.max(6, RAWH));
+          const p = Math.min(1, Math.max(0, (now - t0) / D));
+          S.t = 6 + (NOWH - 6) * (1 - Math.pow(1 - p, 3));
           renderTL();
           renderLeft();
           renderMap();
@@ -5418,7 +4847,6 @@
         };
         requestAnimationFrame(step);
       }
-      // sentuhan pengguna membatalkan intro
       document.addEventListener(
         "pointerdown",
         () => {
@@ -5426,18 +4854,18 @@
         },
         true,
       );
-      /* ===== LIVE SIMULATOR ===== */
+
       setInterval(() => {
-        if (S.pd || document.hidden || S.intro) return;
+        if (!CURRENT_USER || S.pd || document.hidden || S.intro) return;
         S.tick++;
         RAWH = jakartaHour();
         NOWH = Math.min(18, Math.max(6, RAWH));
-        const nd = jakartaDayNum(); // lewat tengah malam → ganti hari otomatis
+        const nd = jakartaDayNum();
         if (nd !== TODAY) {
           if (S.day === TODAY) S.day = nd;
           TODAY = nd;
         }
-        if (!isLive() && S.day === TODAY && S.live) S.t = NOWH; // di luar shift: diam di 06:00 / 18:00
+        if (!isLive() && S.day === TODAY && S.live) S.t = NOWH;
         if (isLive()) {
           S.t = NOWH;
           Object.keys(S.drift).forEach(
@@ -5477,7 +4905,8 @@
         renderRight();
       }, 2000);
       setInterval(() => {
-        if (S.pd || !isLive() || document.hidden || S.intro) return;
+        if (!CURRENT_USER || S.pd || !isLive() || document.hidden || S.intro)
+          return;
         const fl = fleet();
         document.querySelectorAll("[data-up]").forEach((el) => {
           const u = fl.find((x) => x.id === el.dataset.up);
@@ -5485,17 +4914,100 @@
         });
       }, 1000);
 
-      if (INTRO) {
-        S.intro = true;
-        S.t = 6; // mulai dari kondisi 0
-        document.body.classList.add("intro");
+      /* ===== AUTHENTICATION & BOOTSTRAP ===== */
+      function updatePassIcon() {
+        const inp = $("loginPass"),
+          btn = $("togglePass");
+        if (!inp || !btn) return;
+        btn.innerHTML = I(inp.type === "password" ? "eye" : "eyeoff");
       }
+
+      function enterDashboard(account) {
+        CURRENT_USER = account;
+        S.page = account.pages[0];
+        S.lens = PAGE_LENS[S.page];
+        S.area = account.areas[0];
+        S.level = 0;
+        S.sel.clear();
+        S.menu = null;
+        S.modal = null;
+        window.__fitted = 0;
+
+        document.body.classList.remove("locked");
+        const lv = $("loginView");
+        lv.classList.add("hide");
+        setTimeout(() => {
+          if (CURRENT_USER) lv.style.display = "none";
+        }, 560);
+
+        if (INTRO) {
+          S.intro = true;
+          S.t = 6;
+          document.body.classList.add("intro");
+        }
+        reset("side", "left", "frame", "rp");
+        renderAll();
+        fit();
+        window.__ready = 1;
+        setTimeout(() => $("side").classList.remove("nt"), 150);
+        if (INTRO) setTimeout(playIntro, 700);
+        toast(`Selamat datang, ${account.name} (${account.role})`);
+      }
+
+      function logoutDashboard() {
+        CURRENT_USER = null;
+        S.intro = false;
+        S.modal = null;
+        S.menu = null;
+        window.__ready = 0;
+        renderModal();
+        document.body.classList.remove("intro");
+        document.body.classList.add("locked");
+        $("side").classList.add("nt");
+        $("loginForm").reset();
+        $("loginErr").classList.remove("show");
+        updatePassIcon();
+
+        const lv = $("loginView");
+        lv.style.display = "grid";
+        void lv.offsetWidth;
+        lv.classList.remove("hide");
+        setTimeout(() => $("loginUser")?.focus(), 100);
+      }
+
+      $("togglePass").addEventListener("click", () => {
+        const inp = $("loginPass");
+        inp.type = inp.type === "password" ? "text" : "password";
+        updatePassIcon();
+      });
+
+      $("loginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const uVal = $("loginUser").value.trim().toLowerCase();
+        const pVal = $("loginPass").value;
+        const errEl = $("loginErr");
+        const card = $("loginCard");
+
+        const found = USERS.find(
+          (acc) => acc.user.toLowerCase() === uVal && acc.pass === pVal,
+        );
+
+        if (!found) {
+          errEl.innerHTML = `${I("alert")}<span>Username atau kata sandi tidak valid.</span>`;
+          errEl.classList.add("show");
+          card.classList.remove("err-shake");
+          void card.offsetWidth;
+          card.classList.add("err-shake");
+          return;
+        }
+
+        errEl.classList.remove("show");
+        enterDashboard(found);
+      });
+
       hgiProbe();
-      renderAll();
-      fit();
-      window.__ready = 1;
-      setTimeout(() => $("side").classList.remove("nt"), 150);
-      if (INTRO) setTimeout(playIntro, 700); // tunggu animasi masuk kartu/peta dulu
+      updatePassIcon();
+      setTimeout(() => $("loginUser")?.focus(), 120);
     </script>
   </body>
 </html>
