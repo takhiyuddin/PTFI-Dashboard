@@ -443,11 +443,11 @@
       .sch {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         height: 46px;
         border-radius: 14px;
         border: 1px solid var(--line);
-        padding: 0 15px;
+        padding: 0 14px;
         color: var(--mut);
         width: 100%;
         overflow: hidden;
@@ -455,6 +455,27 @@
       }
       .sch:hover {
         background: #f7f8f6;
+        color: var(--ink);
+      }
+      .sch .lb {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: 1;
+        min-width: 0;
+        gap: 6px;
+      }
+      .sch kbd {
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--mut);
+        background: #f1f3f0;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 2px 6px;
+        line-height: 1.2;
+        flex: none;
       }
       .sec {
         font-size: 9.5px;
@@ -544,28 +565,30 @@
         display: block;
         position: absolute;
         left: 100%;
-        top: -6px;
+        top: 50%;
         padding-left: 14px;
         opacity: 0;
         visibility: hidden;
-        transform: translateX(-8px);
+        transform: translate(-8px, -50%);
         transition: 0.25s var(--ease);
         z-index: 60;
       }
       .ki {
-        min-width: 230px;
+        min-width: 236px;
         background: #fff;
+        border: 1px solid var(--line);
         border-radius: 18px;
         box-shadow: 0 14px 44px rgba(0, 0, 0, 0.16);
         padding: 6px;
-        max-height: 72dvh;
-        overflow: auto;
+        max-height: min(460px, calc(100dvh - 32px));
+        overflow-y: auto;
+        scrollbar-width: thin;
       }
       .grp:hover .kids,
       .grp:focus-within .kids {
         opacity: 1;
         visibility: visible;
-        transform: none;
+        transform: translateY(-50%);
       }
       .kid {
         display: flex;
@@ -2459,12 +2482,12 @@
       }
 
       /* =====================================================================
-         RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
-1. Mobile (HP)             : <= 640px  (optimal 360px - 576px)
-2. Tablet                  : 641px - 1023px (optimal 768px)
-3. Desktop / Laptop        : 1024px - 1679px (optimal 1280px - 1440px)
+RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
+1. Mobile (HP) : <= 640px (optimal 360px - 576px)
+2. Tablet : 641px - 1023px (optimal 768px)
+3. Desktop / Laptop : 1024px - 1679px (optimal 1280px - 1440px)
 4. Desktop Besar / Full HD : >= 1680px (optimal 1920px+)
-      ===================================================================== */
+===================================================================== */
 
       /* --- TIER 4: DESKTOP BESAR / FULL HD (>= 1680px, optimal 1920px) --- */
       @media (min-width: 1680px) {
@@ -3988,20 +4011,20 @@
         patch(
           s,
           `<div class="logo">${LOGO}<div class="logo-txt"><b>PT Freeport Indonesia</b><small>Operations Control</small></div></div>
-      <button class="sch" data-a="search" aria-label="Cari">${I("search")}<span class="lb">Pencarian Cepat</span></button>
-      <div class="sec">MAIN</div>
-      <nav class="nv">${pList.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}" title="${p[2]}">${I(p[1])}<span class="lb">${p[2]}</span></button>`).join("")}
-       <div class="grp"><button class="it" aria-label="Lensa Peta">${I("layers")}<span class="lb">Lensa Peta</span></button>
-        <div class="kids"><div class="ki">${LENSES.map((l) => `<button class="kid ${S.lens === l[0] ? "on" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div></div></div>
-      </nav>
-      <div class="sec">AREA</div>
-      <div class="areas">${aList
-        .map(
-          (k) =>
-            `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}<span class="lb">${AREAS[k].short === "BG" ? "Big Gossan" : AREAS[k].short}</span></button>`,
-        )
-        .join("")}</div>
-      <button class="usr nick" data-a="sys" aria-label="${init} — profil & status sistem" title="${CURRENT_USER ? CURRENT_USER.name + " (" + CURRENT_USER.role + ")" : ""}"><span class="nk">${init}</span><span class="usr-lbl">${uName}</span></button>`,
+<button class="sch" data-a="search" aria-label="Search / ⌘ + K" title="Search / ⌘ + K">${I("search")}<span class="lb"><span>Search</span><kbd>⌘ + K</kbd></span></button>
+<div class="sec">MAIN</div>
+<nav class="nv">${pList.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}" title="${p[2]}">${I(p[1])}<span class="lb">${p[2]}</span></button>`).join("")}
+<div class="grp"><button class="it" aria-label="Lensa Peta">${I("layers")}<span class="lb">Lensa Peta</span></button>
+<div class="kids"><div class="ki">${LENSES.map((l) => `<button class="kid ${S.lens === l[0] ? "on" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div></div></div>
+</nav>
+<div class="sec">AREA</div>
+<div class="areas">${aList
+            .map(
+              (k) =>
+                `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}<span class="lb">${AREAS[k].short === "BG" ? "Big Gossan" : AREAS[k].short}</span></button>`,
+            )
+            .join("")}</div>
+<button class="usr nick" data-a="sys" aria-label="${init} — profil & status sistem" title="${CURRENT_USER ? CURRENT_USER.name + " (" + CURRENT_USER.role + ")" : ""}"><span class="nk">${init}</span><span class="usr-lbl">${uName}</span></button>`,
         );
       }
       function renderMobDock() {
@@ -4036,15 +4059,15 @@
         patch(
           $("sels"),
           `<span class="dd"><button data-a="menu" data-v="areaB">${a.short === "BG" ? "Big Gossan" : a.short}${I("chev")}</button>${S.menu === "areaB" ? areaPop : ""}</span>
-      <span class="sep pgsep"></span><span class="dd pgsel"><button data-a="menu" data-v="pg">${(PAGES.find((p) => p[0] === S.page) || PAGES[0])[2]}${I("chev")}</button>${S.menu === "pg" ? `<div class="pop r" style="max-height:60dvh;overflow:auto"><h6>Halaman</h6>${pList.map((p) => `<button class="${S.page === p[0] ? "cur" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}${p[2]}</button>`).join("")}<h6>Lensa peta</h6>${LENSES.map((l) => `<button class="${S.lens === l[0] ? "cur" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>` : ""}</span>
-      <span class="sep"></span><span class="dd"><button data-a="menu" data-v="level">${lvName()}${I("chev")}</button>${S.menu === "level" ? `<div class="pop r">${(S.page === "ecology" ? ECO : LEVELS).map((l, i) => `<button class="${i === S.level ? "cur" : ""}" data-a="level" data-v="${i}">${l}</button>`).join("")}</div>` : ""}</span>`,
+<span class="sep pgsep"></span><span class="dd pgsel"><button data-a="menu" data-v="pg">${(PAGES.find((p) => p[0] === S.page) || PAGES[0])[2]}${I("chev")}</button>${S.menu === "pg" ? `<div class="pop r" style="max-height:60dvh;overflow:auto"><h6>Halaman</h6>${pList.map((p) => `<button class="${S.page === p[0] ? "cur" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}${p[2]}</button>`).join("")}<h6>Lensa peta</h6>${LENSES.map((l) => `<button class="${S.lens === l[0] ? "cur" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>` : ""}</span>
+<span class="sep"></span><span class="dd"><button data-a="menu" data-v="level">${lvName()}${I("chev")}</button>${S.menu === "level" ? `<div class="pop r">${(S.page === "ecology" ? ECO : LEVELS).map((l, i) => `<button class="${i === S.level ? "cur" : ""}" data-a="level" data-v="${i}">${l}</button>`).join("")}</div>` : ""}</span>`,
         );
         patch(
           $("hr"),
           `<div class="acts"><button data-a="share" aria-label="Share">${I("share")}<span class="t">Share</span></button><button data-a="report" aria-label="Report">${I("doc")}<span class="t">Report</span></button><button data-a="print" aria-label="Print">${I("print")}<span class="t">Print</span></button></div>
-      <span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 24px))"><h6>Notifikasi (simulasi)</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
-      <button class="rb" data-a="search" aria-label="Cari">${I("search")}</button>
-      <button class="ava" data-a="sys" aria-label="${init} — profil & status sistem">${init}</button>`,
+<span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 24px))"><h6>Notifikasi (simulasi)</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
+<button class="rb" data-a="search" aria-label="Search / ⌘ + K">${I("search")}</button>
+<button class="ava" data-a="sys" aria-label="${init} — profil & status sistem">${init}</button>`,
         );
       }
       function winPos() {
@@ -4057,8 +4080,8 @@
         patch(
           $("day"),
           `<span class="al ${alert ? "" : "ok"}">${I(alert ? "alert" : "check")}</span>
-      <span class="dd"><button data-a="menu" data-v="day">Day ${dInfo(S.day).d}${I("chev")}</button>${S.menu === "day" ? `<div class="pop" style="top:46px">${days.map((d) => `<button class="${d === S.day ? "cur" : ""}" data-a="day" data-v="${d}">Day ${dInfo(d).d} · ${dLbl(d)}${d === TODAY ? " (hari ini)" : ""}</button>`).join("")}</div>` : ""}</span>
-      <span class="chip" style="margin-left:auto">${dLbl(S.day)}</span><button class="today" data-a="today">${S.day === TODAY ? (offShift() ? (RAWH < 6 ? "Belum shift" : "Shift selesai") : "Today") : "Replay"}</button>`,
+<span class="dd"><button data-a="menu" data-v="day">Day ${dInfo(S.day).d}${I("chev")}</button>${S.menu === "day" ? `<div class="pop" style="top:46px">${days.map((d) => `<button class="${d === S.day ? "cur" : ""}" data-a="day" data-v="${d}">Day ${dInfo(d).d} · ${dLbl(d)}${d === TODAY ? " (hari ini)" : ""}</button>`).join("")}</div>` : ""}</span>
+<span class="chip" style="margin-left:auto">${dLbl(S.day)}</span><button class="today" data-a="today">${S.day === TODAY ? (offShift() ? (RAWH < 6 ? "Belum shift" : "Shift selesai") : "Today") : "Replay"}</button>`,
         );
       }
       function renderTL() {
@@ -4206,22 +4229,22 @@
                   pct = clamp(c.pct, 0, 100),
                   muted = S.mute[S.area + c.i];
                 return `<div class="cd ${S.level === c.i ? "sel" : ""}" data-a="level" data-v="${c.i}" style="--d:${c.i}">
-       <div class="top2"><span class="bdg ${bd[0]}">${bd[1]}</span><span class="code">${c.code}</span></div>
-       <div class="mg"><div><label>${c.A[0]} ${sup(c.A[2])}</label><div class="v">${val(c.A[1])}</div></div><div><label>${c.B[0]} ${sup(c.B[2])}</label><div class="v">${val(c.B[1])}</div></div>
-       <div><label>${c.C[0]}</label><div class="v">${val(c.C[1])}${ic(c.C[2])}</div></div><div><label>${c.dl}</label><div class="v">${val(c.D[1])}${ic(c.D[2])}</div></div></div>
-       <div class="bar"><div>${c.bl} ${Math.round(c.pct)}%</div><div class="btrack"><div class="bfill" style="width:${pct}%"></div><div class="bfade" style="left:${pct}%"></div><div class="bmk" style="left:${pct}%">${val(c.A[1])}</div></div>
-       <div class="bend"><span>0 ${c.mu === "org" ? "" : c.mu}</span><span>${K(c.max)} ${c.mu === "org" ? "" : c.mu}</span></div></div>
-       <div class="cfoot"><span class="dd"><button data-a="menu" data-v="cl${c.i}">${I("pin")}${A().name}${I("chev")}</button>${
-         S.menu === "cl" + c.i
-           ? `<div class="pop" style="bottom:100%;top:auto;margin-bottom:6px">${aList
-               .map(
-                 (k) =>
-                   `<button class="${k === S.area ? "cur" : ""}" data-a="area" data-v="${k}">${AREAS[k].name}</button>`,
-               )
-               .join("")}</div>`
-           : ""
-       }</span>
-       <span class="ic"><button data-a="log" data-v="${c.i}" aria-label="Log aktivitas">${I("log")}</button><button data-a="mute" data-v="${c.i}" aria-label="Alarm">${I(muted ? "bellx" : "bell")}${S.notes.some((n) => !n.read && n.sev !== "ok") && c.i === 0 && !muted ? '<span class="rd"></span>' : ""}</button></span></div></div>`;
+<div class="top2"><span class="bdg ${bd[0]}">${bd[1]}</span><span class="code">${c.code}</span></div>
+<div class="mg"><div><label>${c.A[0]} ${sup(c.A[2])}</label><div class="v">${val(c.A[1])}</div></div><div><label>${c.B[0]} ${sup(c.B[2])}</label><div class="v">${val(c.B[1])}</div></div>
+<div><label>${c.C[0]}</label><div class="v">${val(c.C[1])}${ic(c.C[2])}</div></div><div><label>${c.dl}</label><div class="v">${val(c.D[1])}${ic(c.D[2])}</div></div></div>
+<div class="bar"><div>${c.bl} ${Math.round(c.pct)}%</div><div class="btrack"><div class="bfill" style="width:${pct}%"></div><div class="bfade" style="left:${pct}%"></div><div class="bmk" style="left:${pct}%">${val(c.A[1])}</div></div>
+<div class="bend"><span>0 ${c.mu === "org" ? "" : c.mu}</span><span>${K(c.max)} ${c.mu === "org" ? "" : c.mu}</span></div></div>
+<div class="cfoot"><span class="dd"><button data-a="menu" data-v="cl${c.i}">${I("pin")}${A().name}${I("chev")}</button>${
+                  S.menu === "cl" + c.i
+                    ? `<div class="pop" style="bottom:100%;top:auto;margin-bottom:6px">${aList
+                        .map(
+                          (k) =>
+                            `<button class="${k === S.area ? "cur" : ""}" data-a="area" data-v="${k}">${AREAS[k].name}</button>`,
+                        )
+                        .join("")}</div>`
+                    : ""
+                }</span>
+<span class="ic"><button data-a="log" data-v="${c.i}" aria-label="Log aktivitas">${I("log")}</button><button data-a="mute" data-v="${c.i}" aria-label="Alarm">${I(muted ? "bellx" : "bell")}${S.notes.some((n) => !n.read && n.sev !== "ok") && c.i === 0 && !muted ? '<span class="rd"></span>' : ""}</button></span></div></div>`;
               })
               .join("") +
             "</div>",
@@ -4292,8 +4315,8 @@
               ? `<div class="p">${rows[0]}${rows[1]}</div><div>${rows[2]}</div>`
               : `<div>${rows[0]}</div><div>${rows[1]}</div><div>${rows[2]}</div>`;
           h += `<div class="${cls}" data-a="blk" data-id="${b.id}" style="${pos}" title="${b.flag === "wet" ? "Wet muck" : b.flag === "restr" ? "Akses dibatasi (geoteknik)" : "Normal"}">
-       <div class="bt"><span>${b.id}</span>${b.flag ? `<span class="fl ${b.flag === "wet" ? "" : "rs"}">${b.flag === "wet" ? "WET MUCK" : "RESTRICTED"}</span>` : ""}<span class="dd"><button data-a="menu" data-v="b${b.id}" aria-label="Menu blok ${b.id}">${I("dots")}</button>${S.menu === "b" + b.id ? `<div class="pop ${b.c <= 2 ? "l" : "r"}" style="min-width:230px"><h6>Drawpoint ${b.id}</h6><button data-a="focus" data-id="${b.id}">${I("pin")}Fokuskan blok</button><button data-a="setflag" data-id="${b.id}" data-v="wet">${I("drop")}Tandai wet muck</button><button data-a="setflag" data-id="${b.id}" data-v="restr">${I("lock")}Batasi akses (geoteknik)</button><button data-a="setflag" data-id="${b.id}" data-v="">${I("check")}Normalkan</button></div>` : ""}</span></div>
-       <div class="m">${m}</div></div>`;
+<div class="bt"><span>${b.id}</span>${b.flag ? `<span class="fl ${b.flag === "wet" ? "" : "rs"}">${b.flag === "wet" ? "WET MUCK" : "RESTRICTED"}</span>` : ""}<span class="dd"><button data-a="menu" data-v="b${b.id}" aria-label="Menu blok ${b.id}">${I("dots")}</button>${S.menu === "b" + b.id ? `<div class="pop ${b.c <= 2 ? "l" : "r"}" style="min-width:230px"><h6>Drawpoint ${b.id}</h6><button data-a="focus" data-id="${b.id}">${I("pin")}Fokuskan blok</button><button data-a="setflag" data-id="${b.id}" data-v="wet">${I("drop")}Tandai wet muck</button><button data-a="setflag" data-id="${b.id}" data-v="restr">${I("lock")}Batasi akses (geoteknik)</button><button data-a="setflag" data-id="${b.id}" data-v="">${I("check")}Normalkan</button></div>` : ""}</span></div>
+<div class="m">${m}</div></div>`;
           if (b.id === "BB") h += `<div class="band" style="grid-row:3"></div>`;
         });
         const inf = [
@@ -4426,36 +4449,36 @@
             .join("");
 
         return `<svg class="stream" viewBox="0 28 572 190" role="img" aria-label="Place of development">
-      <defs><pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#f3f4f2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#dcdfdb" stroke-width="3.2"/></pattern></defs>
-      <path d="${band(
-        top.map(([x, y]) => [x, y + 6]),
-        bot.map(([x, y]) => [x, y - 24]),
-      )}" fill="url(#ht)"/>
-      <path d="${band(topE, botE)}" fill="#8b8d8e"/>
-      <path d="${band(topE, dkE)}" fill="#2a2c2b"/>
-      <path d="${curve(top)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
-      <path d="${curve(bot)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
-      ${hl(top, tSegs)}${hl(bot, bSegs)}
-      ${top.map((p, i) => diamond(p, dNodes.has("t" + i))).join("")}
-      ${bot.map((p, i) => diamond(p, dNodes.has("b" + i))).join("")}
-      <rect x="${tpx}" y="28" width="${Math.max(0, X1 + 10 - tpx)}" height="190" fill="rgba(255,255,255,.55)"/>
-      <rect x="0" y="28" width="${r0}" height="190" fill="rgba(255,255,255,.5)"/>
-      <rect x="${r1}" y="28" width="${Math.max(0, 572 - r1)}" height="190" fill="rgba(255,255,255,.5)"/>
-      ${[
-        ["AA", 73, 64],
-        ["AB", 175, 68],
-        ["BA", 277, 57],
-        ["CA", 376, 50],
-        ["DA", 478, 44],
-        ["AC", 73, 192],
-        ["AD", 175, 178],
-        ["BB", 277, 196],
-        ["CB", 376, 200],
-        ["DA", 478, 177],
-      ]
-        .map((l) => label(...l))
-        .join("")}
-    </svg>`;
+<defs><pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#f3f4f2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#dcdfdb" stroke-width="3.2"/></pattern></defs>
+<path d="${band(
+          top.map(([x, y]) => [x, y + 6]),
+          bot.map(([x, y]) => [x, y - 24]),
+        )}" fill="url(#ht)"/>
+<path d="${band(topE, botE)}" fill="#8b8d8e"/>
+<path d="${band(topE, dkE)}" fill="#2a2c2b"/>
+<path d="${curve(top)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+<path d="${curve(bot)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+${hl(top, tSegs)}${hl(bot, bSegs)}
+${top.map((p, i) => diamond(p, dNodes.has("t" + i))).join("")}
+${bot.map((p, i) => diamond(p, dNodes.has("b" + i))).join("")}
+<rect x="${tpx}" y="28" width="${Math.max(0, X1 + 10 - tpx)}" height="190" fill="rgba(255,255,255,.55)"/>
+<rect x="0" y="28" width="${r0}" height="190" fill="rgba(255,255,255,.5)"/>
+<rect x="${r1}" y="28" width="${Math.max(0, 572 - r1)}" height="190" fill="rgba(255,255,255,.5)"/>
+${[
+  ["AA", 73, 64],
+  ["AB", 175, 68],
+  ["BA", 277, 57],
+  ["CA", 376, 50],
+  ["DA", 478, 44],
+  ["AC", 73, 192],
+  ["AD", 175, 178],
+  ["BB", 277, 196],
+  ["CB", 376, 200],
+  ["DA", 478, 177],
+]
+  .map((l) => label(...l))
+  .join("")}
+</svg>`;
       }
       function renderRight() {
         const bs = selBlocks(),
@@ -4519,62 +4542,62 @@
         patch(
           $("rp"),
           `<div class="rh"><div><div class="big">${vtxt}<sup>${c.u}</sup></div><p>${lvName()} — ${names[S.tab]} remaining${S.sel.size ? ` (${[...S.sel].join(", ")})` : ""}</p></div><div style="display:flex;gap:8px"><span class="dd"><button class="cb" data-a="menu" data-v="flt" aria-label="Filter" style="padding:0">${I("funnel")}</button>${S.menu === "flt" ? `<div class="pop r"><h6>Filter blok</h6><button data-a="fsel" data-v="all">Semua blok aktif</button><button data-a="fsel" data-v="wet">${I("drop")}Hanya wet muck</button><button data-a="fsel" data-v="restr">${I("lock")}Hanya restricted</button><button data-a="fsel" data-v="ok">${I("check")}Hanya normal</button></div>` : ""}</span><button class="cb" data-a="clear" aria-label="Hapus pilihan">${I("x")}</button></div></div>
-      <div class="tabs">${[
-        ["ore", "Ore"],
-        ["cu", "Cu"],
-        ["au", "Au"],
-        ["ag", "Ag"],
-      ]
+<div class="tabs">${[
+            ["ore", "Ore"],
+            ["cu", "Cu"],
+            ["au", "Au"],
+            ["ag", "Ag"],
+          ]
+            .map(
+              (t) =>
+                `<button class="${S.tab === t[0] ? "on" : ""}" data-a="tab" data-v="${t[0]}">${t[1]}</button>`,
+            )
+            .join("")}</div>
+<div class="dv"><span>Place of development</span><span>Remaining</span></div>
+<div class="chips" style="justify-content:space-between"><div class="chips" style="margin:0">${dev.map((b) => `<span class="ch">${a.short}-${b.id}</span>`).join("") || '<span class="ch n">—</span>'}</div><span class="ch b">${sc.v >= 100 ? fmt(sc.v) : sc.v.toFixed(1)} ${c.u}</span></div>
+${streamSVG()}
+<div class="nums"><span>${dec(bef)}</span><b>${fmt(inn)}</b><span>${dec(aft)}</span></div>
+<div class="rng" id="rng"><div class="tk"></div><div class="ac" style="left:${rg[0] * 100}%;width:${(rg[1] - rg[0]) * 100}%"></div><div class="th" data-th="0" style="left:${rg[0] * 100}%"></div><div class="th" data-th="1" style="left:${rg[1] * 100}%"></div></div>
+<div class="bts">${bsel}</div>
+<div class="acc"><button class="ah" data-a="acc" data-v="w"><span>Workers</span><span class="rt"><span class="sm">${I("hat")}${wk}/${wk}</span><span class="sm"><i class="face"></i>${eff}%</span>${I(S.acc.w ? "chevup" : "chev")}</span></button>
+${S.acc.w ? bs.map((b) => `<div class="crew"><b style="font-weight:500">${b.id}</b><div class="t"><i style="width:${Math.round(b.eff * 100)}%"></i></div><span>${b.w}/${b.w} · ${Math.round(b.eff * 100)}%</span></div>`).join("") + '<p style="font-size:12px;color:var(--mut);padding:6px 0 10px">Lokasi pekerja bersumber dari tagging bawah tanah (simulasi).</p>' : ""}</div>
+<div class="acc"><button class="ah" data-a="acc" data-v="f"><span>Fleet</span><span class="rt">${ready < fl.length ? `<span class="al2">${I("alert")}</span>` : ""}<span>${ready}/${fl.length}</span>${I(S.acc.f ? "chevup" : "chev")}</span></button>
+${
+  S.acc.f
+    ? `<div class="fchips">${typeBtns
+        .filter((t) => t[0] === "ALL" || fl.some((u) => u.ty === t[0]))
         .map(
           (t) =>
-            `<button class="${S.tab === t[0] ? "on" : ""}" data-a="tab" data-v="${t[0]}">${t[1]}</button>`,
+            `<button class="${S.ftype === t[0] ? "on" : ""}" data-a="ftype" data-v="${t[0]}">${t[1]}</button>`,
         )
-        .join("")}</div>
-      <div class="dv"><span>Place of development</span><span>Remaining</span></div>
-      <div class="chips" style="justify-content:space-between"><div class="chips" style="margin:0">${dev.map((b) => `<span class="ch">${a.short}-${b.id}</span>`).join("") || '<span class="ch n">—</span>'}</div><span class="ch b">${sc.v >= 100 ? fmt(sc.v) : sc.v.toFixed(1)} ${c.u}</span></div>
-      ${streamSVG()}
-      <div class="nums"><span>${dec(bef)}</span><b>${fmt(inn)}</b><span>${dec(aft)}</span></div>
-      <div class="rng" id="rng"><div class="tk"></div><div class="ac" style="left:${rg[0] * 100}%;width:${(rg[1] - rg[0]) * 100}%"></div><div class="th" data-th="0" style="left:${rg[0] * 100}%"></div><div class="th" data-th="1" style="left:${rg[1] * 100}%"></div></div>
-      <div class="bts">${bsel}</div>
-      <div class="acc"><button class="ah" data-a="acc" data-v="w"><span>Workers</span><span class="rt"><span class="sm">${I("hat")}${wk}/${wk}</span><span class="sm"><i class="face"></i>${eff}%</span>${I(S.acc.w ? "chevup" : "chev")}</span></button>
-      ${S.acc.w ? bs.map((b) => `<div class="crew"><b style="font-weight:500">${b.id}</b><div class="t"><i style="width:${Math.round(b.eff * 100)}%"></i></div><span>${b.w}/${b.w} · ${Math.round(b.eff * 100)}%</span></div>`).join("") + '<p style="font-size:12px;color:var(--mut);padding:6px 0 10px">Lokasi pekerja bersumber dari tagging bawah tanah (simulasi).</p>' : ""}</div>
-      <div class="acc"><button class="ah" data-a="acc" data-v="f"><span>Fleet</span><span class="rt">${ready < fl.length ? `<span class="al2">${I("alert")}</span>` : ""}<span>${ready}/${fl.length}</span>${I(S.acc.f ? "chevup" : "chev")}</span></button>
-      ${
-        S.acc.f
-          ? `<div class="fchips">${typeBtns
-              .filter((t) => t[0] === "ALL" || fl.some((u) => u.ty === t[0]))
-              .map(
-                (t) =>
-                  `<button class="${S.ftype === t[0] ? "on" : ""}" data-a="ftype" data-v="${t[0]}">${t[1]}</button>`,
-              )
-              .join("")}</div>` +
-            (fsel
-              .map((u) => {
-                const c = unitCalc(u),
-                  down = u.st !== "ok";
-                return `<div class="unit ${down ? "warn" : ""}" data-k="${u.id}"><div class="ur"><div><b>${u.id}</b><small>${u.n}</small></div><div><b data-up="${u.id}">${down ? "—" : T3(c.up)}</b><small>Uptime</small></div><div><b>${MS(u.cy)}</b><small>Cycle time</small></div><span class="dd"><button data-a="menu" data-v="u${u.id}" style="color:var(--mut);padding:0;height:28px;width:28px;justify-content:center" aria-label="Menu unit">${I("dots")}</button>${S.menu === "u" + u.id ? `<div class="pop r" style="min-width:210px"><button data-a="unitst" data-id="${u.id}" data-v="ok">${I("check")}Set: Operasional</button><button data-a="unitst" data-id="${u.id}" data-v="down">${I("alert")}Set: Breakdown</button><button data-a="unitst" data-id="${u.id}" data-v="maint">${I("drill")}Set: Maintenance</button></div>` : ""}</span></div>
-       <div class="ld"><span>${down ? (u.st === "maint" ? "Maintenance" : "Breakdown") : "Loading " + c.load + "%"}</span><span>${down ? "" : "~" + MS(c.eta)}</span></div>
-       <div class="ut"><i style="width:${c.load}%"></i>${down ? "" : `<u style="left:${c.load}%">${c.pay.toFixed(1)}</u>`}</div>
-       <div class="ue"><span>0 t</span><span style="text-align:right">${u.cap} t · Blok ${u.blk} · Dikirim ${fmt(c.deliv)} t</span></div>
-       <div class="ua">${[
-         ["flag", "flag", "Tandai kendala"],
-         ["grid", "loc", "Lacak posisi"],
-         ["cursor", "route", "Ubah rute"],
-         ["split", "assign", "Alihkan blok"],
-         ["sync", "sync", "Sinkronisasi"],
-         ["lock", "lock", "Kunci target"],
-         ["undo", "reset", "Reset siklus"],
-       ]
-         .map(
-           (x) =>
-             `<button data-a="uact" data-id="${u.id}" data-v="${x[1]}" class="${x[1] === "assign" || (x[1] === "loc" && S.sel.has(u.blk)) || (x[1] === "lock" && S.locked[u.id]) ? "on" : ""}" aria-label="${x[2]}" title="${x[2]}">${I(x[0])}</button>`,
-         )
-         .join("")}</div></div>`;
-              })
-              .join("") ||
-              '<p style="font-size:13px;color:var(--mut);padding:8px 0">Tidak ada unit pada filter ini.</p>')
-          : ""
-      }</div>`,
+        .join("")}</div>` +
+      (fsel
+        .map((u) => {
+          const c = unitCalc(u),
+            down = u.st !== "ok";
+          return `<div class="unit ${down ? "warn" : ""}" data-k="${u.id}"><div class="ur"><div><b>${u.id}</b><small>${u.n}</small></div><div><b data-up="${u.id}">${down ? "—" : T3(c.up)}</b><small>Uptime</small></div><div><b>${MS(u.cy)}</b><small>Cycle time</small></div><span class="dd"><button data-a="menu" data-v="u${u.id}" style="color:var(--mut);padding:0;height:28px;width:28px;justify-content:center" aria-label="Menu unit">${I("dots")}</button>${S.menu === "u" + u.id ? `<div class="pop r" style="min-width:210px"><button data-a="unitst" data-id="${u.id}" data-v="ok">${I("check")}Set: Operasional</button><button data-a="unitst" data-id="${u.id}" data-v="down">${I("alert")}Set: Breakdown</button><button data-a="unitst" data-id="${u.id}" data-v="maint">${I("drill")}Set: Maintenance</button></div>` : ""}</span></div>
+<div class="ld"><span>${down ? (u.st === "maint" ? "Maintenance" : "Breakdown") : "Loading " + c.load + "%"}</span><span>${down ? "" : "~" + MS(c.eta)}</span></div>
+<div class="ut"><i style="width:${c.load}%"></i>${down ? "" : `<u style="left:${c.load}%">${c.pay.toFixed(1)}</u>`}</div>
+<div class="ue"><span>0 t</span><span style="text-align:right">${u.cap} t · Blok ${u.blk} · Dikirim ${fmt(c.deliv)} t</span></div>
+<div class="ua">${[
+            ["flag", "flag", "Tandai kendala"],
+            ["grid", "loc", "Lacak posisi"],
+            ["cursor", "route", "Ubah rute"],
+            ["split", "assign", "Alihkan blok"],
+            ["sync", "sync", "Sinkronisasi"],
+            ["lock", "lock", "Kunci target"],
+            ["undo", "reset", "Reset siklus"],
+          ]
+            .map(
+              (x) =>
+                `<button data-a="uact" data-id="${u.id}" data-v="${x[1]}" class="${x[1] === "assign" || (x[1] === "loc" && S.sel.has(u.blk)) || (x[1] === "lock" && S.locked[u.id]) ? "on" : ""}" aria-label="${x[2]}" title="${x[2]}">${I(x[0])}</button>`,
+            )
+            .join("")}</div></div>`;
+        })
+        .join("") ||
+        '<p style="font-size:13px;color:var(--mut);padding:8px 0">Tidak ada unit pada filter ini.</p>')
+    : ""
+}</div>`,
         );
       }
       function renderModal() {
@@ -4655,10 +4678,10 @@
           })
           .join("");
         return `<div class="rpt"><p class="meta">${a.name} · ${dLbl(S.day)} · s.d. ${hh(S.t)} WIB · <b>data simulasi (prototipe)</b></p>
-      <div class="sh"><h4>Level</h4><div class="acts2"><button class="bo" data-a="csv">${I("doc")}Unduh CSV</button><button class="bo" data-a="print">${I("print")}Cetak / PDF</button></div></div>
-      <div class="tw"><table><thead><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr></thead><tbody>${rows}</tbody></table></div>
-      <div class="sh"><h4>Blok</h4></div>
-      <div class="tw"><table><thead><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr></thead><tbody>${bs.map((b) => `<tr><td><b>${b.id}</b></td><td><span class="pl ${b.flag || "ok"}">${b.flag || "normal"}</span></td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`).join("")}</tbody></table></div></div>`;
+<div class="sh"><h4>Level</h4><div class="acts2"><button class="bo" data-a="csv">${I("doc")}Unduh CSV</button><button class="bo" data-a="print">${I("print")}Cetak / PDF</button></div></div>
+<div class="tw"><table><thead><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr></thead><tbody>${rows}</tbody></table></div>
+<div class="sh"><h4>Blok</h4></div>
+<div class="tw"><table><thead><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr></thead><tbody>${bs.map((b) => `<tr><td><b>${b.id}</b></td><td><span class="pl ${b.flag || "ok"}">${b.flag || "normal"}</span></td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`).join("")}</tbody></table></div></div>`;
       }
       function sysHTML() {
         const f = flagsOf(),
@@ -4710,27 +4733,27 @@
               .join(", ")
           : "";
         return `<div class="rpt sys">
-      ${
-        u
-          ? `<div class="usr-box">
-              <div class="usr-info">
-                <div class="usr-badge">${u.initials}</div>
-                <div>
-                  <div style="font-weight:500;font-size:15.5px">${u.name}</div>
-                  <div style="font-size:13px;color:var(--mut);margin-top:2px">${u.role} · Akses Modul: <b style="color:var(--ink);font-weight:500">${pageNames}</b></div>
-                </div>
-              </div>
-              <button class="btn danger" data-a="logout" style="display:inline-flex;align-items:center;gap:8px">${I("logout")}Keluar Sesi</button>
-            </div>`
-          : ""
-      }
-      <div class="sh first"><h4>Ringkasan anomali</h4><span class="hint2">aturan otomatis, bukan AI generatif</span></div>
-      <div class="anl">${an.length ? an.map((x) => `<div class="an ${x.c}"><span class="ai">${I(x.ic)}</span><span>${x.t}</span></div>`).join("") : `<div class="an ok"><span class="ai">${I("check")}</span><span>Tidak ada anomali aktif.</span></div>`}</div>
-      <div class="sh"><h4>Koneksi sumber data</h4></div>
-      <div class="tw"><table><thead><tr><th>Sistem</th><th>Status</th><th>Catatan</th></tr></thead><tbody>${src.map((r) => `<tr><td>${r[0]}</td><td><span class="pl mock">Mock</span></td><td>${r[1]}</td></tr>`).join("")}</tbody></table></div>
-      <div class="sh"><h4>Referensi publik yang dipakai sebagai skala</h4></div>
-      <div class="refl">${refs.map((r) => `<div class="rf2"><span class="ai">${I("link")}</span><span>${r[0]} <a href="${r[1]}" target="_blank" rel="noopener">${r[2]}</a></span></div>`).join("")}</div>
-      <div class="note">${I("info")}<p>Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p></div></div>`;
+${
+  u
+    ? `<div class="usr-box">
+<div class="usr-info">
+<div class="usr-badge">${u.initials}</div>
+<div>
+<div style="font-weight:500;font-size:15.5px">${u.name}</div>
+<div style="font-size:13px;color:var(--mut);margin-top:2px">${u.role} · Akses Modul: <b style="color:var(--ink);font-weight:500">${pageNames}</b></div>
+</div>
+</div>
+<button class="btn danger" data-a="logout" style="display:inline-flex;align-items:center;gap:8px">${I("logout")}Keluar Sesi</button>
+</div>`
+    : ""
+}
+<div class="sh first"><h4>Ringkasan anomali</h4><span class="hint2">aturan otomatis, bukan AI generatif</span></div>
+<div class="anl">${an.length ? an.map((x) => `<div class="an ${x.c}"><span class="ai">${I(x.ic)}</span><span>${x.t}</span></div>`).join("") : `<div class="an ok"><span class="ai">${I("check")}</span><span>Tidak ada anomali aktif.</span></div>`}</div>
+<div class="sh"><h4>Koneksi sumber data</h4></div>
+<div class="tw"><table><thead><tr><th>Sistem</th><th>Status</th><th>Catatan</th></tr></thead><tbody>${src.map((r) => `<tr><td>${r[0]}</td><td><span class="pl mock">Mock</span></td><td>${r[1]}</td></tr>`).join("")}</tbody></table></div>
+<div class="sh"><h4>Referensi publik yang dipakai sebagai skala</h4></div>
+<div class="refl">${refs.map((r) => `<div class="rf2"><span class="ai">${I("link")}</span><span>${r[0]} <a href="${r[1]}" target="_blank" rel="noopener">${r[2]}</a></span></div>`).join("")}</div>
+<div class="note">${I("info")}<p>Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p></div></div>`;
       }
       function camHTML() {
         return `<p style="margin-bottom:12px">Tampilan simulasi (tidak ada umpan video nyata). Pada sistem produksi, ganti dengan stream RTSP/WebRTC.</p><div class="cams">${["GBC Extraction Level · CAM-03", "GBC Haulage Drift · CAM-07", "Crusher Station · CAM-01", "DMLZ Drawbell · CAM-11", "Rail Loading · CAM-04", "MineGem Remote Bay · CAM-02"].map((n) => `<div class="cam"><div class="cam-top"><span class="cam-name">${n}</span><b>● REC</b></div><span class="cam-time">${hh(S.t)} WIB</span></div>`).join("")}</div>`;
@@ -4956,7 +4979,7 @@
           case "search":
             openModal(
               "search",
-              "Pencarian global",
+              "Search / ⌘ + K",
               `<input class="sinput" id="sq" placeholder="Cari area, blok (mis. BB), atau unit (mis. LHD-GBC-03)…" autocomplete="off"><div id="sres">${searchRes("")}</div>`,
             );
             setTimeout(() => $("sq")?.focus(), 60);
