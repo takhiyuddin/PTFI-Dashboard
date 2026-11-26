@@ -2119,7 +2119,7 @@
       }
       .cams {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
         gap: 10px;
       }
       .cam {
@@ -2129,8 +2129,11 @@
         position: relative;
         overflow: hidden;
         color: #cfe;
-        font-size: 11px;
-        padding: 8px;
+        font-size: 11.5px;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
       .cam::after {
         content: "";
@@ -2144,12 +2147,32 @@
           transparent
         );
         animation: sc 3s linear infinite;
+        pointer-events: none;
+      }
+      .cam-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        position: relative;
+        z-index: 1;
+      }
+      .cam-name {
+        line-height: 1.35;
+        word-break: break-word;
       }
       .cam b {
-        position: absolute;
-        right: 8px;
-        top: 8px;
+        flex: none;
         color: #ff6b6b;
+        font-size: 10.5px;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+      }
+      .cam-time {
+        position: relative;
+        z-index: 1;
+        font-size: 11px;
+        opacity: 0.9;
       }
       .rpt .meta {
         font-size: 15px;
@@ -2437,10 +2460,10 @@
 
       /* =====================================================================
          RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
-         1. Mobile (HP)             : <= 640px  (optimal 360px - 576px)
-         2. Tablet                  : 641px - 1023px (optimal 768px)
-         3. Desktop / Laptop        : 1024px - 1679px (optimal 1280px - 1440px)
-         4. Desktop Besar / Full HD : >= 1680px (optimal 1920px+)
+1. Mobile (HP)             : <= 640px  (optimal 360px - 576px)
+2. Tablet                  : 641px - 1023px (optimal 768px)
+3. Desktop / Laptop        : 1024px - 1679px (optimal 1280px - 1440px)
+4. Desktop Besar / Full HD : >= 1680px (optimal 1920px+)
       ===================================================================== */
 
       /* --- TIER 4: DESKTOP BESAR / FULL HD (>= 1680px, optimal 1920px) --- */
@@ -2727,6 +2750,19 @@
           top: 9px;
           right: 10px;
         }
+        /* Fix posisi popup notifikasi di mobile agar tidak terpotong ke kiri */
+        .hacts .pop.r,
+        .nlist {
+          position: fixed;
+          top: calc(58px + env(safe-area-inset-top));
+          left: 12px;
+          right: 12px;
+          width: auto !important;
+          max-width: none;
+          transform-origin: top center;
+          max-height: calc(100dvh - 150px);
+          overflow-y: auto;
+        }
         .sels {
           width: 100%;
           order: 3;
@@ -2878,6 +2914,15 @@
         }
         .modal h3 {
           font-size: 18px;
+        }
+        .cams {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+        .cam {
+          aspect-ratio: 16/9;
+          font-size: 12px;
+          padding: 12px 14px;
         }
 
         /* Mobile Bottom Navigation Dock */
@@ -4688,7 +4733,7 @@
       <div class="note">${I("info")}<p>Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p></div></div>`;
       }
       function camHTML() {
-        return `<p style="margin-bottom:10px">Tampilan simulasi (tidak ada umpan video nyata). Pada sistem produksi, ganti dengan stream RTSP/WebRTC.</p><div class="cams">${["GBC Extraction Level · CAM-03", "GBC Haulage Drift · CAM-07", "Crusher Station · CAM-01", "DMLZ Drawbell · CAM-11", "Rail Loading · CAM-04", "MineGem Remote Bay · CAM-02"].map((n) => `<div class="cam">${n}<b>● REC</b><span style="position:absolute;left:8px;bottom:8px">${hh(S.t)} WIB</span></div>`).join("")}</div>`;
+        return `<p style="margin-bottom:12px">Tampilan simulasi (tidak ada umpan video nyata). Pada sistem produksi, ganti dengan stream RTSP/WebRTC.</p><div class="cams">${["GBC Extraction Level · CAM-03", "GBC Haulage Drift · CAM-07", "Crusher Station · CAM-01", "DMLZ Drawbell · CAM-11", "Rail Loading · CAM-04", "MineGem Remote Bay · CAM-02"].map((n) => `<div class="cam"><div class="cam-top"><span class="cam-name">${n}</span><b>● REC</b></div><span class="cam-time">${hh(S.t)} WIB</span></div>`).join("")}</div>`;
       }
       function searchRes(q) {
         q = (q || "").toLowerCase();
