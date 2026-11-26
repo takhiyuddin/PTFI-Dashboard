@@ -3180,17 +3180,16 @@
             timeZone: "Asia/Jakarta",
             hour: "2-digit",
             minute: "2-digit",
+            second: "2-digit",
             hour12: false,
           }).formatToParts(new Date());
-          return (
-            +p.find((x) => x.type === "hour").value +
-            +p.find((x) => x.type === "minute").value / 60
-          );
+          const g = (t) => +p.find((x) => x.type === t).value;
+          return g("hour") + g("minute") / 60 + g("second") / 3600;
         } catch (e) {
           return 13.5;
         }
       }
-      const NOWH = Math.min(18, Math.max(6, jakartaHour()));
+      let NOWH = Math.min(18, Math.max(6, jakartaHour()));
       const S = {
         page: "production",
         lens: "map",
@@ -3415,12 +3414,18 @@
       }
       function prodSeries(b) {
         const a = A(),
-          base = ((a.np / 2) * a.pace * dayK()) / 12;
+          base = ((a.np / 2) * a.pace * dayK()) / 12,
+          live = isLive(),
+          ph = hash(S.area + b.id) % 7; // fase gelombang berbeda tiap blok
         return Array.from({ length: 12 }, (_, i) => {
           const raw =
             base * b.share * (0.72 + 0.56 * rnd(S.area + b.id + "h" + i));
           const f = b.flag === "restr" ? 0.25 : b.flag === "wet" ? 0.8 : 1;
-          return raw * f * clamp(S.t - (6 + i), 0, 1);
+          // naik-turun ±2,5% mengikuti S.tick (hanya saat LIVE)
+          const wob = live
+            ? 1 + 0.025 * Math.sin(S.tick / 2 + i * 0.9 + ph)
+            : 1;
+          return raw * f * wob * clamp(S.t - (6 + i), 0, 1);
         });
       }
       function V(b, k, lo, hi, d = 0) {
@@ -3957,62 +3962,169 @@
         patch($("frame"), h);
       }
       function streamSVG() {
-        const W = 388,
-          H = 170,
-          all = blocks().filter((b) => b.act),
-          layers = all.map((b) => ({ b, v: prodSeries(b) })),
+        const X0 = 22,
+          X1 = 528,
           n = 12;
-        const tot = Array.from({ length: n }, (_, i) =>
-            layers.reduce((s, l) => s + l.v[i], 0),
-          ),
-          mx = Math.max(1, ...tot),
-          sc = (H - 70) / mx,
-          X = (i) => 10 + (i * (W - 20)) / (n - 1);
-        let cum = tot.map((t) => H / 2 - (t * sc) / 2);
-        const paths = [],
-          dots = [];
-        const smooth = (pts) => {
-          let d = `M${pts[0][0]},${pts[0][1]}`;
-          for (let i = 1; i < pts.length; i++) {
-            const m = (pts[i - 1][0] + pts[i][0]) / 2;
-            d += ` C${m},${pts[i - 1][1]} ${m},${pts[i][1]} ${pts[i][0]},${pts[i][1]}`;
+        const px = (i) => X0 + (i * (X1 - X0)) / (n - 1);
+
+        /* ---- helper kurva halus (tangen horizontal) ---- */
+        const cs = (p, a = 0, b = p.length - 1) => {
+          let d = "";
+          for (let i = a + 1; i <= b; i++) {
+            const m = (p[i - 1][0] + p[i][0]) / 2;
+            d += ` C${m},${p[i - 1][1]} ${m},${p[i][1]} ${p[i][0]},${p[i][1]}`;
           }
           return d;
         };
-        layers.forEach((l, li) => {
-          const top = cum.slice(),
-            bot = cum.map((c, i) => c + l.v[i] * sc),
-            sel = S.sel.size ? S.sel.has(l.b.id) : li === 0 || li === 3;
-          const up = top.map((y, i) => [X(i), y]),
-            dn = bot.map((y, i) => [X(i), y]).reverse();
-          const d =
-            smooth(up) +
-            " L" +
-            dn[0][0] +
-            "," +
-            dn[0][1] +
-            smooth(dn).replace(/^M[^C]+/, "") +
-            "Z";
-          paths.push(
-            `<path d="${d}" fill="${sel ? (li % 2 ? "#a9afac" : "#272b29") : "url(#ht)"}" stroke="${sel ? "none" : "#d2d6d2"}" stroke-width=".6"/>`,
-          );
-          if (sel)
-            [2, 5, 8].forEach((i) =>
-              dots.push(
-                `<circle cx="${X(i)}" cy="${top[i]}" r="3" fill="#1d201e"/>`,
-              ),
-            );
-          cum = bot;
+        const curve = (p, a = 0, b = p.length - 1) =>
+          `M${p[a][0]},${p[a][1]}` + cs(p, a, b);
+        const band = (up, lo) => {
+          const r = lo.slice().reverse();
+          return curve(up) + ` L${r[0][0]},${r[0][1]}` + cs(r) + "Z";
+        };
+        const yAt = (pts, x) => {
+          let k = 0;
+          while (k < pts.length - 2 && x > pts[k + 1][0]) k++;
+          const [xa, ya] = pts[k],
+            [xb, yb] = pts[k + 1];
+          const t = clamp((x - xa) / (xb - xa), 0, 1),
+            s = t * t * (3 - 2 * t);
+          return ya + (yb - ya) * s;
+        };
+
+        /* ---- garis batas atas & bawah (6 node) ---- */
+        const top = [
+          [22, 106],
+          [124, 95],
+          [225, 100],
+          [325, 81],
+          [427, 83],
+          [528, 62],
+        ];
+        const bot = [
+          [22, 175],
+          [124, 152],
+          [225, 152],
+          [325, 175],
+          [427, 152],
+          [528, 130],
+        ];
+        const hatTop = top.map(([x, y]) => [x, y + 6]);
+        const hatBot = bot.map(([x, y]) => [x, y - 24]);
+
+        /* ---- data produksi (dipengaruhi jam S.t) ---- */
+        const act = blocks().filter((b) => b.act);
+        const ser = act.map((b) => ({ id: b.id, v: prodSeries(b) }));
+        const tot = Array.from({ length: n }, (_, i) =>
+          ser.reduce((s, l) => s + l.v[i], 0),
+        );
+        const a = A();
+        const base = ((a.np / 2) * a.pace * dayK()) / 12; // skala stabil, tidak ikut berubah saat jam digeser
+        const sc = 38 / (base * 1.28);
+
+        const selIds = S.sel.size ? [...S.sel] : ["BA", "BB"];
+        const dk = Array.from({ length: n }, (_, i) =>
+          ser
+            .filter((l) => selIds.includes(l.id))
+            .reduce((s, l) => s + l.v[i], 0),
+        );
+
+        const botE = [],
+          topE = [],
+          dkE = [];
+        for (let i = 0; i < n; i++) {
+          const x = px(i),
+            yb = yAt(bot, x) - 6;
+          const th = Math.max(0.8, tot[i] * sc);
+          const yt = yb - th;
+          botE.push([x, yb]);
+          topE.push([x, yt]);
+          dkE.push([x, yt + Math.min(dk[i] * sc, th)]);
+        }
+
+        /* ---- segmen & node yang disorot ---- */
+        const topSeg = { AA: 0, AB: 1, BA: 2, CA: 3, DA: 4 };
+        const botSeg = { AC: 0, AD: 1, BB: 2, CB: 3, DA: 4 };
+        const tSegs = new Set(),
+          bSegs = new Set(),
+          dNodes = new Set();
+        selIds.forEach((id) => {
+          if (id in topSeg) {
+            tSegs.add(topSeg[id]);
+            dNodes.add("t" + topSeg[id]);
+            dNodes.add("t" + (topSeg[id] + 1));
+          }
+          if (id in botSeg) {
+            bSegs.add(botSeg[id]);
+            dNodes.add("b" + botSeg[id]);
+            dNodes.add("b" + (botSeg[id] + 1));
+          }
         });
-        const labs = all
-          .map(
-            (b, i) =>
-              `<text x="${X(1 + (i * (n - 2.2)) / (all.length - 1))}" y="${i % 2 === 0 ? 14 : H - 4}" font-size="11" fill="#8d928f" text-anchor="middle" style="cursor:pointer" data-a="blk" data-id="${b.id}">${b.id}</text>`,
-          )
-          .join("");
-        const tpx = X(clamp(((S.t - 6) / 12) * (n - 1), 0, n - 1)),
-          rg = S.range;
-        return `<svg class="stream" viewBox="0 0 ${W} ${H}"><defs><pattern id="ht" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="5" height="5" fill="#f3f4f2"/><line x1="0" y1="0" x2="0" y2="5" stroke="#d2d6d2" stroke-width="2"/></pattern></defs>${paths.join("")}${dots.join("")}${labs}<rect x="${tpx}" y="0" width="${W - tpx}" height="${H}" fill="rgba(255,255,255,.55)"/><rect x="0" y="0" width="${10 + rg[0] * (W - 20)}" height="${H}" fill="rgba(255,255,255,.5)"/><rect x="${10 + rg[1] * (W - 20)}" y="0" width="${W}" height="${H}" fill="rgba(255,255,255,.5)"/></svg>`;
+
+        const diamond = ([x, y], dark) => {
+          const c = dark ? "#1d201e" : "#9a9e9b";
+          return `<polygon points="${x},${y - 5.5} ${x + 5.5},${y} ${x},${y + 5.5} ${x - 5.5},${y}" fill="${c}" stroke="${c}" stroke-width="1.5" stroke-linejoin="round"/>`;
+        };
+        const label = (id, cx, cy) => {
+          const on = S.sel.has(id);
+          return `<g data-a="blk" data-id="${id}" style="cursor:pointer"><rect x="${cx - 20}" y="${cy - 13}" width="40" height="26" rx="8" fill="${on ? "#cfd3cf" : "#e9ebe8"}"/><text x="${cx}" y="${cy + 5.5}" font-size="15" font-weight="500" text-anchor="middle" fill="${on ? "#1d201e" : "#9a9e9b"}" font-family="Inter,system-ui,sans-serif">${id}</text></g>`;
+        };
+        const labelsTop = [
+          ["AA", 73, 64],
+          ["AB", 175, 68],
+          ["BA", 277, 57],
+          ["CA", 376, 50],
+          ["DA", 478, 44],
+        ];
+        const labelsBot = [
+          ["AC", 73, 192],
+          ["AD", 175, 178],
+          ["BB", 277, 196],
+          ["CB", 376, 200],
+          ["DA", 478, 177],
+        ];
+
+        /* ---- overlay: penanda waktu & rentang slider ---- */
+        const tpx = X0 + clamp((S.t - 6) / 12, 0, 1) * (X1 - X0);
+        const rg = S.range;
+        const r0 = X0 + rg[0] * (X1 - X0),
+          r1 = X0 + rg[1] * (X1 - X0);
+        const OY = 28,
+          OH = 190;
+
+        const hl = (pts, set) =>
+          [...set]
+            .map(
+              (s) =>
+                `<path d="${curve(pts, s, s + 1)}" fill="none" stroke="#1d201e" stroke-width="2.2"/>`,
+            )
+            .join("");
+
+        return `<svg class="stream" viewBox="0 28 572 190" role="img" aria-label="Place of development">
+    <defs>
+      <pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="7" height="7" fill="#f3f4f2"/>
+        <line x1="0" y1="0" x2="0" y2="7" stroke="#dcdfdb" stroke-width="3.2"/>
+      </pattern>
+    </defs>
+
+    <path d="${band(hatTop, hatBot)}" fill="url(#ht)"/>
+    <path d="${band(topE, botE)}" fill="#8b8d8e"/>
+    <path d="${band(topE, dkE)}" fill="#2a2c2b"/>
+
+    <path d="${curve(top)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+    <path d="${curve(bot)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+    ${hl(top, tSegs)}${hl(bot, bSegs)}
+    ${top.map((p, i) => diamond(p, dNodes.has("t" + i))).join("")}
+    ${bot.map((p, i) => diamond(p, dNodes.has("b" + i))).join("")}
+
+    <rect x="${tpx}" y="${OY}" width="${Math.max(0, X1 + 10 - tpx)}" height="${OH}" fill="rgba(255,255,255,.55)"/>
+    <rect x="0" y="${OY}" width="${r0}" height="${OH}" fill="rgba(255,255,255,.5)"/>
+    <rect x="${r1}" y="${OY}" width="${Math.max(0, 572 - r1)}" height="${OH}" fill="rgba(255,255,255,.5)"/>
+
+    ${labelsTop.map((l) => label(...l)).join("")}
+    ${labelsBot.map((l) => label(...l)).join("")}
+  </svg>`;
       }
       function renderRight() {
         const bs = selBlocks(),
@@ -4717,6 +4829,9 @@
         if (S.pd || document.hidden) return;
         S.tick++;
         if (isLive()) {
+          NOWH = Math.min(18, Math.max(6, jakartaHour())); // BARU: jam WIB nyata
+          S.t = NOWH; // BARU: majukan jam dashboard
+          S.t0 = Date.now(); // BARU: sinkronkan uptime agar tidak terhitung dua kali
           Object.keys(S.drift).forEach(
             (k) =>
               (S.drift[k] = S.drift[k].map(
