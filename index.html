@@ -3085,6 +3085,148 @@
         background: #fdecea;
         color: #c0353a;
       }
+      /* ===== PATCH-22: tampilan Status sistem & sumber data ===== */
+      .rpt .sh.first {
+        margin-top: 4px;
+      }
+      .rpt .hint2 {
+        font-size: 13px;
+        color: var(--mut);
+        background: #f4f5f3;
+        padding: 5px 12px;
+        border-radius: 12px;
+      }
+
+      /* tabel: teks boleh turun baris (memperbaiki teks terpotong) */
+      .sys .tw {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 6px 8px 2px;
+      }
+      .sys table {
+        min-width: 480px;
+      }
+      .sys th,
+      .sys td {
+        white-space: normal !important;
+        vertical-align: top;
+      }
+      .sys tbody td:first-child {
+        font-weight: 500;
+      }
+      .sys tbody td:last-child {
+        color: #555a57;
+      }
+      .rpt .pl.mock {
+        background: #fff1d6;
+        color: #8a5a00;
+      }
+
+      /* kartu anomali */
+      .anl,
+      .refl {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .an {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 14.5px;
+        background: #f4f5f3;
+      }
+      .an .ai {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        flex: none;
+        background: #fff;
+      }
+      .an.warn {
+        background: #fff6e5;
+      }
+      .an.warn .ai {
+        color: #b97a00;
+      }
+      .an.crit {
+        background: #fdecea;
+      }
+      .an.crit .ai {
+        color: var(--red2);
+      }
+      .an.ok {
+        background: #eaf3ec;
+      }
+      .an.ok .ai {
+        color: var(--green);
+      }
+
+      /* daftar referensi */
+      .rf2 {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+        line-height: 1.55;
+        color: #434846;
+      }
+      .rf2:last-child {
+        border-bottom: 0;
+      }
+      .rf2 .ai {
+        width: 28px;
+        height: 28px;
+        border-radius: 9px;
+        background: #f1f3f0;
+        display: grid;
+        place-items: center;
+        flex: none;
+        color: var(--mut);
+      }
+      .rf2 .ai .i {
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+      }
+      .rf2 a {
+        color: var(--bl);
+        text-decoration: none;
+        overflow-wrap: anywhere;
+      }
+      .rf2 a:hover {
+        text-decoration: underline;
+      }
+
+      /* catatan simulasi */
+      .note {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin-top: 22px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: #f4f5f3;
+        color: var(--mut);
+      }
+      .note .i {
+        margin-top: 2px;
+      }
+      .note p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #555a57;
+      }
+      .note b {
+        color: var(--ink);
+        font-weight: 500;
+      }
     </style>
   </head>
   <body>
@@ -4594,20 +4736,73 @@
           f = flagsOf(),
           an = [];
         Object.keys(f).forEach((k) =>
-          an.push(
-            `Drawpoint ${k}: ${f[k] === "wet" ? "wet muck" : "akses dibatasi geoteknik"}`,
-          ),
+          an.push({
+            ic: f[k] === "wet" ? "drop" : "lock",
+            c: f[k] === "wet" ? "warn" : "crit",
+            t: `Drawpoint ${k}: ${f[k] === "wet" ? "wet muck" : "akses dibatasi geoteknik"}`,
+          }),
         );
         down.forEach((u) =>
-          an.push(`${u.id}: ${u.st === "maint" ? "maintenance" : "breakdown"}`),
+          an.push({
+            ic: "alert",
+            c: "warn",
+            t: `${u.id}: ${u.st === "maint" ? "maintenance" : "breakdown"}`,
+          }),
         );
-        return `<p style="margin-bottom:10px"><b>Ringkasan anomali (aturan otomatis, bukan AI generatif):</b></p><ul>${an.map((x) => `<li>${x}</li>`).join("") || "<li>Tidak ada anomali aktif.</li>"}</ul><br>
-      <p style="margin-bottom:8px"><b>Koneksi sumber data</b></p><table><tr><th>Sistem</th><th>Status</th><th>Catatan</th></tr><tr><td>Fleet Management (mis. Cat MineStar / Modular Dispatch)</td><td>Mock</td><td>Ganti dengan API Gateway produksi</td></tr><tr><td>SCADA/PLC crusher & conveyor</td><td>Mock</td><td>OPC-UA / MQTT</td></tr><tr><td>Tagging personel bawah tanah</td><td>Mock</td><td>RFID / Wi-Fi tag</td></tr></table><br>
-      <p style="margin-bottom:8px"><b>Referensi publik yang dipakai sebagai skala</b></p><ul>
-      <li>Kapasitas nameplate GBC 150 kt/hari, DMLZ 80 kt/hari, Big Gossan 7,5 kt/hari — makalah Mass Mining 2024: <a href="https://papers.acg.uwa.edu.au/d/2435_O-04/O-04.pdf" target="_blank" rel="noopener">papers.acg.uwa.edu.au</a></li>
-      <li>GBC dipulihkan bertahap setelah mud flow 8 Sep 2025 — <a href="https://www.mining.com/?p=1206574" target="_blank" rel="noopener">mining.com</a></li>
-      <li>Struktur tambang — <a href="https://www.sec.gov/Archives/edgar/data/831259/000083125922000012/a2021trsptfi-exhibit.htm" target="_blank" rel="noopener">SEC Technical Report Summary</a></li></ul><br>
-      <p style="font-size:13px;color:var(--mut)">Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p>`;
+        const src = [
+          [
+            "Fleet Management (mis. Cat MineStar / Modular Dispatch)",
+            "Ganti dengan API Gateway produksi",
+          ],
+          ["SCADA/PLC crusher & conveyor", "OPC-UA / MQTT"],
+          ["Tagging personel bawah tanah", "RFID / Wi-Fi tag"],
+        ];
+        const refs = [
+          [
+            "Kapasitas nameplate GBC 150 kt/hari, DMLZ 80 kt/hari, Big Gossan 7,5 kt/hari — makalah Mass Mining 2024:",
+            "https://papers.acg.uwa.edu.au/d/2435_O-04/O-04.pdf",
+            "papers.acg.uwa.edu.au",
+          ],
+          [
+            "GBC dipulihkan bertahap setelah mud flow 8 Sep 2025 —",
+            "https://www.mining.com/?p=1206574",
+            "mining.com",
+          ],
+          [
+            "Struktur tambang —",
+            "https://www.sec.gov/Archives/edgar/data/831259/000083125922000012/a2021trsptfi-exhibit.htm",
+            "SEC Technical Report Summary",
+          ],
+        ];
+        return `<div class="rpt sys">
+    <div class="sh first"><h4>Ringkasan anomali</h4><span class="hint2">aturan otomatis, bukan AI generatif</span></div>
+    <div class="anl">${
+      an.length
+        ? an
+            .map(
+              (x) =>
+                `<div class="an ${x.c}"><span class="ai">${I(x.ic)}</span><span>${x.t}</span></div>`,
+            )
+            .join("")
+        : `<div class="an ok"><span class="ai">${I("check")}</span><span>Tidak ada anomali aktif.</span></div>`
+    }</div>
+
+    <div class="sh"><h4>Koneksi sumber data</h4></div>
+    <div class="tw"><table>
+      <thead><tr><th>Sistem</th><th>Status</th><th>Catatan</th></tr></thead>
+      <tbody>${src.map((r) => `<tr><td>${r[0]}</td><td><span class="pl mock">Mock</span></td><td>${r[1]}</td></tr>`).join("")}</tbody>
+    </table></div>
+
+    <div class="sh"><h4>Referensi publik yang dipakai sebagai skala</h4></div>
+    <div class="refl">${refs
+      .map(
+        (r) =>
+          `<div class="rf2"><span class="ai">${I("link")}</span><span>${r[0]} <a href="${r[1]}" target="_blank" rel="noopener">${r[2]}</a></span></div>`,
+      )
+      .join("")}</div>
+
+    <div class="note">${I("info")}<p>Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p></div>
+  </div>`;
       }
       function camHTML() {
         return `<p style="margin-bottom:10px">Tampilan simulasi (tidak ada umpan video nyata). Pada sistem produksi, ganti dengan stream RTSP/WebRTC.</p><div class="cams">${["GBC Extraction Level · CAM-03", "GBC Haulage Drift · CAM-07", "Crusher Station · CAM-01", "DMLZ Drawbell · CAM-11", "Rail Loading · CAM-04", "MineGem Remote Bay · CAM-02"].map((n) => `<div class="cam">${n}<b>● REC</b><span style="position:absolute;left:8px;bottom:8px">${hh(S.t)} WIB</span></div>`).join("")}</div>`;
