@@ -2979,6 +2979,112 @@
       body.intro .crew .t i {
         transition: none !important;
       }
+      /* ===== PATCH-21: tampilan Laporan shift ala dashboard laporan ===== */
+      .modal:has(.rpt) {
+        width: min(900px, 100%);
+      }
+      .rpt .meta {
+        font-size: 15px;
+        color: var(--mut);
+      }
+      .rpt .meta b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .rpt .sh {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 26px 0 12px;
+      }
+      .rpt .sh h4 {
+        font-size: 17px;
+        font-weight: 500;
+      }
+      .rpt .acts2 {
+        display: flex;
+        gap: 8px;
+      }
+      .rpt .bo {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 40px;
+        padding: 0 14px;
+        font-size: 14px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .rpt .bo:hover {
+        background: #f4f5f3;
+      }
+      .rpt .bo .i {
+        width: 18px;
+        height: 18px;
+        font-size: 18px;
+      }
+      .rpt .tw {
+        overflow-x: auto;
+      }
+      .rpt table {
+        display: table;
+        width: 100%;
+        min-width: 520px;
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: visible;
+      }
+      .rpt thead th {
+        background: #f4f5f3;
+        color: #555a57;
+        font-size: 13px;
+        font-weight: 500;
+        text-transform: none;
+        letter-spacing: 0;
+        padding: 12px 14px;
+        border: 0;
+      }
+      .rpt thead th:first-child {
+        border-radius: 12px 0 0 12px;
+      }
+      .rpt thead th:last-child {
+        border-radius: 0 12px 12px 0;
+      }
+      .rpt tbody td {
+        padding: 16px 14px;
+        font-size: 14.5px;
+        color: var(--ink);
+        border-bottom: 1px solid var(--line);
+      }
+      .rpt tbody td b {
+        font-weight: 500;
+      }
+      .rpt tbody tr:last-child td {
+        border-bottom: 0;
+      }
+      .rpt tbody tr:hover td {
+        background: #fafbf9;
+      }
+      .rpt .pl {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 10px;
+        font-size: 13px;
+        background: #e6ece7;
+        color: var(--gp);
+      }
+      .rpt .pl.wet {
+        background: #fff1d6;
+        color: #8a5a00;
+      }
+      .rpt .pl.restr {
+        background: #fdecea;
+        color: #c0353a;
+      }
     </style>
   </head>
   <body>
@@ -4461,7 +4567,27 @@
             return `<tr><td>${LEVELS[i]}</td><td>${L.name}</td><td>${fmt(L.val)} ${L.unit}</td><td>${fmt(L.plan)} ${L.unit}</td><td>${Math.round(L.pct)}%</td></tr>`;
           })
           .join("");
-        return `<p style="margin-bottom:12px">${a.name} · ${dLbl(S.day)} · s.d. ${hh(S.t)} WIB · <b>data simulasi (prototipe)</b></p><table><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr>${rows}</table><br><table><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr>${bs.map((b) => `<tr><td>${b.id}</td><td>${b.flag || "normal"}</td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`).join("")}</table><br><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-a="csv">Unduh CSV</button><button class="btn l" data-a="print">Cetak / PDF</button></div>`;
+        const acts = `<div class="acts2"><button class="bo" data-a="csv">${I("doc")}Unduh CSV</button><button class="bo" data-a="print">${I("print")}Cetak / PDF</button></div>`;
+        return `<div class="rpt">
+    <p class="meta">${a.name} · ${dLbl(S.day)} · s.d. ${hh(S.t)} WIB · <b>data simulasi (prototipe)</b></p>
+
+    <div class="sh"><h4>Level</h4>${acts}</div>
+    <div class="tw"><table>
+      <thead><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+
+    <div class="sh"><h4>Blok</h4></div>
+    <div class="tw"><table>
+      <thead><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr></thead>
+      <tbody>${bs
+        .map(
+          (b) =>
+            `<tr><td><b>${b.id}</b></td><td><span class="pl ${b.flag || "ok"}">${b.flag || "normal"}</span></td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`,
+        )
+        .join("")}</tbody>
+    </table></div>
+  </div>`;
       }
       function sysHTML() {
         const down = fleet().filter((u) => u.st !== "ok"),
