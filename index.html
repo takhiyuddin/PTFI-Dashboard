@@ -48,6 +48,7 @@
       html,
       body {
         background: var(--bg);
+        overflow-x: hidden;
       }
       body {
         font-family:
@@ -215,7 +216,8 @@
         background-size: 16px 16px;
         display: grid;
         place-items: center;
-        padding: 20px;
+        padding: 16px;
+        overflow-y: auto;
         transition:
           opacity 0.55s var(--ease),
           transform 0.55s var(--ease);
@@ -364,9 +366,11 @@
       .shell {
         display: flex;
         min-height: 100dvh;
+        width: 100%;
       }
-      body.locked .shell {
-        display: none;
+      body.locked .shell,
+      body.locked .mob-dock {
+        display: none !important;
       }
 
       body.dragging * {
@@ -383,7 +387,7 @@
         transition: none !important;
       }
 
-      /* ---------- sidebar ---------- */
+      /* ---------- SIDEBAR ---------- */
       .side {
         position: sticky;
         top: 12px;
@@ -419,6 +423,22 @@
         height: 30px;
         width: auto;
         flex: none;
+      }
+      .logo-txt {
+        display: none;
+        flex-direction: column;
+        line-height: 1.15;
+      }
+      .logo-txt b {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+      .logo-txt small {
+        font-size: 10.5px;
+        color: var(--mut);
+        white-space: nowrap;
       }
       .sch {
         display: flex;
@@ -518,6 +538,7 @@
         overflow: hidden;
         pointer-events: none;
         white-space: nowrap;
+        font-size: 13.5px;
       }
       .kids {
         display: block;
@@ -572,10 +593,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 10px;
         height: 44px;
         width: 100%;
         background: #f1f3f0;
         border-radius: 22px;
+        padding: 0 10px;
         animation: itemIn 0.55s var(--spring) backwards 0.94s;
       }
       .usr.nick:hover {
@@ -585,9 +608,24 @@
         font-weight: 600;
         font-size: 13px;
         letter-spacing: 0.2px;
+        flex: none;
+      }
+      .usr-lbl {
+        display: none;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--ink);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
-      /* ---------- main ---------- */
+      /* ---------- MOBILE BOTTOM DOCK (HP <= 640px) ---------- */
+      .mob-dock {
+        display: none;
+      }
+
+      /* ---------- MAIN ---------- */
       .main {
         flex: 1;
         min-width: 0;
@@ -606,16 +644,19 @@
       .ttl {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         flex-wrap: nowrap;
+        min-width: 0;
       }
       .ttl h1 {
-        font-size: clamp(24px, 3vw, 36px);
+        font-size: clamp(20px, 2.5vw, 36px);
         font-weight: 400;
         letter-spacing: -0.5px;
         white-space: nowrap;
-        line-height: 1;
-        padding-bottom: 0.06em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.1;
+        padding-bottom: 0.04em;
       }
       .rf {
         flex: none;
@@ -655,9 +696,10 @@
         gap: 4px;
       }
       .sels .sep {
-        width: 22px;
+        width: 18px;
         height: 1px;
         background: var(--mut2);
+        flex: none;
       }
       .dd {
         position: relative;
@@ -669,8 +711,9 @@
         gap: 6px;
         padding: 0 12px;
         height: 38px;
-        font-size: 15px;
+        font-size: 14.5px;
         border-radius: 20px;
+        white-space: nowrap;
       }
       .dd > button:hover {
         background: #fff;
@@ -699,7 +742,7 @@
         border-radius: 18px;
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
         padding: 8px;
-        z-index: 50;
+        z-index: 80;
         font-size: 14px;
         animation: pop 0.22s var(--spring);
         transform-origin: top left;
@@ -745,7 +788,7 @@
       .acts {
         display: flex;
         gap: 4px;
-        margin-right: 10px;
+        margin-right: 6px;
       }
       .acts button {
         display: flex;
@@ -754,7 +797,7 @@
         height: 42px;
         padding: 0 12px;
         border-radius: 21px;
-        font-size: 15px;
+        font-size: 14.5px;
       }
       .acts button:hover {
         background: #fff;
@@ -799,7 +842,7 @@
         border: 2px solid #fff;
       }
 
-      /* ---------- timeline ---------- */
+      /* ---------- TIMELINE ---------- */
       .tlrow {
         display: grid;
         grid-template-columns: 330px minmax(0, 1fr);
@@ -826,6 +869,7 @@
         align-items: center;
         justify-content: center;
         color: #fff;
+        flex: none;
       }
       .daypill .al.ok {
         background: #cfe3d1;
@@ -857,10 +901,11 @@
         white-space: nowrap;
       }
       .today {
-        font-size: 14px;
+        font-size: 13.5px;
         color: var(--mut);
         padding: 6px 8px;
         border-radius: 10px;
+        white-space: nowrap;
       }
       .today:hover {
         background: #fff;
@@ -969,7 +1014,7 @@
         white-space: nowrap;
       }
 
-      /* ---------- grid & left cards ---------- */
+      /* ---------- GRID & LEFT CARDS ---------- */
       .grid {
         flex: 1;
         min-height: 0;
@@ -1073,7 +1118,7 @@
         color: var(--mut);
       }
       .mg .v {
-        font-size: clamp(22px, 2.1vw, 30px);
+        font-size: clamp(22px, 2vw, 30px);
         letter-spacing: -0.8px;
         display: flex;
         align-items: center;
@@ -1154,7 +1199,7 @@
       }
       .cfoot .dd > button {
         padding: 0;
-        font-size: 15px;
+        font-size: 14.5px;
         gap: 8px;
         height: 34px;
         white-space: nowrap;
@@ -1207,7 +1252,7 @@
         border-radius: 50%;
       }
 
-      /* ---------- map ---------- */
+      /* ---------- MAP ---------- */
       .map {
         position: relative;
         border-radius: 24px;
@@ -1599,7 +1644,7 @@
         animation: hintin 0.6s var(--ease) backwards 0.9s;
       }
 
-      /* ---------- right panel ---------- */
+      /* ---------- RIGHT PANEL ---------- */
       .rp {
         background: transparent;
         border-radius: 28px;
@@ -1636,6 +1681,7 @@
         display: grid;
         place-items: center;
         background: transparent;
+        flex: none;
       }
       .cb:hover {
         background: #fff;
@@ -1983,7 +2029,7 @@
         font-size: 19px;
       }
 
-      /* ---------- modal / report / toast ---------- */
+      /* ---------- MODAL / REPORT / TOAST ---------- */
       .mbg {
         position: fixed;
         inset: 0;
@@ -2389,8 +2435,93 @@
         white-space: normal;
       }
 
-      /* ---------- responsive ---------- */
-      @media (min-width: 800px) {
+      /* =====================================================================
+         RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
+         1. Mobile (HP)             : <= 640px  (optimal 360px - 576px)
+         2. Tablet                  : 641px - 1023px (optimal 768px)
+         3. Desktop / Laptop        : 1024px - 1679px (optimal 1280px - 1440px)
+         4. Desktop Besar / Full HD : >= 1680px (optimal 1920px+)
+      ===================================================================== */
+
+      /* --- TIER 4: DESKTOP BESAR / FULL HD (>= 1680px, optimal 1920px) --- */
+      @media (min-width: 1680px) {
+        .side {
+          width: 224px;
+          padding: 18px 14px 16px;
+          margin: 16px 0 16px 16px;
+          height: calc(100dvh - 32px);
+        }
+        .logo {
+          padding: 0 8px;
+        }
+        .logo-txt {
+          display: flex;
+        }
+        .sec {
+          text-align: left;
+          padding-left: 14px;
+        }
+        .it {
+          padding: 0 14px;
+        }
+        .lb {
+          opacity: 1;
+          width: auto;
+          overflow: visible;
+          pointer-events: auto;
+        }
+        .usr.nick {
+          justify-content: flex-start;
+          padding: 0 14px;
+          border-radius: 16px;
+        }
+        .usr-lbl {
+          display: block;
+        }
+        .main {
+          padding: 18px 28px 24px;
+          gap: 16px;
+          height: 100dvh;
+          overflow: hidden;
+        }
+        .top {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+          gap: 12px 18px;
+        }
+        .ttl {
+          justify-self: start;
+        }
+        .sels {
+          justify-self: center;
+        }
+        .hacts {
+          justify-self: end;
+          margin-left: 0;
+        }
+        .acts .t {
+          display: inline;
+        }
+        .tlrow {
+          grid-template-columns: 390px minmax(0, 1fr);
+          gap: 26px;
+        }
+        .grid {
+          grid-template-columns: 390px minmax(0, 1fr) 480px;
+          gap: 26px;
+        }
+        .rp {
+          padding: 28px 30px 14px;
+        }
+      }
+
+      /* --- TIER 3: DESKTOP / LAPTOP (1024px - 1679px, optimal 1280px - 1440px) --- */
+      @media (min-width: 1024px) and (max-width: 1679px) {
+        .main {
+          height: 100dvh;
+          overflow: hidden;
+        }
         .top {
           display: grid;
           grid-template-columns: 1fr auto 1fr;
@@ -2408,127 +2539,397 @@
           margin-left: 0;
         }
       }
-      @media (min-width: 1100px) {
-        .main {
-          height: 100dvh;
-          overflow: hidden;
-        }
-      }
-      @media (min-width: 1300px) {
+      @media (min-width: 1280px) and (max-width: 1679px) {
         .acts .t {
           display: inline;
         }
-      }
-      @media (max-width: 1399px) and (min-width: 1100px) {
+        .tlrow {
+          grid-template-columns: 320px minmax(0, 1fr);
+          gap: 20px;
+        }
         .grid {
-          grid-template-columns: 290px minmax(0, 1fr) 370px;
-          gap: 16px;
+          grid-template-columns: 320px minmax(0, 1fr) 400px;
+          gap: 20px;
+        }
+      }
+      @media (min-width: 1024px) and (max-width: 1279px) {
+        .main {
+          padding: 14px 16px 16px;
+          gap: 12px;
         }
         .tlrow {
-          grid-template-columns: 290px minmax(0, 1fr);
-          gap: 16px;
+          grid-template-columns: 276px minmax(0, 1fr);
+          gap: 14px;
+        }
+        .grid {
+          grid-template-columns: 276px minmax(0, 1fr) 340px;
+          gap: 14px;
+        }
+        .cd {
+          padding: 18px;
+          border-radius: 24px;
+        }
+        .rp {
+          padding: 20px 18px 10px;
+        }
+        .big {
+          font-size: 30px;
         }
       }
-      @media (max-width: 1099px) {
+
+      /* --- TIER 2: TABLET (641px - 1023px, optimal 768px) --- */
+      @media (min-width: 641px) and (max-width: 1023px) {
+        .side {
+          width: 68px;
+          margin: 10px 0 10px 10px;
+          height: calc(100dvh - 20px);
+          padding: 14px 10px 12px;
+        }
+        .it {
+          padding: 0 14px;
+        }
+        .main {
+          padding: 14px 16px 28px;
+          gap: 14px;
+        }
+        .top {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+        }
+        .ttl {
+          flex: 1 1 auto;
+        }
+        .ttl h1 {
+          font-size: clamp(22px, 3.2vw, 28px);
+        }
+        .hacts {
+          margin-left: auto;
+        }
+        .sels {
+          order: 3;
+          width: 100%;
+          justify-content: space-between;
+          padding: 0 10px;
+        }
+        .pgsel,
+        .pgsep {
+          display: inline-flex;
+        }
+        .tlrow {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
         .grid {
           display: flex;
           flex-direction: column;
           gap: 16px;
         }
-        .tlrow {
-          grid-template-columns: 1fr;
-          gap: 6px;
-        }
         .lcards {
-          flex-direction: row;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          scrollbar-width: none;
-          padding-bottom: 4px;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
         }
-        .lcards .cd {
-          min-width: min(320px, 82vw);
-          scroll-snap-align: start;
+        .cd {
+          padding: 18px 20px;
+          border-radius: 24px;
         }
         .map {
-          height: clamp(380px, 60vw, 540px);
+          height: clamp(420px, 58vw, 540px);
           touch-action: pan-y;
           flex: none;
         }
         .rp {
           overflow: visible;
+          background: #fff;
+          border: 1px solid var(--line);
+          padding: 24px;
+        }
+        .bmk,
+        .ut u {
+          background: #fff;
+        }
+        .stream rect[fill^="rgba"] {
+          fill: rgba(255, 255, 255, 0.65);
         }
       }
-      @media (max-width: 799px) {
+
+      /* --- TIER 1: MOBILE / HP (<= 640px, optimal 360px - 576px) --- */
+      @media (max-width: 640px) {
         .side {
-          display: none;
+          display: none !important;
         }
         .ava {
           display: grid;
           place-items: center;
+          width: 40px;
+          height: 40px;
         }
         .pgsel,
         .pgsep {
           display: inline-flex;
         }
         .main {
-          padding: calc(12px + env(safe-area-inset-top)) 14px
-            calc(24px + env(safe-area-inset-bottom));
+          padding: calc(10px + env(safe-area-inset-top)) 12px
+            calc(84px + env(safe-area-inset-bottom));
+          gap: 12px;
+        }
+        .login-card {
+          padding: 28px 20px 24px;
+          border-radius: 26px;
+        }
+        .top {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 8px;
+        }
+        .ttl {
+          flex: 1 1 0;
+          min-width: 0;
+          gap: 6px;
+        }
+        .ttl h1 {
+          font-size: clamp(18px, 5vw, 22px);
+          letter-spacing: -0.4px;
+        }
+        .rf {
+          width: 30px;
+          height: 30px;
+        }
+        .hacts {
+          gap: 4px;
+          flex: none;
+        }
+        .acts {
+          margin-right: 0;
+          gap: 2px;
+        }
+        .acts button {
+          width: 38px;
+          height: 38px;
+          padding: 0;
+          justify-content: center;
+        }
+        /* Pada layar sangat sempit (360px), sembunyikan Share & Print dari header karena sudah tersedia di dalam modal Report */
+        .acts button[data-a="share"],
+        .acts button[data-a="print"] {
+          display: none;
+        }
+        .rb,
+        .dd > .rb {
+          width: 40px;
+          height: 40px;
+        }
+        .rb .dot {
+          top: 9px;
+          right: 10px;
         }
         .sels {
           width: 100%;
           order: 3;
-          justify-content: space-between;
-          overflow-x: auto;
-        }
-        .acts {
-          margin-right: 0;
-        }
-        .rb,
-        .ava,
-        .dd > .rb {
-          width: 44px;
           height: 44px;
+          justify-content: space-between;
+          padding: 0 4px;
+          gap: 2px;
         }
-        .map {
-          height: 460px;
+        .sels .sep {
+          width: 10px;
         }
-        .rp {
-          padding: 22px 18px 6px;
+        .dd > button {
+          padding: 0 8px;
+          height: 36px;
+          font-size: 13px;
+          gap: 4px;
+        }
+        .tlrow {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+        .daypill {
+          height: 46px;
+          padding: 0 8px;
+          gap: 6px;
+        }
+        .daypill .al {
+          width: 34px;
+          height: 26px;
+        }
+        .chip {
+          font-size: 11px;
+          padding: 5px 8px;
+        }
+        .today {
+          font-size: 12.5px;
+          padding: 4px 6px;
+        }
+        .track {
+          height: 58px;
+        }
+        .hl {
+          font-size: 11px;
+        }
+        .grid {
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+        }
+        .lcards {
+          flex-direction: row;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          scrollbar-width: none;
+          gap: 12px;
+          padding: 2px 2px 6px;
+        }
+        .lcards .cd {
+          min-width: min(305px, 85vw);
+          scroll-snap-align: start;
+          padding: 18px;
           border-radius: 24px;
+          background: #fff;
         }
-        .cd {
-          padding: 20px;
-        }
-        .big {
-          font-size: 30px;
+        .lcards .bmk {
+          background: #fff;
         }
         .mg .v {
+          font-size: 24px;
+        }
+        .map {
+          height: clamp(320px, 84vw, 410px);
+          border-radius: 22px;
+          touch-action: pan-y;
+          flex: none;
+        }
+        .tools,
+        .zm {
+          gap: 6px;
+        }
+        .tools button,
+        .zm button {
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+        }
+        .tools button .i,
+        .zm button .i {
+          width: 19px;
+          height: 19px;
+          font-size: 19px;
+        }
+        .hint {
+          display: none;
+        }
+        .rp {
+          overflow: visible;
+          background: #fff;
+          border: 1px solid var(--line);
+          padding: 20px 16px 12px;
+          border-radius: 24px;
+        }
+        .ut u {
+          background: #fff;
+        }
+        .stream rect[fill^="rgba"] {
+          fill: rgba(255, 255, 255, 0.65);
+        }
+        .big {
           font-size: 28px;
         }
+        .cb {
+          width: 42px;
+          height: 42px;
+        }
+        .tabs button {
+          font-size: 14.5px;
+          padding: 10px 0;
+        }
+        .bts {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+        .ur {
+          grid-template-columns: 1.2fr 1fr 28px;
+        }
+        .ur > div:nth-child(3) {
+          display: none;
+        }
+        .ua {
+          gap: 2px;
+        }
+        .ua button {
+          width: 32px;
+          height: 32px;
+        }
+
+        /* Bottom Sheet Modal untuk HP */
         .mbg {
           align-items: end;
           padding: 0;
         }
         .modal {
           width: 100%;
-          padding: 22px 20px;
-          border-radius: 28px 28px 0 0;
-          max-height: 82dvh;
+          padding: 20px 16px calc(24px + env(safe-area-inset-bottom));
+          border-radius: 26px 26px 0 0;
+          max-height: 85dvh;
           animation: sl 0.45s var(--spring);
         }
-        .hint {
-          display: none;
+        .modal h3 {
+          font-size: 18px;
+        }
+
+        /* Mobile Bottom Navigation Dock */
+        .mob-dock {
+          position: fixed;
+          left: 10px;
+          right: 10px;
+          bottom: calc(10px + env(safe-area-inset-bottom));
+          height: 60px;
+          background: rgba(255, 255, 255, 0.94);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          border: 1px solid var(--line);
+          border-radius: 22px;
+          box-shadow: 0 10px 30px rgba(29, 32, 30, 0.1);
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          padding: 0 6px;
+          z-index: 75;
+        }
+        .mob-dock button {
+          flex: 1;
+          height: 48px;
+          border-radius: 15px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 3px;
+          color: var(--mut);
+          font-size: 10px;
+          font-weight: 500;
+          min-width: 0;
+        }
+        .mob-dock button .i {
+          width: 19px;
+          height: 19px;
+          font-size: 19px;
+        }
+        .mob-dock button.on {
+          background: #f1f3f0;
+          color: var(--ink);
+          font-weight: 600;
+        }
+        .toast {
+          bottom: calc(80px + env(safe-area-inset-bottom));
+          font-size: 13px;
+          padding: 10px 16px;
         }
       }
-      @media (max-width: 420px) {
-        .acts button:nth-child(n + 2) {
-          display: none;
-        }
-        .ttl h1 {
-          font-size: 23px;
-        }
-      }
+
       @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
@@ -2539,6 +2940,7 @@
       }
       @media print {
         .side,
+        .mob-dock,
         .hacts,
         .tools,
         .zm,
@@ -2548,6 +2950,7 @@
         .main {
           height: auto;
           overflow: visible;
+          padding: 0;
         }
       }
     </style>
@@ -2756,6 +3159,7 @@
         </div>
       </main>
     </div>
+    <nav class="mob-dock" id="mobdock" aria-label="Navigasi Mobile"></nav>
     <div id="modalroot"></div>
 
     <script>
@@ -3216,7 +3620,7 @@
         offShift = () => S.day === TODAY && (RAWH < 6 || RAWH >= 18),
         isLive = () => S.live && S.day === TODAY && !offShift(),
         flagsOf = () => S.flags[S.area],
-        wide = () => matchMedia("(min-width:1100px)").matches,
+        wide = () => matchMedia("(min-width:1024px)").matches,
         dec = (v) => (Math.abs(v) < 100 && v % 1 !== 0 ? v.toFixed(1) : fmt(v)),
         lvName = () => (S.page === "ecology" ? ECO[S.level] : LEVELS[S.level]);
 
@@ -3233,6 +3637,7 @@
         }, 2200);
       }
       function patch(el, html) {
+        if (!el) return;
         const t = document.createElement("template");
         t.innerHTML = html;
         sync(el, t.content);
@@ -3266,7 +3671,7 @@
       }
       const reset = (...ids) =>
         ids.forEach((i) => {
-          $(i).innerHTML = "";
+          if ($(i)) $(i).innerHTML = "";
         });
 
       /* ===== MODEL ===== */
@@ -3532,26 +3937,40 @@
         const s = $("side"),
           pList = allowedPages(),
           aList = allowedAreas(),
-          init = CURRENT_USER ? CURRENT_USER.initials : "TA";
+          init = CURRENT_USER ? CURRENT_USER.initials : "TA",
+          uName = CURRENT_USER ? CURRENT_USER.name : "";
         s.className = "side" + (window.__ready ? "" : " nt");
         patch(
           s,
-          `<div class="logo">${LOGO}</div>
-      <button class="sch" data-a="search" aria-label="Cari">${I("search")}</button>
+          `<div class="logo">${LOGO}<div class="logo-txt"><b>PT Freeport Indonesia</b><small>Operations Control</small></div></div>
+      <button class="sch" data-a="search" aria-label="Cari">${I("search")}<span class="lb">Pencarian Cepat</span></button>
       <div class="sec">MAIN</div>
-      <nav class="nv">${pList.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}" title="${p[2]}">${I(p[1])}</button>`).join("")}
-       <div class="grp"><button class="it" aria-label="Lensa Peta">${I("layers")}</button>
+      <nav class="nv">${pList.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}" title="${p[2]}">${I(p[1])}<span class="lb">${p[2]}</span></button>`).join("")}
+       <div class="grp"><button class="it" aria-label="Lensa Peta">${I("layers")}<span class="lb">Lensa Peta</span></button>
         <div class="kids"><div class="ki">${LENSES.map((l) => `<button class="kid ${S.lens === l[0] ? "on" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div></div></div>
       </nav>
       <div class="sec">AREA</div>
       <div class="areas">${aList
         .map(
           (k) =>
-            `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}</button>`,
+            `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}<span class="lb">${AREAS[k].short === "BG" ? "Big Gossan" : AREAS[k].short}</span></button>`,
         )
         .join("")}</div>
-      <button class="usr nick" data-a="sys" aria-label="${init} — profil & status sistem" title="${CURRENT_USER ? CURRENT_USER.name + " (" + CURRENT_USER.role + ")" : ""}"><span class="nk">${init}</span></button>`,
+      <button class="usr nick" data-a="sys" aria-label="${init} — profil & status sistem" title="${CURRENT_USER ? CURRENT_USER.name + " (" + CURRENT_USER.role + ")" : ""}"><span class="nk">${init}</span><span class="usr-lbl">${uName}</span></button>`,
         );
+      }
+      function renderMobDock() {
+        const dock = $("mobdock");
+        if (!dock) return;
+        const pList = allowedPages();
+        const items = pList
+          .map(
+            (p) =>
+              `<button class="${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}<span>${p[2]}</span></button>`,
+          )
+          .join("");
+        const lensBtn = `<button data-a="mob-lenses">${I("layers")}<span>Lensa</span></button>`;
+        patch(dock, items + lensBtn);
       }
       function renderTop() {
         const a = A(),
@@ -3571,14 +3990,14 @@
           .join("")}</div>`;
         patch(
           $("sels"),
-          `<span class="dd"><button data-a="menu" data-v="areaB">${a.short === "BG" ? "Big Gossan" : a.short}${I("chev")}</button>${S.menu === "areaB" ? areaPop : ""}</span><span class="sep"></span>
+          `<span class="dd"><button data-a="menu" data-v="areaB">${a.short === "BG" ? "Big Gossan" : a.short}${I("chev")}</button>${S.menu === "areaB" ? areaPop : ""}</span>
       <span class="sep pgsep"></span><span class="dd pgsel"><button data-a="menu" data-v="pg">${(PAGES.find((p) => p[0] === S.page) || PAGES[0])[2]}${I("chev")}</button>${S.menu === "pg" ? `<div class="pop r" style="max-height:60dvh;overflow:auto"><h6>Halaman</h6>${pList.map((p) => `<button class="${S.page === p[0] ? "cur" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}${p[2]}</button>`).join("")}<h6>Lensa peta</h6>${LENSES.map((l) => `<button class="${S.lens === l[0] ? "cur" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>` : ""}</span>
-      <span class="dd"><button data-a="menu" data-v="level">${lvName()}${I("chev")}</button>${S.menu === "level" ? `<div class="pop">${(S.page === "ecology" ? ECO : LEVELS).map((l, i) => `<button class="${i === S.level ? "cur" : ""}" data-a="level" data-v="${i}">${l}</button>`).join("")}</div>` : ""}</span>`,
+      <span class="sep"></span><span class="dd"><button data-a="menu" data-v="level">${lvName()}${I("chev")}</button>${S.menu === "level" ? `<div class="pop r">${(S.page === "ecology" ? ECO : LEVELS).map((l, i) => `<button class="${i === S.level ? "cur" : ""}" data-a="level" data-v="${i}">${l}</button>`).join("")}</div>` : ""}</span>`,
         );
         patch(
           $("hr"),
           `<div class="acts"><button data-a="share" aria-label="Share">${I("share")}<span class="t">Share</span></button><button data-a="report" aria-label="Report">${I("doc")}<span class="t">Report</span></button><button data-a="print" aria-label="Print">${I("print")}<span class="t">Print</span></button></div>
-      <span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 28px))"><h6>Notifikasi (simulasi)</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
+      <span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 24px))"><h6>Notifikasi (simulasi)</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
       <button class="rb" data-a="search" aria-label="Cari">${I("search")}</button>
       <button class="ava" data-a="sys" aria-label="${init} — profil & status sistem">${init}</button>`,
         );
@@ -4130,6 +4549,7 @@
       function renderAll() {
         if (!CURRENT_USER) return;
         renderSide();
+        renderMobDock();
         renderTop();
         dayPill();
         renderTL();
@@ -4313,6 +4733,13 @@
             S.menu = null;
             reset("left", "rp");
             break;
+          case "mob-lenses":
+            openModal(
+              "lenses",
+              "Pilih Lensa Peta",
+              `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px">${LENSES.map((l) => `<button class="btn ${S.lens === l[0] ? "" : "l"}" data-a="lens" data-v="${l[0]}" style="display:flex;align-items:center;gap:8px;text-align:left;padding:12px">${I(l[1])}<span>${l[2]}</span></button>`).join("")}</div>`,
+            );
+            return;
           case "lens":
             S.modal = null;
             if (d.v === "cctv") {
@@ -4637,10 +5064,10 @@
       }
       function viewFor(mw, mh, full) {
         if (!full) {
-          const top = 64,
-            bottom = wide() ? 44 : 0,
+          const top = wide() ? 64 : 54,
+            bottom = wide() ? 44 : 12,
             availH = mh - top - bottom;
-          const k = Math.max(0.3, Math.min(1.2, (mw - 20) / NW, availH / NH));
+          const k = Math.max(0.28, Math.min(1.3, (mw - 16) / NW, availH / NH));
           return {
             k,
             W: NW,
@@ -4649,10 +5076,10 @@
             y: top + Math.max(0, (availH - NH * k) / 2),
           };
         }
-        const aw = mw - 40,
-          ah = mh - 76 - 48,
-          k = Math.max(0.3, Math.min(2, aw / NW, ah / NH));
-        return { k, W: aw / k, H: ah / k, x: 20, y: 76 };
+        const aw = mw - 32,
+          ah = mh - 76 - 32,
+          k = Math.max(0.28, Math.min(2, aw / NW, ah / NH));
+        return { k, W: aw / k, H: ah / k, x: 16, y: 76 };
       }
       function fit() {
         const m = $("map"),
@@ -4753,7 +5180,7 @@
         const r = $("map").getBoundingClientRect();
         cx = cx ?? r.width / 2;
         cy = cy ?? r.height / 2;
-        const nk = clamp(S.view.k * f, 0.3, 2.6),
+        const nk = clamp(S.view.k * f, 0.25, 2.6),
           rf = nk / S.view.k;
         S.view.x = cx - (cx - S.view.x) * rf;
         S.view.y = cy - (cy - S.view.y) * rf;
@@ -4945,7 +5372,7 @@
           S.t = 6;
           document.body.classList.add("intro");
         }
-        reset("side", "left", "frame", "rp");
+        reset("side", "mobdock", "left", "frame", "rp");
         renderAll();
         fit();
         window.__ready = 1;
