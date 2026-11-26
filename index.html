@@ -2690,11 +2690,215 @@
         display: block;
         line-height: 20px;
       }
+      /* ===== PATCH-15: sidebar tidak beranimasi saat load ===== */
+      .side.nt,
+      .side.nt * {
+        transition: none !important;
+      }
+
+      /* ===== PATCH-16: animasi masuk tools, zoom, hint, peta (kecil → besar) ===== */
+      @keyframes grow {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes hintin {
+        from {
+          opacity: 0;
+          transform: translateY(14px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* "backwards" (bukan "both") supaya efek :active / hover tidak tertimpa */
+      .tools button,
+      .zm button {
+        animation: grow 0.55s var(--spring) backwards;
+      }
+      .tools button:nth-child(1) {
+        animation-delay: 0.25s;
+      }
+      .tools button:nth-child(2) {
+        animation-delay: 0.31s;
+      }
+      .tools button:nth-child(3) {
+        animation-delay: 0.37s;
+      }
+      .zm button:nth-child(1) {
+        animation-delay: 0.43s;
+      }
+      .zm button:nth-child(2) {
+        animation-delay: 0.49s;
+      }
+      .zm button:nth-child(3) {
+        animation-delay: 0.55s;
+      }
+
+      /* teks petunjuk: naik pelan + fade, muncul paling akhir */
+      .hint {
+        animation: hintin 0.6s var(--ease) backwards 0.9s;
+      }
+
+      /* peta hanya fade-in (transform-nya dipakai pan/zoom lewat JS) */
+      #world {
+        animation: fade 0.5s var(--ease) backwards 0.1s;
+      }
+
+      /* ===== PATCH-16: animasi masuk tools, zoom, hint, peta (kecil → besar) ===== */
+      @keyframes grow {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes hintin {
+        from {
+          opacity: 0;
+          transform: translateY(14px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* "backwards" (bukan "both") supaya efek :active / hover tidak tertimpa */
+      .tools button,
+      .zm button {
+        animation: grow 0.55s var(--spring) backwards;
+      }
+      .tools button:nth-child(1) {
+        animation-delay: 0.25s;
+      }
+      .tools button:nth-child(2) {
+        animation-delay: 0.31s;
+      }
+      .tools button:nth-child(3) {
+        animation-delay: 0.37s;
+      }
+      .zm button:nth-child(1) {
+        animation-delay: 0.43s;
+      }
+      .zm button:nth-child(2) {
+        animation-delay: 0.49s;
+      }
+      .zm button:nth-child(3) {
+        animation-delay: 0.55s;
+      }
+
+      /* teks petunjuk: naik pelan + fade, muncul paling akhir */
+      .hint {
+        animation: hintin 0.6s var(--ease) backwards 0.9s;
+      }
+
+      /* peta hanya fade-in (transform-nya dipakai pan/zoom lewat JS) */
+      #world {
+        animation: fade 0.5s var(--ease) backwards 0.1s;
+      }
+      /* ===== PATCH-17: animasi masuk sidebar saat load / refresh ===== */
+      @keyframes sideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-28px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes itemIn {
+        from {
+          opacity: 0;
+          transform: translateX(-14px) scale(0.85);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* wadah sidebar: slide masuk dari kiri + fade */
+      .side {
+        animation: sideIn 0.7s var(--ease) backwards;
+      }
+
+      /* isi sidebar: muncul berurutan (stagger) */
+      .side .logo,
+      .side .sch,
+      .side .sec,
+      .side .nv > .it,
+      .side .nv > .grp,
+      .side .areas .it,
+      .side .usr {
+        animation: itemIn 0.55s var(--spring) backwards;
+      }
+
+      .side .logo {
+        animation-delay: 0.25s;
+      }
+      .side .sch {
+        animation-delay: 0.31s;
+      }
+      .side .sec:nth-of-type(1) {
+        animation-delay: 0.36s;
+      }
+      .side .nv > :nth-child(1) {
+        animation-delay: 0.4s;
+      }
+      .side .nv > :nth-child(2) {
+        animation-delay: 0.46s;
+      }
+      .side .nv > :nth-child(3) {
+        animation-delay: 0.52s;
+      }
+      .side .nv > :nth-child(4) {
+        animation-delay: 0.58s;
+      }
+      .side .nv > :nth-child(5) {
+        animation-delay: 0.64s;
+      }
+      .side .areas .it:nth-child(1) {
+        animation-delay: 0.74s;
+      }
+      .side .areas .it:nth-child(2) {
+        animation-delay: 0.8s;
+      }
+      .side .areas .it:nth-child(3) {
+        animation-delay: 0.86s;
+      }
+      .side .usr {
+        animation-delay: 0.94s;
+      }
+
+      /* label "MAIN" dan "AREA" fade saja */
+      .side .sec {
+        animation-name: fade;
+        animation-duration: 0.5s;
+        animation-timing-function: var(--ease);
+        animation-delay: 0.38s;
+      }
+      .side .areas {
+      }
+      .side .sec ~ .sec {
+        animation-delay: 0.7s;
+      }
     </style>
   </head>
   <body>
     <div class="shell">
-      <aside class="side open" id="side"></aside>
+      <aside class="side rail" id="side"></aside>
       <main class="main">
         <div class="top">
           <div class="ttl" id="ttl"></div>
@@ -3418,7 +3622,8 @@
       function renderSide() {
         const open = S.side === "open",
           s = $("side");
-        s.className = "side " + (open ? "open" : "rail");
+        s.className =
+          "side " + (open ? "open" : "rail") + (window.__ready ? "" : " nt");
         patch(
           s,
           `<div class="logo">${LOGO}<span class="lt lb">PTFI Ops</span></div>
@@ -4423,7 +4628,18 @@
         S.view.k = Math.max(0.3, k);
         S.view.x = (m.clientWidth - w.offsetWidth * S.view.k) / 2;
         S.view.y = top + Math.max(0, (availH - w.offsetHeight * S.view.k) / 2);
-        applyView();
+        if (!window.__fitted) {
+          w.style.transition =
+            "none"; /* fit pertama: langsung di posisi akhir */
+          applyView();
+          void w.offsetWidth;
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              w.style.transition = "";
+              window.__fitted = 1;
+            }),
+          );
+        } else applyView();
       }
       function zoomBy(f, cx, cy) {
         const r = $("map").getBoundingClientRect();
@@ -4550,6 +4766,7 @@
       renderAll();
       fit();
       window.__ready = 1;
+      setTimeout(() => $("side").classList.remove("nt"), 150);
       if (document.fonts && document.fonts.ready)
         document.fonts.ready.then(hgiProbe);
     </script>
