@@ -8,19 +8,21 @@ Prototipe dashboard operasi tambang bawah tanah (Grasberg Block Cave, Deep Mill 
 
 ## Fitur
 
-- **4 halaman utama:** Production, Personnel, Safety, dan Ecology, masing-masing dengan kartu level, metrik, dan progress bar sendiri.
+- **4 halaman utama:** Production, Personnel, Safety, dan Ecology. Masing-masing punya 4 kartu level (metrik, progress bar, log aktivitas, dan tombol bisu alarm) serta lensa peta bawaan.
 - **3 area tambang:** Grasberg Block Cave (GBC), Deep Mill Level Zone (DMLZ), dan Big Gossan (BG).
 - **Peta blok interaktif** (drawpoint AA–DA + kolom infrastruktur N/A):
-  - geser (drag), zoom (tombol +/−, scroll, Ctrl + scroll), dan mode layar penuh;
+  - geser (drag), zoom (tombol +/−, scroll, Ctrl + scroll), dan mode layar penuh dengan animasi transisi;
   - klik blok untuk memfilter, **Shift + klik** atau mode *multi-pilih* untuk memilih beberapa blok;
   - overlay risiko untuk blok **WET MUCK** dan **RESTRICTED**;
-  - menu titik tiga pada tiap blok: fokuskan, tandai wet muck, batasi akses, normalkan.
-- **11 lensa peta:** Crew & Shift, Equipment Health, Ventilation & Airflow, Remote Ops & CCTV, Spatial Block Map, Drilling & Blasting, Geothermal & Temp, Camp & Logistics, Access Control, PPE/APD Compliance, Haulage & Rail Routing.
-- **Timeline 06:00–18:00** yang bisa diseret untuk replay per jam, ditambah pemilih hari (Day 20–26) dan jendela peringatan.
-- **Panel kanan:** sisa cadangan (Ore / Cu / Au / Ag), grafik stream per blok, rentang yang bisa diatur, daftar pekerja, dan **Fleet** (LHD, MineGem, UG Truck, Rail) lengkap dengan uptime, cycle time, loading, dan aksi per unit.
-- **Simulator live:** data bergerak tiap 2 detik, uptime unit berjalan tiap detik, dan breakdown acak muncul sebagai notifikasi.
-- **Utilitas:** pencarian global, notifikasi, laporan shift, ekspor **CSV**, cetak/PDF, dan salin tautan.
-- **Responsif:** sidebar pada layar lebar, tata letak bertumpuk pada tablet/ponsel, dan reduced-motion didukung.
+  - menu titik tiga pada tiap blok: fokuskan, tandai wet muck, batasi akses, normalkan;
+  - blok non-aktif (AA, AB, CA) menampilkan progres pengembangan dan status (*Eksplorasi*, *Development*, *Siap Aktif*), sedangkan kolom N/A menampilkan ringkasan infrastruktur (crusher, conveyor, ventilasi, rail, kontrol).
+- **11 lensa peta:** Crew & Shift, Equipment Health, Ventilation & Airflow, Remote Ops & CCTV (panel CCTV simulasi), Spatial Block Map, Drilling & Blasting, Geothermal & Temp, Camp & Logistics, Access Control, PPE/APD Compliance, Haulage & Rail Routing. Halaman Ecology memakai lensa khusus (pH, TSS, reklamasi).
+- **Timeline 06:00–18:00** yang bisa diseret untuk replay per jam, pemilih hari (7 hari terakhir, dihitung otomatis dari tanggal Jakarta), dan jendela peringatan yang bisa diklik untuk melihat rinciannya.
+- **Panel kanan:** sisa cadangan (Ore / Cu / Au / Ag), grafik stream per blok, rentang yang bisa diatur, daftar pekerja, dan **Fleet** (LHD, MineGem, UG Truck, Rail) lengkap dengan uptime, cycle time, loading, filter tipe unit, menu status (operasional / breakdown / maintenance), dan 7 aksi per unit.
+- **Simulator live:** data bergerak tiap 2 detik, uptime unit berjalan tiap detik, dan breakdown atau pemulihan acak muncul sebagai notifikasi.
+- **Status shift:** di luar jam 06:00–18:00 WIB, hari ini ditampilkan sebagai *Belum shift* atau *Shift selesai*, simulator berhenti, dan timeline diam di 06:00 / 18:00.
+- **Utilitas:** pencarian global (area, blok, unit), notifikasi, laporan shift, ekspor **CSV**, cetak/PDF, salin tautan, dan modal **Status sistem & sumber data** (tombol avatar "TA").
+- **Responsif:** sidebar pada layar lebar, tata letak bertumpuk pada tablet/ponsel (pemilih halaman dan lensa pindah ke header), dan reduced-motion didukung.
 
 ## Cara Menjalankan
 
@@ -47,11 +49,15 @@ Tidak perlu instalasi.
 | Pencarian global | `Ctrl/⌘ + K` atau tombol Search |
 | Tutup modal, menu, atau layar penuh | `Esc` |
 | Pilih banyak blok | `Shift + klik` atau mode multi-pilih |
+| Overlay risiko (wet muck / restricted) | Tombol ketiga pada toolbar kiri atas peta |
 | Geser peta | Drag pada area peta |
 | Zoom peta | Tombol +/−, scroll (desktop), atau `Ctrl + scroll` |
+| Layar penuh | Tombol expand pada peta |
 | Ubah jam | Seret penanda pada timeline |
+| Lihat peringatan | Klik jendela berpola garis pada timeline |
 | Kembali ke waktu nyata | Tombol **Today** / **Replay** |
-| Buka/tutup sidebar | Tombol panah pada sisi sidebar |
+| Ganti lensa peta | Arahkan kursor ke ikon *Lensa Peta* di sidebar (submenu muncul), atau lewat pemilih halaman di layar kecil |
+| Status sistem | Klik avatar **TA** |
 
 ## Struktur Kode
 
@@ -60,21 +66,22 @@ Semua ada di satu file `index.html`:
 | Bagian | Isi |
 | --- | --- |
 | `<style>` | Design token (`:root`), komponen, breakpoint responsif, dan blok `FIX` / `PATCH-n` untuk perapian tampilan |
-| `PS`, `HGC`, `I()` | Ikon: font Hugeicons bila tersedia, jika tidak memakai SVG inline |
+| `PS`, `HGC`, `I()`, `hgiProbe()` | Ikon: font Hugeicons bila tersedia, jika tidak memakai SVG inline |
 | `AREAS`, `LEVELS`, `BLOCKS`, `LENSES`, `PAGES` | Data statis dan konfigurasi |
+| `jakartaDayNum()`, `jakartaHour()` | Tanggal dan jam nyata menurut zona Asia/Jakarta |
 | `S` | State global aplikasi |
-| `lvl()`, `blocks()`, `fleet()`, `lensVals()` | Model data simulasi (deterministik berbasis hash + sedikit drift acak) |
-| `render*()` | Fungsi render per bagian UI, memakai `patch()` (DOM morph) agar transisi CSS dan scroll tetap utuh |
+| `lvl()`, `blocks()`, `fleet()`, `unitCalc()`, `lensVals()` | Model data simulasi (deterministik berbasis hash + sedikit drift acak) |
+| `render*()`, `streamSVG()` | Fungsi render per bagian UI, memakai `patch()` (DOM morph) agar transisi CSS dan scroll tetap utuh |
 | `act()` | Pusat penanganan aksi lewat atribut `data-a` |
-| Timeline / Map / Simulator | Penanganan pointer untuk timeline, pan/zoom peta, dan `setInterval` simulator |
+| Timeline / Map / Simulator | Penanganan pointer untuk timeline, pan/zoom peta, `viewFor()` / `toggleFull()` untuk layar penuh, dan `setInterval` simulator |
 
 ## Kustomisasi
 
-- **Tanggal "hari ini":** ubah konstanta `TODAY` (saat ini `26`, label `NOV`).
-- **Area tambang:** edit objek `AREAS` (plan harian `np`, pace, sisa cadangan `remain`, kadar `grade`, jumlah unit dan pekerja).
+- **Tanggal "hari ini":** dihitung otomatis oleh `jakartaDayNum()` dan berganti sendiri saat lewat tengah malam WIB. Untuk mengunci tanggal tertentu, ubah nilai awal `TODAY`.
+- **Area tambang:** edit objek `AREAS` (plan harian `np`, pace, sisa cadangan `remain`, kadar `grade`, jumlah unit `units`, pekerja `workers`, zona `zone`, dan flag awal `flags`).
 - **Blok:** edit array `BLOCKS` (`act` aktif/tidak, posisi grid `c`/`r`, bobot `w`).
 - **Warna & tema:** ubah variabel CSS pada `:root` (`--bg`, `--green`, `--or`, `--red2`, dan lainnya).
-- **Zona waktu:** jam "sekarang" mengikuti `Asia/Jakarta` (fungsi `jakartaHour()`), dibatasi pada rentang 06:00–18:00.
+- **Zona waktu & jam shift:** jam "sekarang" mengikuti `Asia/Jakarta` (fungsi `jakartaHour()`), dibatasi pada rentang 06:00–18:00. Di luar rentang itu status berubah menjadi *Belum shift* / *Shift selesai*.
 
 ## Menghubungkan ke Data Nyata
 
@@ -92,9 +99,11 @@ Rekomendasi: ambil data lewat `fetch`/WebSocket, simpan ke state `S`, lalu pangg
 ## Keterbatasan
 
 - Data bersifat simulasi sehingga tidak boleh dipakai untuk pengambilan keputusan operasional.
-- Tidak ada penyimpanan permanen: perubahan seperti flag blok, status unit, dan notifikasi hilang saat halaman dimuat ulang.
+- Tidak ada penyimpanan permanen: perubahan seperti flag blok, status unit, penugasan blok, dan notifikasi hilang saat halaman dimuat ulang.
 - Tidak ada autentikasi atau kontrol akses pengguna.
-- Tombol "Share" hanya menyalin URL halaman saat ini.
+- Tombol "Share" hanya menyalin URL halaman saat ini; halaman, lensa, dan pilihan blok tidak ikut tersimpan di URL.
+- Pemilih hari hanya mencakup 7 hari terakhir, dan datanya dihasilkan secara deterministik, bukan riwayat nyata.
+- Sidebar selalu dalam mode ringkas (rail); label lengkap muncul lewat tooltip dan submenu hover.
 - Panel CCTV hanya tampilan simulasi tanpa umpan video nyata.
 
 ## Referensi Publik (Skala Angka)
