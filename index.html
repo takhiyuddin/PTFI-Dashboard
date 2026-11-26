@@ -2894,6 +2894,80 @@
       .side .sec ~ .sec {
         animation-delay: 0.7s;
       }
+      /* ===== PATCH-18: hint rata tengah ===== */
+      .hint {
+        left: 50%;
+        right: auto;
+        width: max-content;
+        text-align: center;
+        --hx: -50%;
+      }
+
+      /* animasi masuk disesuaikan supaya translateX(-50%) tidak hilang */
+      @keyframes hintin {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(14px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%);
+        }
+      }
+      .hint {
+        transform: translateX(-50%);
+      }
+      /* ===== PATCH-19: full screen memenuhi halaman + animasi ===== */
+      #world {
+        display: flex;
+        flex-direction: column;
+      }
+      .mh {
+        flex: none;
+      }
+      .frame {
+        flex: 1;
+        min-height: 0;
+        grid-template-columns:
+          minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.9fr)
+          minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) 28px minmax(0, 1.5fr);
+      }
+
+      .map.full {
+        animation: none;
+        width: auto;
+        height: auto !important; /* mengalahkan height .map di layar kecil */
+      }
+      .map.fsing {
+        position: fixed;
+        z-index: 90;
+      }
+
+      /* saat animasi: tools, zoom, hint disembunyikan lalu muncul lagi di akhir */
+      .map.fsing .tools button,
+      .map.fsing .zm button,
+      .map.fsing .hint {
+        animation: none !important;
+        opacity: 0;
+      }
+      .hint {
+        transition: opacity 0.2s;
+      }
+      @keyframes growFull {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .map.full .tools button,
+      .map.full .zm button {
+        animation-name: growFull;
+      }
     </style>
   </head>
   <body>
@@ -2919,8 +2993,7 @@
               <div class="frame" id="frame"></div>
             </div>
             <div class="hint">
-              Seret untuk geser · scroll/pinch tombol +/- untuk zoom · klik blok
-              untuk memfilter · Shift+klik = multi-pilih
+              PT Freeport Indonesia — Mine Operations Dashboard
             </div>
           </div>
           <div class="rp" id="rp"></div>
@@ -3171,7 +3244,50 @@
         safety: "vent",
         ecology: "eco",
       };
-      const TODAY = 26;
+      const MON = [
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MEI",
+        "JUN",
+        "JUL",
+        "AGU",
+        "SEP",
+        "OKT",
+        "NOV",
+        "DES",
+      ];
+      /* nomor hari (hari sejak 1970) menurut kalender Asia/Jakarta */
+      function jakartaDayNum() {
+        try {
+          const p = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "Asia/Jakarta",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          }).formatToParts(new Date());
+          const g = (t) => +p.find((x) => x.type === t).value;
+          return Math.floor(
+            Date.UTC(g("year"), g("month") - 1, g("day")) / 864e5,
+          );
+        } catch (e) {
+          const n = new Date(Date.now() + 7 * 36e5); // fallback: UTC+7
+          return Math.floor(
+            Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()) /
+              864e5,
+          );
+        }
+      }
+      let TODAY = jakartaDayNum();
+      const dInfo = (n) => {
+        const x = new Date(n * 864e5);
+        return { d: x.getUTCDate(), m: MON[x.getUTCMonth()] };
+      };
+      const dLbl = (n) => {
+        const i = dInfo(n);
+        return i.d + " " + i.m;
+      };
 
       /* ===== STATE ===== */
       function jakartaHour() {
@@ -3189,7 +3305,8 @@
           return 13.5;
         }
       }
-      let NOWH = Math.min(18, Math.max(6, jakartaHour()));
+      let RAWH = jakartaHour(); // jam WIB nyata (0–24), tidak di-clamp
+      let NOWH = Math.min(18, Math.max(6, RAWH));
       const S = {
         page: "production",
         lens: "map",
@@ -3213,7 +3330,7 @@
         modal: null,
         pd: false,
         t0: Date.now(),
-        view: { x: 0, y: 0, k: 1 },
+        view: { x: 0, y: 0, k: 1, W: 812, H: 642 },
         notes: [],
         locked: {},
         assign: {},
@@ -3288,7 +3405,18 @@
               "'": "&#39;",
             })[c],
         );
-      const isLive = () => S.live && S.day === TODAY,
+      const offShift = () => S.day === TODAY && (RAWH < 6 || RAWH >= 18),
+        statusLbl = () =>
+          S.day !== TODAY
+            ? "REPLAY"
+            : offShift()
+              ? RAWH < 6
+                ? "BELUM SHIFT"
+                : "SHIFT SELESAI"
+              : S.live
+                ? "LIVE"
+                : "REPLAY",
+        isLive = () => S.live && S.day === TODAY && !offShift(),
         flagsOf = () => S.flags[S.area];
       const wide = () => matchMedia("(min-width:1100px)").matches;
       function toast(m) {
@@ -3632,20 +3760,20 @@
         patch(
           s,
           `<div class="logo">${LOGO}<span class="lt lb">PTFI Ops</span></div>
- <button class="sch" data-a="search" aria-label="Cari">${I("search")}<span class="lb">Search</span></button>
- <div class="sec">MAIN</div>
- <nav class="nv">${PAGES.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}">${I(p[1])}<span class="lb">${p[2]}</span></button>`).join("")}
-  <div class="grp ${S.lensOpen ? "op" : ""}"><button class="it" data-a="lensgrp" aria-label="Lensa Peta">${I("layers")}<span class="lb">Lensa Peta</span><span class="lb cv">${I("chev")}</span></button>
-   <div class="kids"><div class="ki">${LENSES.map((l) => `<button class="kid ${S.lens === l[0] ? "on" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div></div></div>
- </nav>
- <div class="sec">AREA</div>
- <div class="areas">${Object.keys(AREAS)
-   .map(
-     (k, i) =>
-       `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}<span class="lb">${AREAS[k].name}</span></button>`,
-   )
-   .join("")}</div>
- <button class="usr nick" data-a="sys" aria-label="TA — status sistem"><span class="nk">TA</span></button>`,
+      <button class="sch" data-a="search" aria-label="Cari">${I("search")}<span class="lb">Search</span></button>
+      <div class="sec">MAIN</div>
+      <nav class="nv">${PAGES.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}">${I(p[1])}<span class="lb">${p[2]}</span></button>`).join("")}
+       <div class="grp ${S.lensOpen ? "op" : ""}"><button class="it" data-a="lensgrp" aria-label="Lensa Peta">${I("layers")}<span class="lb">Lensa Peta</span><span class="lb cv">${I("chev")}</span></button>
+        <div class="kids"><div class="ki">${LENSES.map((l) => `<button class="kid ${S.lens === l[0] ? "on" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div></div></div>
+      </nav>
+      <div class="sec">AREA</div>
+      <div class="areas">${Object.keys(AREAS)
+        .map(
+          (k, i) =>
+            `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}<span class="lb">${AREAS[k].name}</span></button>`,
+        )
+        .join("")}</div>
+      <button class="usr nick" data-a="sys" aria-label="TA — status sistem"><span class="nk">TA</span></button>`,
         );
       }
       function squash() {
@@ -3671,15 +3799,15 @@
         patch(
           $("sels"),
           `<span class="dd"><button data-a="menu" data-v="areaB">${a.short === "BG" ? "Big Gossan" : a.short}${I("chev")}</button>${S.menu === "areaB" ? areaPop : ""}</span><span class="sep"></span>
- <span class="sep pgsep"></span><span class="dd pgsel"><button data-a="menu" data-v="pg">${PAGES.find((p) => p[0] === S.page)[2]}${I("chev")}</button>${S.menu === "pg" ? `<div class="pop r" style="max-height:60dvh;overflow:auto"><h6>Halaman</h6>${PAGES.map((p) => `<button class="${S.page === p[0] ? "cur" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}${p[2]}</button>`).join("")}<h6>Lensa peta</h6>${LENSES.map((l) => `<button class="${S.lens === l[0] ? "cur" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>` : ""}</span>
- <span class="dd"><button data-a="menu" data-v="level">${lvName()}${I("chev")}</button>${S.menu === "level" ? `<div class="pop">${(S.page === "ecology" ? ECO : LEVELS).map((l, i) => `<button class="${i === S.level ? "cur" : ""}" data-a="level" data-v="${i}">${l}</button>`).join("")}</div>` : ""}</span>`,
+      <span class="sep pgsep"></span><span class="dd pgsel"><button data-a="menu" data-v="pg">${PAGES.find((p) => p[0] === S.page)[2]}${I("chev")}</button>${S.menu === "pg" ? `<div class="pop r" style="max-height:60dvh;overflow:auto"><h6>Halaman</h6>${PAGES.map((p) => `<button class="${S.page === p[0] ? "cur" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}${p[2]}</button>`).join("")}<h6>Lensa peta</h6>${LENSES.map((l) => `<button class="${S.lens === l[0] ? "cur" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>` : ""}</span>
+      <span class="dd"><button data-a="menu" data-v="level">${lvName()}${I("chev")}</button>${S.menu === "level" ? `<div class="pop">${(S.page === "ecology" ? ECO : LEVELS).map((l, i) => `<button class="${i === S.level ? "cur" : ""}" data-a="level" data-v="${i}">${l}</button>`).join("")}</div>` : ""}</span>`,
         );
         patch(
           $("hr"),
           `<div class="acts"><button data-a="share" aria-label="Share">${I("share")}<span class="t">Share</span></button><button data-a="report" aria-label="Report">${I("doc")}<span class="t">Report</span></button><button data-a="print" aria-label="Print">${I("print")}<span class="t">Print</span></button></div>
- <span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 28px))"><h6>Notifikasi (simulasi)</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
- <button class="rb" data-a="search" aria-label="Cari">${I("search")}</button>
- <button class="ava" data-a="sys" aria-label="TA — status sistem">TA</button>`,
+      <span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 28px))"><h6>Notifikasi (simulasi)</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
+      <button class="rb" data-a="search" aria-label="Cari">${I("search")}</button>
+      <button class="ava" data-a="sys" aria-label="TA — status sistem">TA</button>`,
         );
       }
       function winPos() {
@@ -3688,12 +3816,12 @@
       }
       function dayPill() {
         const alert = S.day === TODAY || rnd("al" + S.day) > 0.5,
-          days = [26, 25, 24, 23, 22, 21, 20];
+          days = Array.from({ length: 7 }, (_, i) => TODAY - i);
         patch(
           $("day"),
           `<span class="al ${alert ? "" : "ok"}">${I(alert ? "alert" : "check")}</span>
- <span class="dd"><button data-a="menu" data-v="day">Day ${S.day}${I("chev")}</button>${S.menu === "day" ? `<div class="pop" style="top:46px">${days.map((d) => `<button class="${d === S.day ? "cur" : ""}" data-a="day" data-v="${d}">Day ${d} · NOV ${d}${d === TODAY ? " (hari ini)" : ""}</button>`).join("")}</div>` : ""}</span>
- <span class="chip" style="margin-left:auto">NOV ${S.day}</span><button class="today" data-a="today">${S.day === TODAY ? "Today" : "Replay"}</button>`,
+      <span class="dd"><button data-a="menu" data-v="day">Day ${dInfo(S.day).d}${I("chev")}</button>${S.menu === "day" ? `<div class="pop" style="top:46px">${days.map((d) => `<button class="${d === S.day ? "cur" : ""}" data-a="day" data-v="${d}">Day ${dInfo(d).d} · ${dLbl(d)}${d === TODAY ? " (hari ini)" : ""}</button>`).join("")}</div>` : ""}</span>
+      <span class="chip" style="margin-left:auto">${dLbl(S.day)}</span><button class="today" data-a="today">${S.day === TODAY ? (offShift() ? (RAWH < 6 ? "Belum shift" : "Shift selesai") : "Today") : "Replay"}</button>`,
         );
       }
       function renderTL() {
@@ -3839,24 +3967,24 @@
                   pct = clamp(c.pct, 0, 100),
                   muted = S.mute[S.area + c.i];
                 return `<div class="cd ${S.level === c.i ? "sel" : ""}" data-a="level" data-v="${c.i}" style="--d:${c.i}">
-  <div class="top2"><span class="bdg ${bd[0]}">${bd[1]}</span><span class="code">${c.code}</span></div>
-  <div class="mg"><div><label>${c.A[0]} ${sup(c.A[2])}</label><div class="v">${val(c.A[1])}</div></div><div><label>${c.B[0]} ${sup(c.B[2])}</label><div class="v">${val(c.B[1])}</div></div>
-  <div><label>${c.C[0]}</label><div class="v">${val(c.C[1])}${ic(c.C[2])}</div></div><div><label>${c.dl}</label><div class="v">${val(c.D[1])}${ic(c.D[2])}</div></div></div>
-  <div class="bar"><div>${c.bl} ${Math.round(c.pct)}%</div><div class="btrack"><div class="bfill" style="width:${pct}%"></div><div class="bfade" style="left:${pct}%"></div><div class="bmk" style="left:${pct}%">${val(c.A[1])}</div></div>
-  <div class="bend"><span>0 ${c.mu === "org" ? "" : c.mu}</span><span>${K(c.max)} ${c.mu === "org" ? "" : c.mu}</span></div></div>
-  <div class="cfoot"><span class="dd"><button data-a="menu" data-v="cl${c.i}">${I("pin")}${A().name}${I("chev")}</button>${
-    S.menu === "cl" + c.i
-      ? `<div class="pop" style="bottom:100%;top:auto;margin-bottom:6px">${Object.keys(
-          AREAS,
-        )
-          .map(
-            (k) =>
-              `<button class="${k === S.area ? "cur" : ""}" data-a="area" data-v="${k}">${AREAS[k].name}</button>`,
-          )
-          .join("")}</div>`
-      : ""
-  }</span>
-  <span class="ic"><button data-a="log" data-v="${c.i}" aria-label="Log aktivitas">${I("log")}</button><button data-a="mute" data-v="${c.i}" aria-label="Alarm">${I(muted ? "bellx" : "bell")}${S.notes.some((n) => !n.read && n.sev !== "ok") && c.i === 0 && !muted ? '<span class="rd"></span>' : ""}</button></span></div></div>`;
+       <div class="top2"><span class="bdg ${bd[0]}">${bd[1]}</span><span class="code">${c.code}</span></div>
+       <div class="mg"><div><label>${c.A[0]} ${sup(c.A[2])}</label><div class="v">${val(c.A[1])}</div></div><div><label>${c.B[0]} ${sup(c.B[2])}</label><div class="v">${val(c.B[1])}</div></div>
+       <div><label>${c.C[0]}</label><div class="v">${val(c.C[1])}${ic(c.C[2])}</div></div><div><label>${c.dl}</label><div class="v">${val(c.D[1])}${ic(c.D[2])}</div></div></div>
+       <div class="bar"><div>${c.bl} ${Math.round(c.pct)}%</div><div class="btrack"><div class="bfill" style="width:${pct}%"></div><div class="bfade" style="left:${pct}%"></div><div class="bmk" style="left:${pct}%">${val(c.A[1])}</div></div>
+       <div class="bend"><span>0 ${c.mu === "org" ? "" : c.mu}</span><span>${K(c.max)} ${c.mu === "org" ? "" : c.mu}</span></div></div>
+       <div class="cfoot"><span class="dd"><button data-a="menu" data-v="cl${c.i}">${I("pin")}${A().name}${I("chev")}</button>${
+         S.menu === "cl" + c.i
+           ? `<div class="pop" style="bottom:100%;top:auto;margin-bottom:6px">${Object.keys(
+               AREAS,
+             )
+               .map(
+                 (k) =>
+                   `<button class="${k === S.area ? "cur" : ""}" data-a="area" data-v="${k}">${AREAS[k].name}</button>`,
+               )
+               .join("")}</div>`
+           : ""
+       }</span>
+       <span class="ic"><button data-a="log" data-v="${c.i}" aria-label="Log aktivitas">${I("log")}</button><button data-a="mute" data-v="${c.i}" aria-label="Alarm">${I(muted ? "bellx" : "bell")}${S.notes.some((n) => !n.read && n.sev !== "ok") && c.i === 0 && !muted ? '<span class="rd"></span>' : ""}</button></span></div></div>`;
               })
               .join("") +
             "</div>",
@@ -3908,8 +4036,8 @@
                     ? "DEVELOPMENT"
                     : "EKSPLORASI";
             h += `<div class="blk idle" style="${pos}">
-    <div class="bt"><span>${b.id}</span><span class="fl gy">${st}</span></div>
-    <div class="m"><div><span>${I("drill")}${prog}% dev.</span></div><div><span>${I("flag")}Q${q} 2027</span></div><div><span>${I("cube")}${fmt(res)} mt</span></div></div></div>`;
+         <div class="bt"><span>${b.id}</span><span class="fl gy">${st}</span></div>
+         <div class="m"><div><span>${I("drill")}${prog}% dev.</span></div><div><span>${I("flag")}Q${q} 2027</span></div><div><span>${I("cube")}${fmt(res)} mt</span></div></div></div>`;
             return;
           }
           const lv = lensVals(b),
@@ -3929,8 +4057,8 @@
               ? `<div class="p">${rows[0]}${rows[1]}</div><div>${rows[2]}</div>`
               : `<div>${rows[0]}</div><div>${rows[1]}</div><div>${rows[2]}</div>`;
           h += `<div class="${cls}" data-a="blk" data-id="${b.id}" style="${pos}" title="${b.flag === "wet" ? "Wet muck" : b.flag === "restr" ? "Akses dibatasi (geoteknik)" : "Normal"}">
-  <div class="bt"><span>${b.id}</span>${b.flag ? `<span class="fl ${b.flag === "wet" ? "" : "rs"}">${b.flag === "wet" ? "WET MUCK" : "RESTRICTED"}</span>` : ""}<span class="dd"><button data-a="menu" data-v="b${b.id}" aria-label="Menu blok ${b.id}">${I("dots")}</button>${S.menu === "b" + b.id ? `<div class="pop ${b.c <= 2 ? "l" : "r"}" style="min-width:230px"><h6>Drawpoint ${b.id}</h6><button data-a="focus" data-id="${b.id}">${I("pin")}Fokuskan blok</button><button data-a="setflag" data-id="${b.id}" data-v="wet">${I("drop")}Tandai wet muck</button><button data-a="setflag" data-id="${b.id}" data-v="restr">${I("lock")}Batasi akses (geoteknik)</button><button data-a="setflag" data-id="${b.id}" data-v="">${I("check")}Normalkan</button></div>` : ""}</span></div>
-  <div class="m">${m}</div></div>`;
+       <div class="bt"><span>${b.id}</span>${b.flag ? `<span class="fl ${b.flag === "wet" ? "" : "rs"}">${b.flag === "wet" ? "WET MUCK" : "RESTRICTED"}</span>` : ""}<span class="dd"><button data-a="menu" data-v="b${b.id}" aria-label="Menu blok ${b.id}">${I("dots")}</button>${S.menu === "b" + b.id ? `<div class="pop ${b.c <= 2 ? "l" : "r"}" style="min-width:230px"><h6>Drawpoint ${b.id}</h6><button data-a="focus" data-id="${b.id}">${I("pin")}Fokuskan blok</button><button data-a="setflag" data-id="${b.id}" data-v="wet">${I("drop")}Tandai wet muck</button><button data-a="setflag" data-id="${b.id}" data-v="restr">${I("lock")}Batasi akses (geoteknik)</button><button data-a="setflag" data-id="${b.id}" data-v="">${I("check")}Normalkan</button></div>` : ""}</span></div>
+       <div class="m">${m}</div></div>`;
           if (b.id === "BB") h += `<div class="band" style="grid-row:3"></div>`;
         });
         const inf = [
@@ -3957,8 +4085,8 @@
           ],
         ];
         h += `<div class="blk na idle" style="grid-column:4;grid-row:1/5">
-  <div class="bt"><span>N/A</span><span class="fl gy">INFRA</span></div>
-  <div class="infra">${inf.map((x) => `<div class="ir">${I(x[0])}<span><small>${x[1]}</small><b>${x[2]}</b></span></div>`).join("")}</div></div>`;
+       <div class="bt"><span>N/A</span><span class="fl gy">INFRA</span></div>
+       <div class="infra">${inf.map((x) => `<div class="ir">${I(x[0])}<span><small>${x[1]}</small><b>${x[2]}</b></span></div>`).join("")}</div></div>`;
         patch($("frame"), h);
       }
       function streamSVG() {
@@ -4101,30 +4229,30 @@
             .join("");
 
         return `<svg class="stream" viewBox="0 28 572 190" role="img" aria-label="Place of development">
-    <defs>
-      <pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <rect width="7" height="7" fill="#f3f4f2"/>
-        <line x1="0" y1="0" x2="0" y2="7" stroke="#dcdfdb" stroke-width="3.2"/>
-      </pattern>
-    </defs>
+         <defs>
+           <pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+             <rect width="7" height="7" fill="#f3f4f2"/>
+             <line x1="0" y1="0" x2="0" y2="7" stroke="#dcdfdb" stroke-width="3.2"/>
+           </pattern>
+         </defs>
 
-    <path d="${band(hatTop, hatBot)}" fill="url(#ht)"/>
-    <path d="${band(topE, botE)}" fill="#8b8d8e"/>
-    <path d="${band(topE, dkE)}" fill="#2a2c2b"/>
+         <path d="${band(hatTop, hatBot)}" fill="url(#ht)"/>
+         <path d="${band(topE, botE)}" fill="#8b8d8e"/>
+         <path d="${band(topE, dkE)}" fill="#2a2c2b"/>
 
-    <path d="${curve(top)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
-    <path d="${curve(bot)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
-    ${hl(top, tSegs)}${hl(bot, bSegs)}
-    ${top.map((p, i) => diamond(p, dNodes.has("t" + i))).join("")}
-    ${bot.map((p, i) => diamond(p, dNodes.has("b" + i))).join("")}
+         <path d="${curve(top)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+         <path d="${curve(bot)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+         ${hl(top, tSegs)}${hl(bot, bSegs)}
+         ${top.map((p, i) => diamond(p, dNodes.has("t" + i))).join("")}
+         ${bot.map((p, i) => diamond(p, dNodes.has("b" + i))).join("")}
 
-    <rect x="${tpx}" y="${OY}" width="${Math.max(0, X1 + 10 - tpx)}" height="${OH}" fill="rgba(255,255,255,.55)"/>
-    <rect x="0" y="${OY}" width="${r0}" height="${OH}" fill="rgba(255,255,255,.5)"/>
-    <rect x="${r1}" y="${OY}" width="${Math.max(0, 572 - r1)}" height="${OH}" fill="rgba(255,255,255,.5)"/>
+         <rect x="${tpx}" y="${OY}" width="${Math.max(0, X1 + 10 - tpx)}" height="${OH}" fill="rgba(255,255,255,.55)"/>
+         <rect x="0" y="${OY}" width="${r0}" height="${OH}" fill="rgba(255,255,255,.5)"/>
+         <rect x="${r1}" y="${OY}" width="${Math.max(0, 572 - r1)}" height="${OH}" fill="rgba(255,255,255,.5)"/>
 
-    ${labelsTop.map((l) => label(...l)).join("")}
-    ${labelsBot.map((l) => label(...l)).join("")}
-  </svg>`;
+         ${labelsTop.map((l) => label(...l)).join("")}
+         ${labelsBot.map((l) => label(...l)).join("")}
+       </svg>`;
       }
       function renderRight() {
         const bs = selBlocks(),
@@ -4189,62 +4317,62 @@
         patch(
           $("rp"),
           `<div class="rh"><div><div class="big">${vtxt}<sup>${c.u}</sup></div><p>${lvName()} — ${names[S.tab]} remaining${S.sel.size ? ` (${[...S.sel].join(", ")})` : ""}</p></div><div style="display:flex;gap:8px"><span class="dd"><button class="cb" data-a="menu" data-v="flt" aria-label="Filter" style="padding:0">${I("funnel")}</button>${S.menu === "flt" ? `<div class="pop r"><h6>Filter blok</h6><button data-a="fsel" data-v="all">Semua blok aktif</button><button data-a="fsel" data-v="wet">${I("drop")}Hanya wet muck</button><button data-a="fsel" data-v="restr">${I("lock")}Hanya restricted</button><button data-a="fsel" data-v="ok">${I("check")}Hanya normal</button></div>` : ""}</span><button class="cb" data-a="clear" aria-label="Hapus pilihan">${I("x")}</button></div></div>
- <div class="tabs">${[
-   ["ore", "Ore"],
-   ["cu", "Cu"],
-   ["au", "Au"],
-   ["ag", "Ag"],
- ]
-   .map(
-     (t) =>
-       `<button class="${S.tab === t[0] ? "on" : ""}" data-a="tab" data-v="${t[0]}">${t[1]}</button>`,
-   )
-   .join("")}</div>
- <div class="dv"><span>Place of development</span><span>Remaining</span></div>
- <div class="chips" style="justify-content:space-between"><div class="chips" style="margin:0">${dev.map((b) => `<span class="ch">${a.short}-${b.id}</span>`).join("") || '<span class="ch n">—</span>'}</div><span class="ch b">${sc.v >= 100 ? fmt(sc.v) : sc.v.toFixed(1)} ${c.u}</span></div>
- ${streamSVG()}
- <div class="nums"><span>${dec(bef)}</span><b>${fmt(inn)}</b><span>${dec(aft)}</span></div>
- <div class="rng" id="rng"><div class="tk"></div><div class="ac" style="left:${rg[0] * 100}%;width:${(rg[1] - rg[0]) * 100}%"></div><div class="th" data-th="0" style="left:${rg[0] * 100}%"></div><div class="th" data-th="1" style="left:${rg[1] * 100}%"></div></div>
- <div class="bts">${bsel}</div>
- <div class="acc"><button class="ah" data-a="acc" data-v="w"><span>Workers</span><span class="rt"><span class="sm">${I("hat")}${wk}/${wk}</span><span class="sm"><i class="face"></i>${eff}%</span>${I(S.acc.w ? "chevup" : "chev")}</span></button>
- ${S.acc.w ? bs.map((b) => `<div class="crew"><b style="font-weight:500">${b.id}</b><div class="t"><i style="width:${Math.round(b.eff * 100)}%"></i></div><span>${b.w}/${b.w} · ${Math.round(b.eff * 100)}%</span></div>`).join("") + '<p style="font-size:12px;color:var(--mut);padding:6px 0 10px">Lokasi pekerja bersumber dari tagging bawah tanah (simulasi).</p>' : ""}</div>
- <div class="acc"><button class="ah" data-a="acc" data-v="f"><span>Fleet</span><span class="rt">${ready < fl.length ? `<span class="al2">${I("alert")}</span>` : ""}<span>${ready}/${fl.length}</span>${I(S.acc.f ? "chevup" : "chev")}</span></button>
- ${
-   S.acc.f
-     ? `<div class="fchips">${typeBtns
-         .filter((t) => t[0] === "ALL" || fl.some((u) => u.ty === t[0]))
+      <div class="tabs">${[
+        ["ore", "Ore"],
+        ["cu", "Cu"],
+        ["au", "Au"],
+        ["ag", "Ag"],
+      ]
+        .map(
+          (t) =>
+            `<button class="${S.tab === t[0] ? "on" : ""}" data-a="tab" data-v="${t[0]}">${t[1]}</button>`,
+        )
+        .join("")}</div>
+      <div class="dv"><span>Place of development</span><span>Remaining</span></div>
+      <div class="chips" style="justify-content:space-between"><div class="chips" style="margin:0">${dev.map((b) => `<span class="ch">${a.short}-${b.id}</span>`).join("") || '<span class="ch n">—</span>'}</div><span class="ch b">${sc.v >= 100 ? fmt(sc.v) : sc.v.toFixed(1)} ${c.u}</span></div>
+      ${streamSVG()}
+      <div class="nums"><span>${dec(bef)}</span><b>${fmt(inn)}</b><span>${dec(aft)}</span></div>
+      <div class="rng" id="rng"><div class="tk"></div><div class="ac" style="left:${rg[0] * 100}%;width:${(rg[1] - rg[0]) * 100}%"></div><div class="th" data-th="0" style="left:${rg[0] * 100}%"></div><div class="th" data-th="1" style="left:${rg[1] * 100}%"></div></div>
+      <div class="bts">${bsel}</div>
+      <div class="acc"><button class="ah" data-a="acc" data-v="w"><span>Workers</span><span class="rt"><span class="sm">${I("hat")}${wk}/${wk}</span><span class="sm"><i class="face"></i>${eff}%</span>${I(S.acc.w ? "chevup" : "chev")}</span></button>
+      ${S.acc.w ? bs.map((b) => `<div class="crew"><b style="font-weight:500">${b.id}</b><div class="t"><i style="width:${Math.round(b.eff * 100)}%"></i></div><span>${b.w}/${b.w} · ${Math.round(b.eff * 100)}%</span></div>`).join("") + '<p style="font-size:12px;color:var(--mut);padding:6px 0 10px">Lokasi pekerja bersumber dari tagging bawah tanah (simulasi).</p>' : ""}</div>
+      <div class="acc"><button class="ah" data-a="acc" data-v="f"><span>Fleet</span><span class="rt">${ready < fl.length ? `<span class="al2">${I("alert")}</span>` : ""}<span>${ready}/${fl.length}</span>${I(S.acc.f ? "chevup" : "chev")}</span></button>
+      ${
+        S.acc.f
+          ? `<div class="fchips">${typeBtns
+              .filter((t) => t[0] === "ALL" || fl.some((u) => u.ty === t[0]))
+              .map(
+                (t) =>
+                  `<button class="${S.ftype === t[0] ? "on" : ""}" data-a="ftype" data-v="${t[0]}">${t[1]}</button>`,
+              )
+              .join("")}</div>` +
+            (fsel
+              .map((u) => {
+                const c = unitCalc(u),
+                  down = u.st !== "ok";
+                return `<div class="unit ${down ? "warn" : ""}" data-k="${u.id}"><div class="ur"><div><b>${u.id}</b><small>${u.n}</small></div><div><b data-up="${u.id}">${down ? "—" : T3(c.up)}</b><small>Uptime</small></div><div><b>${MS(u.cy)}</b><small>Cycle time</small></div><span class="dd"><button data-a="menu" data-v="u${u.id}" style="color:var(--mut);padding:0;height:28px;width:28px;justify-content:center" aria-label="Menu unit">${I("dots")}</button>${S.menu === "u" + u.id ? `<div class="pop r" style="min-width:210px"><button data-a="unitst" data-id="${u.id}" data-v="ok">${I("check")}Set: Operasional</button><button data-a="unitst" data-id="${u.id}" data-v="down">${I("alert")}Set: Breakdown</button><button data-a="unitst" data-id="${u.id}" data-v="maint">${I("drill")}Set: Maintenance</button></div>` : ""}</span></div>
+       <div class="ld"><span>${down ? (u.st === "maint" ? "Maintenance" : "Breakdown") : "Loading " + c.load + "%"}</span><span>${down ? "" : "~" + MS(c.eta)}</span></div>
+       <div class="ut"><i style="width:${c.load}%"></i>${down ? "" : `<u style="left:${c.load}%">${c.pay.toFixed(1)}</u>`}</div>
+       <div class="ue"><span>0 t</span><span style="text-align:right">${u.cap} t · Blok ${u.blk} · Dikirim ${fmt(c.deliv)} t</span></div>
+       <div class="ua">${[
+         ["flag", "flag", "Tandai kendala"],
+         ["grid", "loc", "Lacak posisi"],
+         ["cursor", "route", "Ubah rute"],
+         ["split", "assign", "Alihkan blok"],
+         ["sync", "sync", "Sinkronisasi"],
+         ["lock", "lock", "Kunci target"],
+         ["undo", "reset", "Reset siklus"],
+       ]
          .map(
-           (t) =>
-             `<button class="${S.ftype === t[0] ? "on" : ""}" data-a="ftype" data-v="${t[0]}">${t[1]}</button>`,
+           (x) =>
+             `<button data-a="uact" data-id="${u.id}" data-v="${x[1]}" class="${x[1] === "assign" || (x[1] === "loc" && S.sel.has(u.blk)) || (x[1] === "lock" && S.locked[u.id]) ? "on" : ""}" aria-label="${x[2]}" title="${x[2]}">${I(x[0])}</button>`,
          )
-         .join("")}</div>` +
-       (fsel
-         .map((u) => {
-           const c = unitCalc(u),
-             down = u.st !== "ok";
-           return `<div class="unit ${down ? "warn" : ""}" data-k="${u.id}"><div class="ur"><div><b>${u.id}</b><small>${u.n}</small></div><div><b data-up="${u.id}">${down ? "—" : T3(c.up)}</b><small>Uptime</small></div><div><b>${MS(u.cy)}</b><small>Cycle time</small></div><span class="dd"><button data-a="menu" data-v="u${u.id}" style="color:var(--mut);padding:0;height:28px;width:28px;justify-content:center" aria-label="Menu unit">${I("dots")}</button>${S.menu === "u" + u.id ? `<div class="pop r" style="min-width:210px"><button data-a="unitst" data-id="${u.id}" data-v="ok">${I("check")}Set: Operasional</button><button data-a="unitst" data-id="${u.id}" data-v="down">${I("alert")}Set: Breakdown</button><button data-a="unitst" data-id="${u.id}" data-v="maint">${I("drill")}Set: Maintenance</button></div>` : ""}</span></div>
-  <div class="ld"><span>${down ? (u.st === "maint" ? "Maintenance" : "Breakdown") : "Loading " + c.load + "%"}</span><span>${down ? "" : "~" + MS(c.eta)}</span></div>
-  <div class="ut"><i style="width:${c.load}%"></i>${down ? "" : `<u style="left:${c.load}%">${c.pay.toFixed(1)}</u>`}</div>
-  <div class="ue"><span>0 t</span><span style="text-align:right">${u.cap} t · Blok ${u.blk} · Dikirim ${fmt(c.deliv)} t</span></div>
-  <div class="ua">${[
-    ["flag", "flag", "Tandai kendala"],
-    ["grid", "loc", "Lacak posisi"],
-    ["cursor", "route", "Ubah rute"],
-    ["split", "assign", "Alihkan blok"],
-    ["sync", "sync", "Sinkronisasi"],
-    ["lock", "lock", "Kunci target"],
-    ["undo", "reset", "Reset siklus"],
-  ]
-    .map(
-      (x) =>
-        `<button data-a="uact" data-id="${u.id}" data-v="${x[1]}" class="${x[1] === "assign" || (x[1] === "loc" && S.sel.has(u.blk)) || (x[1] === "lock" && S.locked[u.id]) ? "on" : ""}" aria-label="${x[2]}" title="${x[2]}">${I(x[0])}</button>`,
-    )
-    .join("")}</div></div>`;
-         })
-         .join("") ||
-         '<p style="font-size:13px;color:var(--mut);padding:8px 0">Tidak ada unit pada filter ini.</p>')
-     : ""
- }</div>`,
+         .join("")}</div></div>`;
+              })
+              .join("") ||
+              '<p style="font-size:13px;color:var(--mut);padding:8px 0">Tidak ada unit pada filter ini.</p>')
+          : ""
+      }</div>`,
         );
       }
       function renderAll() {
@@ -4322,7 +4450,7 @@
             return `<tr><td>${LEVELS[i]}</td><td>${L.name}</td><td>${fmt(L.val)} ${L.unit}</td><td>${fmt(L.plan)} ${L.unit}</td><td>${Math.round(L.pct)}%</td></tr>`;
           })
           .join("");
-        return `<p style="margin-bottom:12px">${a.name} · Day ${S.day} NOV · s.d. ${hh(S.t)} WIB · <b>data simulasi (prototipe)</b></p><table><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr>${rows}</table><br><table><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr>${bs.map((b) => `<tr><td>${b.id}</td><td>${b.flag || "normal"}</td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`).join("")}</table><br><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-a="csv">Unduh CSV</button><button class="btn l" data-a="print">Cetak / PDF</button></div>`;
+        return `<p style="margin-bottom:12px">${a.name} · ${dLbl(S.day)} · s.d. ${hh(S.t)} WIB · <b>data simulasi (prototipe)</b></p><table><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr>${rows}</table><br><table><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr>${bs.map((b) => `<tr><td>${b.id}</td><td>${b.flag || "normal"}</td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`).join("")}</table><br><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-a="csv">Unduh CSV</button><button class="btn l" data-a="print">Cetak / PDF</button></div>`;
       }
       function sysHTML() {
         const down = fleet().filter((u) => u.st !== "ok"),
@@ -4337,12 +4465,12 @@
           an.push(`${u.id}: ${u.st === "maint" ? "maintenance" : "breakdown"}`),
         );
         return `<p style="margin-bottom:10px"><b>Ringkasan anomali (aturan otomatis, bukan AI generatif):</b></p><ul>${an.map((x) => `<li>${x}</li>`).join("") || "<li>Tidak ada anomali aktif.</li>"}</ul><br>
- <p style="margin-bottom:8px"><b>Koneksi sumber data</b></p><table><tr><th>Sistem</th><th>Status</th><th>Catatan</th></tr><tr><td>Fleet Management (mis. Cat MineStar / Modular Dispatch)</td><td>Mock</td><td>Ganti dengan API Gateway produksi</td></tr><tr><td>SCADA/PLC crusher & conveyor</td><td>Mock</td><td>OPC-UA / MQTT</td></tr><tr><td>Tagging personel bawah tanah</td><td>Mock</td><td>RFID / Wi-Fi tag</td></tr></table><br>
- <p style="margin-bottom:8px"><b>Referensi publik yang dipakai sebagai skala</b></p><ul>
- <li>Kapasitas nameplate GBC 150 kt/hari, DMLZ 80 kt/hari, Big Gossan 7,5 kt/hari — makalah Mass Mining 2024: <a href="https://papers.acg.uwa.edu.au/d/2435_O-04/O-04.pdf" target="_blank" rel="noopener">papers.acg.uwa.edu.au</a></li>
- <li>GBC dipulihkan bertahap setelah mud flow 8 Sep 2025 — <a href="https://www.mining.com/?p=1206574" target="_blank" rel="noopener">mining.com</a></li>
- <li>Struktur tambang — <a href="https://www.sec.gov/Archives/edgar/data/831259/000083125922000012/a2021trsptfi-exhibit.htm" target="_blank" rel="noopener">SEC Technical Report Summary</a></li></ul><br>
- <p style="font-size:13px;color:var(--mut)">Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p>`;
+      <p style="margin-bottom:8px"><b>Koneksi sumber data</b></p><table><tr><th>Sistem</th><th>Status</th><th>Catatan</th></tr><tr><td>Fleet Management (mis. Cat MineStar / Modular Dispatch)</td><td>Mock</td><td>Ganti dengan API Gateway produksi</td></tr><tr><td>SCADA/PLC crusher & conveyor</td><td>Mock</td><td>OPC-UA / MQTT</td></tr><tr><td>Tagging personel bawah tanah</td><td>Mock</td><td>RFID / Wi-Fi tag</td></tr></table><br>
+      <p style="margin-bottom:8px"><b>Referensi publik yang dipakai sebagai skala</b></p><ul>
+      <li>Kapasitas nameplate GBC 150 kt/hari, DMLZ 80 kt/hari, Big Gossan 7,5 kt/hari — makalah Mass Mining 2024: <a href="https://papers.acg.uwa.edu.au/d/2435_O-04/O-04.pdf" target="_blank" rel="noopener">papers.acg.uwa.edu.au</a></li>
+      <li>GBC dipulihkan bertahap setelah mud flow 8 Sep 2025 — <a href="https://www.mining.com/?p=1206574" target="_blank" rel="noopener">mining.com</a></li>
+      <li>Struktur tambang — <a href="https://www.sec.gov/Archives/edgar/data/831259/000083125922000012/a2021trsptfi-exhibit.htm" target="_blank" rel="noopener">SEC Technical Report Summary</a></li></ul><br>
+      <p style="font-size:13px;color:var(--mut)">Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p>`;
       }
       function camHTML() {
         return `<p style="margin-bottom:10px">Tampilan simulasi (tidak ada umpan video nyata). Pada sistem produksi, ganti dengan stream RTSP/WebRTC.</p><div class="cams">${["GBC Extraction Level · CAM-03", "GBC Haulage Drift · CAM-07", "Crusher Station · CAM-01", "DMLZ Drawbell · CAM-11", "Rail Loading · CAM-04", "MineGem Remote Bay · CAM-02"].map((n) => `<div class="cam">${n}<b>● REC</b><span style="position:absolute;left:8px;bottom:8px">${hh(S.t)} WIB</span></div>`).join("")}</div>`;
@@ -4564,7 +4692,7 @@
             l.href = URL.createObjectURL(
               new Blob([csv()], { type: "text/csv" }),
             );
-            l.download = `ptfi-${A().short}-day${S.day}.csv`;
+            l.download = `ptfi-${A().short}-${dLbl(S.day).replace(" ", "-")}.csv`;
             l.click();
             break;
           }
@@ -4600,8 +4728,7 @@
             zoomBy(d.v > 0 ? 1.2 : 1 / 1.2);
             return;
           case "full":
-            $("map").classList.toggle("full");
-            setTimeout(fit, 60);
+            toggleFull();
             return;
           case "mclose":
             closeModal();
@@ -4648,8 +4775,7 @@
             S.menu = null;
             renderAll();
           } else if ($("map").classList.contains("full")) {
-            $("map").classList.remove("full");
-            setTimeout(fit, 60);
+            toggleFull();
           }
         }
         if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -4721,29 +4847,55 @@
       });
 
       /* ===== MAP PAN / ZOOM ===== */
+      /* ukuran alami dunia peta (px) */
+      const NW = 812,
+        NH = 642;
+
       function applyView() {
         $("world").style.transform =
           `translate(${S.view.x}px,${S.view.y}px) scale(${S.view.k})`;
       }
+      function applyV(v) {
+        Object.assign(S.view, v);
+        const w = $("world");
+        w.style.width = v.W + "px";
+        w.style.height = v.H + "px";
+        applyView();
+      }
+      /* hitung tampilan untuk kotak peta ukuran mw x mh */
+      function viewFor(mw, mh, full) {
+        if (!full) {
+          const top = 64,
+            bottom = wide() ? 44 : 0,
+            availH = mh - top - bottom;
+          const k = Math.max(0.3, Math.min(1.2, (mw - 20) / NW, availH / NH));
+          return {
+            k,
+            W: NW,
+            H: NH,
+            x: (mw - NW * k) / 2,
+            y: top + Math.max(0, (availH - NH * k) / 2),
+          };
+        }
+        /* full: dunia dilebarkan agar memenuhi seluruh layar */
+        const aw = mw - 40,
+          ah = mh - 76 - 48;
+        const k = Math.max(0.3, Math.min(2, aw / NW, ah / NH));
+        return { k, W: aw / k, H: ah / k, x: 20, y: 76 };
+      }
       function fit() {
         const m = $("map"),
           w = $("world");
-        if (!m.clientWidth) return;
-        const top = m.classList.contains("full") ? 76 : 64,
-          bottom = wide() ? 44 : 0;
-        const availH = m.clientHeight - top - bottom;
-        const k = Math.min(
-          1.2,
-          (m.clientWidth - 20) / w.offsetWidth,
-          availH / w.offsetHeight,
+        if (!m.clientWidth || S.anim) return;
+        const v = viewFor(
+          m.clientWidth,
+          m.clientHeight,
+          m.classList.contains("full"),
         );
-        S.view.k = Math.max(0.3, k);
-        S.view.x = (m.clientWidth - w.offsetWidth * S.view.k) / 2;
-        S.view.y = top + Math.max(0, (availH - w.offsetHeight * S.view.k) / 2);
         if (!window.__fitted) {
           w.style.transition =
             "none"; /* fit pertama: langsung di posisi akhir */
-          applyView();
+          applyV(v);
           void w.offsetWidth;
           requestAnimationFrame(() =>
             requestAnimationFrame(() => {
@@ -4751,7 +4903,86 @@
               window.__fitted = 1;
             }),
           );
-        } else applyView();
+        } else applyV(v);
+      }
+
+      /* ===== FULL SCREEN dengan animasi ===== */
+      function toggleFull() {
+        const m = $("map"),
+          w = $("world");
+        if (S.anim) return;
+        const opening = !m.classList.contains("full");
+        const vw = document.documentElement.clientWidth,
+          vh = document.documentElement.clientHeight;
+        const v0 = Object.assign({}, S.view);
+        let b0, b1, v1, ph;
+
+        if (opening) {
+          const r = m.getBoundingClientRect();
+          ph = document.createElement("div"); /* penahan tempat di grid */
+          ph.id = "mapph";
+          if (!wide()) ph.style.cssText = `height:${r.height}px;flex:none`;
+          m.before(ph);
+          b0 = { x: r.left, y: r.top, w: r.width, h: r.height, r: 24 };
+          b1 = { x: 0, y: 0, w: vw, h: vh, r: 0 };
+          v1 = viewFor(vw, vh, true);
+        } else {
+          ph = $("mapph");
+          const r = ph.getBoundingClientRect();
+          b0 = { x: 0, y: 0, w: vw, h: vh, r: 0 };
+          b1 = { x: r.left, y: r.top, w: r.width, h: r.height, r: 24 };
+          v1 = viewFor(r.width, r.height, false);
+        }
+
+        const setBox = (b) => {
+          m.style.left = b.x + "px";
+          m.style.top = b.y + "px";
+          m.style.width = b.w + "px";
+          m.style.height = b.h + "px";
+          m.style.borderRadius = b.r + "px";
+        };
+        S.anim = true;
+        m.classList.add("fsing");
+        m.classList.remove("full");
+        setBox(b0);
+        w.style.transition = "none";
+
+        const D = 650,
+          t0 = performance.now(),
+          L = (a, b, t) => a + (b - a) * t,
+          ease = (t) =>
+            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        const step = (now) => {
+          const p = Math.min(1, Math.max(0, (now - t0) / D)),
+            e = ease(p);
+          setBox({
+            x: L(b0.x, b1.x, e),
+            y: L(b0.y, b1.y, e),
+            w: L(b0.w, b1.w, e),
+            h: L(b0.h, b1.h, e),
+            r: L(b0.r, b1.r, e),
+          });
+          applyV({
+            k: L(v0.k, v1.k, e),
+            x: L(v0.x, v1.x, e),
+            y: L(v0.y, v1.y, e),
+            W: L(v0.W, v1.W, e),
+            H: L(v0.H, v1.H, e),
+          });
+          if (p < 1) requestAnimationFrame(step);
+          else {
+            if (opening) m.classList.add("full");
+            m.classList.remove("fsing");
+            ["left", "top", "width", "height", "borderRadius"].forEach(
+              (k) => (m.style[k] = ""),
+            );
+            if (!opening) ph.remove();
+            S.anim = false;
+            w.style.transition = "";
+            fit();
+          }
+        };
+        requestAnimationFrame(step);
       }
       function zoomBy(f, cx, cy) {
         const r = $("map").getBoundingClientRect();
@@ -4828,10 +5059,16 @@
       setInterval(() => {
         if (S.pd || document.hidden) return;
         S.tick++;
+        RAWH = jakartaHour();
+        NOWH = Math.min(18, Math.max(6, RAWH));
+        const nd = jakartaDayNum(); // lewat tengah malam → ganti hari otomatis
+        if (nd !== TODAY) {
+          if (S.day === TODAY) S.day = nd;
+          TODAY = nd;
+        }
+        if (!isLive() && S.day === TODAY && S.live) S.t = NOWH; // di luar shift: diam di 06:00 / 18:00
         if (isLive()) {
-          NOWH = Math.min(18, Math.max(6, jakartaHour())); // BARU: jam WIB nyata
-          S.t = NOWH; // BARU: majukan jam dashboard
-          S.t0 = Date.now(); // BARU: sinkronkan uptime agar tidak terhitung dua kali
+          S.t = NOWH;
           Object.keys(S.drift).forEach(
             (k) =>
               (S.drift[k] = S.drift[k].map(
