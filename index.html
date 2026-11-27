@@ -5622,9 +5622,8 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           uName = CURRENT_USER ? CURRENT_USER.name : "";
         s.className = "side" + (window.__ready ? "" : " nt");
         patch(
-          s,
-          `<div class="logo">${LOGO}<div class="logo-txt"><b>PT Freeport Indonesia</b><small>Operations Control</small></div></div>
-<button class="sch" data-a="search" aria-label="Search / ⌘ + K" title="Search / ⌘ + K">${I("search")}<span class="lb"><span>Search</span><kbd>⌘ + K</kbd></span></button>
+  s,
+  `<div class="logo">${LOGO}<div class="logo-txt"><b>PT Freeport Indonesia</b><small>Operations Control</small></div></div>
 <div class="sec">MAIN</div>
 <nav class="nv">${pList.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}" title="${p[2]}">${I(p[1])}<span class="lb">${p[2]}</span></button>`).join("")}
 <div class="grp"><button class="it" aria-label="Lensa Peta">${I("layers")}<span class="lb">Lensa Peta</span></button>
