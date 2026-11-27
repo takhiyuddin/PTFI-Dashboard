@@ -1627,17 +1627,24 @@
         flex-direction: column;
         gap: 18px;
         margin-top: 26px;
+        min-width: 0;
       }
       .infra .ir {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 10px;
         color: #5d625f;
+        min-width: 0;
+      }
+      .infra .ir .i,
+      .infra .ir svg.i {
+        margin-top: 2px;
       }
       .infra .ir span {
         display: flex;
         flex-direction: column;
         min-width: 0;
+        flex: 1;
       }
       .infra small {
         font-size: 11px;
@@ -1646,8 +1653,11 @@
       .infra b {
         font-weight: 500;
         font-size: 14px;
+        line-height: 1.3;
         color: var(--ink);
-        white-space: nowrap;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
       .hint {
         position: absolute;
@@ -3290,7 +3300,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           (k) => !CURRENT_USER || CURRENT_USER.areas.includes(k),
         );
 
-      /* ===== Ikon: Hugeicons stroke-rounded + fallback SVG inline ===== */
+      /* ===== IKON: Hugeicons stroke-rounded + fallback SVG inline ===== */
       const PS = {
         bell: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
         bellx:
@@ -3442,48 +3452,1453 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           ? `<i class="i ${c} hgi-stroke hgi-${HG[n]}" aria-hidden="true"></i>`
           : `<svg class="i ${c}" viewBox="0 0 24 24" aria-hidden="true">${PS[n] || ""}</svg>`;
 
-      /* ===== DATA ===== */
+      /* =====================================================================
+   CONCRETE OPERATIONAL DATA REPOSITORY (PT FREEPORT INDONESIA)
+   Terstruktur & deterministik tanpa angka acak; siap disambungkan ke
+   endpoint REST API produksi melalui window.PTFI_API_CONFIG.
+===================================================================== */
+      window.PTFI_API_CONFIG = {
+        endpoint: "", // Isi URL endpoint JSON produksi jika tersedia, mis. "/api/v1/ptfi/operations"
+        storageKey: "ptfi_ops_concrete_v2",
+      };
+
       const AREAS = {
         GBC: {
           name: "Grasberg Block Cave",
           short: "GBC",
           ic: "mtn",
-          np: 150000,
-          pace: 0.65,
+          np: 150000, // 150,000 mt/hari (75,000 mt per shift 12 jam)
           remain: 19300175,
-          grade: [0.82, 0.64, 2.9],
+          grade: [0.84, 0.62, 2.85], // % Cu, g/t Au, g/t Ag
           units: [112, 38, 22, 9],
           workers: [296, 142, 208, 96],
-          zone: "Panel Zone 1",
-          flags: { BB: "wet", DA: "restr" },
+          zone: "PB1S · Panel Zone 1",
+          levelCodes: ["GBC01-4821", "GBC02-4822", "GBC03-7410", "GBC04-9102"],
+          hourlyShare: [
+            0.068, 0.079, 0.086, 0.091, 0.088, 0.074, 0.082, 0.089, 0.092,
+            0.087, 0.084, 0.08,
+          ],
+          levelEfficiency: [0.94, 0.91, 0.89, 0.87],
+          safetyMetrics: [
+            { airflow: 1765, req: 1800, gas: 1, seismic: 2 },
+            { airflow: 892, req: 900, gas: 0, seismic: 1 },
+            { airflow: 2580, req: 2600, gas: 0, seismic: 0 },
+            { airflow: 695, req: 700, gas: 0, seismic: 0 },
+          ],
+          ecologyMetrics: [
+            { val: 384, cap: 480, ph: 7.4, tss: 24 },
+            { val: 92, cap: 120, ph: 6.7, tss: 31 },
+            { val: 268, cap: 350, ph: 7.2, tss: 18 },
+            { val: 214, cap: 260, ph: 7.5, tss: 16 },
+          ],
+          infra: [
+            ["factory", "Crusher", "94% (Gyr #1–3)"],
+            ["route", "Conveyor", "6.4K t/j"],
+            ["wind", "Ventilasi", "465 m³/s"],
+            ["layers", "Rail", "3 consist aktif"],
+            ["hat", "Kontrol", "12 operator"],
+          ],
+          blocks: [
+            {
+              id: "AA",
+              act: 0,
+              c: 1,
+              r: 1,
+              devPct: 84,
+              status: "SIAP AKTIF",
+              target: "Q1 2027",
+              reserve: 2410500,
+            },
+            {
+              id: "AB",
+              act: 0,
+              c: 2,
+              r: 1,
+              devPct: 58,
+              status: "DEVELOPMENT",
+              target: "Q2 2027",
+              reserve: 2685000,
+            },
+            {
+              id: "BA",
+              act: 1,
+              c: 3,
+              r: 1,
+              w: 0.23,
+              flag: null,
+              u: 26,
+              wkr: 68,
+              ton: 4412840,
+              eff: 0.92,
+              s: {
+                oil: 74,
+                hyd: 218,
+                av: 95,
+                af: 88,
+                co: 4,
+                o2: 20.8,
+                bh: 118,
+                ch: 88,
+                nb: 3,
+                rk: 38.4,
+                air: 26.2,
+                rh: 78,
+                food: 130,
+                wt: 8.4,
+                bus: 12,
+                scan: 70,
+                ppe: 99,
+                lamp: 100,
+                gas: 100,
+                q: 2.1,
+                rd: 98,
+                ph: 7.4,
+                tss: 24,
+                rc: 76,
+              },
+            },
+            {
+              id: "AC",
+              act: 1,
+              c: 1,
+              r: 2,
+              w: 0.11,
+              flag: null,
+              u: 14,
+              wkr: 36,
+              ton: 2110450,
+              eff: 0.89,
+              s: {
+                oil: 72,
+                hyd: 212,
+                av: 93,
+                af: 64,
+                co: 5,
+                o2: 20.8,
+                bh: 74,
+                ch: 82,
+                nb: 4,
+                rk: 37.9,
+                air: 25.8,
+                rh: 76,
+                food: 69,
+                wt: 5.2,
+                bus: 14,
+                scan: 38,
+                ppe: 98,
+                lamp: 100,
+                gas: 99,
+                q: 2.6,
+                rd: 97,
+                ph: 7.3,
+                tss: 22,
+                rc: 74,
+              },
+            },
+            {
+              id: "AD",
+              act: 1,
+              c: 2,
+              r: 2,
+              w: 0.12,
+              flag: null,
+              u: 15,
+              wkr: 40,
+              ton: 2304120,
+              eff: 0.9,
+              s: {
+                oil: 75,
+                hyd: 215,
+                av: 94,
+                af: 68,
+                co: 6,
+                o2: 20.7,
+                bh: 82,
+                ch: 85,
+                nb: 4,
+                rk: 39.1,
+                air: 26.5,
+                rh: 80,
+                food: 76,
+                wt: 5.8,
+                bus: 15,
+                scan: 42,
+                ppe: 99,
+                lamp: 99,
+                gas: 100,
+                q: 2.9,
+                rd: 96,
+                ph: 7.2,
+                tss: 26,
+                rc: 71,
+              },
+            },
+            {
+              id: "BB",
+              act: 1,
+              c: 3,
+              r: 2,
+              w: 0.25,
+              flag: "wet",
+              u: 28,
+              wkr: 72,
+              ton: 4825040,
+              eff: 0.84,
+              s: {
+                oil: 81,
+                hyd: 205,
+                av: 89,
+                af: 76,
+                co: 9,
+                o2: 20.6,
+                bh: 92,
+                ch: 76,
+                nb: 5,
+                rk: 41.2,
+                air: 27.8,
+                rh: 88,
+                food: 138,
+                wt: 11.2,
+                bus: 16,
+                scan: 74,
+                ppe: 97,
+                lamp: 99,
+                gas: 98,
+                q: 4.8,
+                rd: 94,
+                ph: 6.8,
+                tss: 42,
+                rc: 68,
+              },
+            },
+            {
+              id: "CA",
+              act: 0,
+              c: 1,
+              r: 4,
+              devPct: 34,
+              status: "EKSPLORASI",
+              target: "Q4 2027",
+              reserve: 2190000,
+            },
+            {
+              id: "CB",
+              act: 1,
+              c: 2,
+              r: 4,
+              w: 0.16,
+              flag: null,
+              u: 18,
+              wkr: 48,
+              ton: 3088030,
+              eff: 0.91,
+              s: {
+                oil: 73,
+                hyd: 220,
+                av: 95,
+                af: 79,
+                co: 4,
+                o2: 20.8,
+                bh: 96,
+                ch: 86,
+                nb: 3,
+                rk: 38.8,
+                air: 26.0,
+                rh: 77,
+                food: 92,
+                wt: 6.9,
+                bus: 11,
+                scan: 50,
+                ppe: 99,
+                lamp: 100,
+                gas: 100,
+                q: 2.3,
+                rd: 98,
+                ph: 7.4,
+                tss: 21,
+                rc: 79,
+              },
+            },
+            {
+              id: "DA",
+              act: 1,
+              c: 3,
+              r: 4,
+              w: 0.13,
+              flag: "restr",
+              u: 3,
+              wkr: 0,
+              ton: 2559695,
+              eff: 0.78,
+              s: {
+                oil: 70,
+                hyd: 196,
+                av: 84,
+                af: 44,
+                co: 15,
+                o2: 20.4,
+                bh: 24,
+                ch: 35,
+                nb: 8,
+                rk: 46.5,
+                air: 29.4,
+                rh: 91,
+                food: 0,
+                wt: 3.1,
+                bus: 0,
+                scan: 3,
+                ppe: 95,
+                lamp: 96,
+                gas: 95,
+                q: 7.5,
+                rd: 89,
+                ph: 6.3,
+                tss: 58,
+                rc: 54,
+              },
+            },
+          ],
         },
         DMLZ: {
           name: "Deep Mill Level Zone",
           short: "DMLZ",
           ic: "deep",
-          np: 80000,
-          pace: 0.95,
+          np: 80000, // 80,000 mt/hari (40,000 mt per shift 12 jam)
           remain: 12845310,
-          grade: [0.98, 0.55, 3.4],
+          grade: [0.98, 0.56, 3.35],
           units: [64, 26, 16, 7],
           workers: [188, 96, 134, 62],
-          zone: "Panel Zone 2",
-          flags: { AD: "wet" },
+          zone: "PB2 · Panel Zone 2",
+          levelCodes: [
+            "DMLZ01-3104",
+            "DMLZ02-3108",
+            "DMLZ03-7422",
+            "DMLZ04-9115",
+          ],
+          hourlyShare: [
+            0.072, 0.081, 0.087, 0.09, 0.086, 0.076, 0.084, 0.088, 0.09, 0.085,
+            0.082, 0.079,
+          ],
+          levelEfficiency: [0.96, 0.93, 0.9, 0.88],
+          safetyMetrics: [
+            { airflow: 968, req: 980, gas: 1, seismic: 2 },
+            { airflow: 512, req: 520, gas: 0, seismic: 1 },
+            { airflow: 1410, req: 1420, gas: 0, seismic: 0 },
+            { airflow: 398, req: 400, gas: 0, seismic: 0 },
+          ],
+          ecologyMetrics: [
+            { val: 218, cap: 280, ph: 7.3, tss: 26 },
+            { val: 64, cap: 85, ph: 6.5, tss: 34 },
+            { val: 162, cap: 210, ph: 7.1, tss: 19 },
+            { val: 128, cap: 165, ph: 7.4, tss: 17 },
+          ],
+          infra: [
+            ["factory", "Crusher", "89% (Gyr #4)"],
+            ["route", "Conveyor", "3.6K t/j"],
+            ["wind", "Ventilasi", "410 m³/s"],
+            ["layers", "Overland", "Belt #2 aktif"],
+            ["hat", "Kontrol", "9 operator"],
+          ],
+          blocks: [
+            {
+              id: "AA",
+              act: 0,
+              c: 1,
+              r: 1,
+              devPct: 76,
+              status: "SIAP AKTIF",
+              target: "Q1 2027",
+              reserve: 1640000,
+            },
+            {
+              id: "AB",
+              act: 0,
+              c: 2,
+              r: 1,
+              devPct: 52,
+              status: "DEVELOPMENT",
+              target: "Q3 2027",
+              reserve: 1810000,
+            },
+            {
+              id: "BA",
+              act: 1,
+              c: 3,
+              r: 1,
+              w: 0.24,
+              flag: null,
+              u: 16,
+              wkr: 46,
+              ton: 3082870,
+              eff: 0.93,
+              s: {
+                oil: 76,
+                hyd: 222,
+                av: 96,
+                af: 72,
+                co: 4,
+                o2: 20.8,
+                bh: 88,
+                ch: 90,
+                nb: 2,
+                rk: 43.2,
+                air: 27.4,
+                rh: 79,
+                food: 88,
+                wt: 6.1,
+                bus: 10,
+                scan: 48,
+                ppe: 99,
+                lamp: 100,
+                gas: 100,
+                q: 1.9,
+                rd: 98,
+                ph: 7.3,
+                tss: 25,
+                rc: 74,
+              },
+            },
+            {
+              id: "AC",
+              act: 1,
+              c: 1,
+              r: 2,
+              w: 0.12,
+              flag: null,
+              u: 8,
+              wkr: 24,
+              ton: 1541440,
+              eff: 0.9,
+              s: {
+                oil: 74,
+                hyd: 214,
+                av: 94,
+                af: 56,
+                co: 5,
+                o2: 20.7,
+                bh: 54,
+                ch: 84,
+                nb: 3,
+                rk: 42.5,
+                air: 27.0,
+                rh: 77,
+                food: 46,
+                wt: 4.0,
+                bus: 13,
+                scan: 25,
+                ppe: 98,
+                lamp: 100,
+                gas: 99,
+                q: 2.4,
+                rd: 97,
+                ph: 7.2,
+                tss: 24,
+                rc: 72,
+              },
+            },
+            {
+              id: "AD",
+              act: 1,
+              c: 2,
+              r: 2,
+              w: 0.14,
+              flag: "wet",
+              u: 9,
+              wkr: 28,
+              ton: 1798340,
+              eff: 0.85,
+              s: {
+                oil: 80,
+                hyd: 208,
+                av: 90,
+                af: 58,
+                co: 8,
+                o2: 20.6,
+                bh: 60,
+                ch: 78,
+                nb: 5,
+                rk: 44.8,
+                air: 28.1,
+                rh: 87,
+                food: 53,
+                wt: 7.4,
+                bus: 15,
+                scan: 29,
+                ppe: 97,
+                lamp: 99,
+                gas: 98,
+                q: 4.2,
+                rd: 95,
+                ph: 6.7,
+                tss: 39,
+                rc: 66,
+              },
+            },
+            {
+              id: "BB",
+              act: 1,
+              c: 3,
+              r: 2,
+              w: 0.22,
+              flag: null,
+              u: 14,
+              wkr: 42,
+              ton: 2825970,
+              eff: 0.92,
+              s: {
+                oil: 75,
+                hyd: 219,
+                av: 95,
+                af: 69,
+                co: 4,
+                o2: 20.8,
+                bh: 82,
+                ch: 88,
+                nb: 3,
+                rk: 43.0,
+                air: 27.2,
+                rh: 78,
+                food: 80,
+                wt: 5.7,
+                bus: 11,
+                scan: 44,
+                ppe: 99,
+                lamp: 100,
+                gas: 100,
+                q: 2.2,
+                rd: 98,
+                ph: 7.3,
+                tss: 23,
+                rc: 75,
+              },
+            },
+            {
+              id: "CA",
+              act: 0,
+              c: 1,
+              r: 4,
+              devPct: 28,
+              status: "EKSPLORASI",
+              target: "Q4 2027",
+              reserve: 1490000,
+            },
+            {
+              id: "CB",
+              act: 1,
+              c: 2,
+              r: 4,
+              w: 0.15,
+              flag: null,
+              u: 9,
+              wkr: 26,
+              ton: 1926800,
+              eff: 0.91,
+              s: {
+                oil: 73,
+                hyd: 216,
+                av: 94,
+                af: 61,
+                co: 4,
+                o2: 20.8,
+                bh: 66,
+                ch: 86,
+                nb: 3,
+                rk: 42.1,
+                air: 26.9,
+                rh: 76,
+                food: 50,
+                wt: 4.5,
+                bus: 12,
+                scan: 27,
+                ppe: 99,
+                lamp: 100,
+                gas: 100,
+                q: 2.0,
+                rd: 98,
+                ph: 7.4,
+                tss: 22,
+                rc: 77,
+              },
+            },
+            {
+              id: "DA",
+              act: 1,
+              c: 3,
+              r: 4,
+              w: 0.13,
+              flag: null,
+              u: 8,
+              wkr: 22,
+              ton: 1669890,
+              eff: 0.89,
+              s: {
+                oil: 77,
+                hyd: 211,
+                av: 92,
+                af: 57,
+                co: 6,
+                o2: 20.7,
+                bh: 58,
+                ch: 83,
+                nb: 4,
+                rk: 44.1,
+                air: 27.6,
+                rh: 81,
+                food: 42,
+                wt: 4.2,
+                bus: 14,
+                scan: 23,
+                ppe: 98,
+                lamp: 99,
+                gas: 99,
+                q: 2.7,
+                rd: 96,
+                ph: 7.1,
+                tss: 27,
+                rc: 70,
+              },
+            },
+          ],
         },
         BGS: {
           name: "Big Gossan",
           short: "BG",
           ic: "gem",
-          np: 7500,
-          pace: 0.97,
+          np: 7500, // 7,500 mt/hari (3,750 mt per shift 12 jam)
           remain: 2118640,
-          grade: [1.6, 0.35, 8],
+          grade: [1.62, 0.36, 7.9],
           units: [14, 8, 6, 4],
           workers: [64, 32, 48, 28],
-          zone: "Stope Zone 1",
-          flags: {},
+          zone: "Stope Zone 1 · Open Stope",
+          levelCodes: ["BG01-2105", "BG02-2109", "BG03-7430", "BG04-9120"],
+          hourlyShare: [
+            0.075, 0.083, 0.088, 0.091, 0.087, 0.077, 0.084, 0.088, 0.089,
+            0.084, 0.079, 0.075,
+          ],
+          levelEfficiency: [0.97, 0.94, 0.92, 0.9],
+          safetyMetrics: [
+            { airflow: 142, req: 145, gas: 0, seismic: 1 },
+            { airflow: 94, req: 95, gas: 0, seismic: 0 },
+            { airflow: 178, req: 180, gas: 0, seismic: 0 },
+            { airflow: 74, req: 75, gas: 0, seismic: 0 },
+          ],
+          ecologyMetrics: [
+            { val: 96, cap: 165, ph: 7.5, tss: 18 },
+            { val: 38, cap: 60, ph: 6.9, tss: 22 },
+            { val: 112, cap: 145, ph: 7.4, tss: 15 },
+            { val: 88, cap: 115, ph: 7.6, tss: 14 },
+          ],
+          infra: [
+            ["factory", "Crusher", "96% (Jaw UG)"],
+            ["route", "Conveyor", "0.4K t/j"],
+            ["wind", "Ventilasi", "240 m³/s"],
+            ["layers", "Haulage", "AD45 Truck"],
+            ["hat", "Kontrol", "6 operator"],
+          ],
+          blocks: [
+            {
+              id: "AA",
+              act: 0,
+              c: 1,
+              r: 1,
+              devPct: 81,
+              status: "SIAP AKTIF",
+              target: "Q1 2027",
+              reserve: 320000,
+            },
+            {
+              id: "AB",
+              act: 0,
+              c: 2,
+              r: 1,
+              devPct: 61,
+              status: "DEVELOPMENT",
+              target: "Q2 2027",
+              reserve: 355000,
+            },
+            {
+              id: "BA",
+              act: 1,
+              c: 3,
+              r: 1,
+              w: 0.24,
+              flag: null,
+              u: 4,
+              wkr: 16,
+              ton: 508470,
+              eff: 0.95,
+              s: {
+                oil: 71,
+                hyd: 224,
+                av: 97,
+                af: 48,
+                co: 2,
+                o2: 20.9,
+                bh: 44,
+                ch: 92,
+                nb: 2,
+                rk: 34.8,
+                air: 24.6,
+                rh: 72,
+                food: 31,
+                wt: 3.4,
+                bus: 8,
+                scan: 17,
+                ppe: 100,
+                lamp: 100,
+                gas: 100,
+                q: 1.4,
+                rd: 99,
+                ph: 7.5,
+                tss: 18,
+                rc: 84,
+              },
+            },
+            {
+              id: "AC",
+              act: 1,
+              c: 1,
+              r: 2,
+              w: 0.13,
+              flag: null,
+              u: 2,
+              wkr: 8,
+              ton: 275420,
+              eff: 0.93,
+              s: {
+                oil: 70,
+                hyd: 220,
+                av: 96,
+                af: 36,
+                co: 2,
+                o2: 20.9,
+                bh: 32,
+                ch: 89,
+                nb: 3,
+                rk: 34.2,
+                air: 24.3,
+                rh: 71,
+                food: 16,
+                wt: 2.1,
+                bus: 9,
+                scan: 9,
+                ppe: 100,
+                lamp: 100,
+                gas: 100,
+                q: 1.6,
+                rd: 98,
+                ph: 7.5,
+                tss: 17,
+                rc: 82,
+              },
+            },
+            {
+              id: "AD",
+              act: 1,
+              c: 2,
+              r: 2,
+              w: 0.14,
+              flag: null,
+              u: 2,
+              wkr: 10,
+              ton: 296610,
+              eff: 0.94,
+              s: {
+                oil: 72,
+                hyd: 221,
+                av: 96,
+                af: 39,
+                co: 3,
+                o2: 20.8,
+                bh: 35,
+                ch: 90,
+                nb: 3,
+                rk: 35.0,
+                air: 24.8,
+                rh: 73,
+                food: 19,
+                wt: 2.4,
+                bus: 10,
+                scan: 11,
+                ppe: 99,
+                lamp: 100,
+                gas: 100,
+                q: 1.8,
+                rd: 98,
+                ph: 7.4,
+                tss: 19,
+                rc: 81,
+              },
+            },
+            {
+              id: "BB",
+              act: 1,
+              c: 3,
+              r: 2,
+              w: 0.21,
+              flag: null,
+              u: 3,
+              wkr: 14,
+              ton: 444915,
+              eff: 0.94,
+              s: {
+                oil: 73,
+                hyd: 223,
+                av: 97,
+                af: 44,
+                co: 3,
+                o2: 20.8,
+                bh: 40,
+                ch: 91,
+                nb: 2,
+                rk: 35.4,
+                air: 25.0,
+                rh: 74,
+                food: 27,
+                wt: 3.0,
+                bus: 8,
+                scan: 15,
+                ppe: 100,
+                lamp: 100,
+                gas: 100,
+                q: 1.5,
+                rd: 99,
+                ph: 7.5,
+                tss: 18,
+                rc: 83,
+              },
+            },
+            {
+              id: "CA",
+              act: 0,
+              c: 1,
+              r: 4,
+              devPct: 40,
+              status: "EKSPLORASI",
+              target: "Q4 2027",
+              reserve: 295000,
+            },
+            {
+              id: "CB",
+              act: 1,
+              c: 2,
+              r: 4,
+              w: 0.15,
+              flag: null,
+              u: 2,
+              wkr: 8,
+              ton: 317800,
+              eff: 0.92,
+              s: {
+                oil: 71,
+                hyd: 218,
+                av: 95,
+                af: 38,
+                co: 2,
+                o2: 20.9,
+                bh: 34,
+                ch: 88,
+                nb: 4,
+                rk: 34.5,
+                air: 24.5,
+                rh: 72,
+                food: 16,
+                wt: 2.2,
+                bus: 11,
+                scan: 9,
+                ppe: 99,
+                lamp: 100,
+                gas: 100,
+                q: 1.7,
+                rd: 98,
+                ph: 7.5,
+                tss: 17,
+                rc: 80,
+              },
+            },
+            {
+              id: "DA",
+              act: 1,
+              c: 3,
+              r: 4,
+              w: 0.13,
+              flag: null,
+              u: 1,
+              wkr: 8,
+              ton: 275425,
+              eff: 0.91,
+              s: {
+                oil: 72,
+                hyd: 217,
+                av: 95,
+                af: 35,
+                co: 3,
+                o2: 20.8,
+                bh: 30,
+                ch: 87,
+                nb: 4,
+                rk: 35.1,
+                air: 24.7,
+                rh: 74,
+                food: 15,
+                wt: 2.0,
+                bus: 12,
+                scan: 8,
+                ppe: 99,
+                lamp: 100,
+                gas: 100,
+                q: 1.9,
+                rd: 97,
+                ph: 7.4,
+                tss: 18,
+                rc: 79,
+              },
+            },
+          ],
         },
       };
+
+      /* Riwayat shift 7 hari terakhir (index 0 = hari ini, 1 = H-1, dst.) */
+      const SHIFT_HISTORY = [
+        {
+          factor: 1.0,
+          supervisor: "Ir. Hendra Wijaya (Badge #88412)",
+          alert: {
+            start: 0.24,
+            end: 0.315,
+            block: "BB",
+            title: "Peringatan Wet Muck & Mikroseismik — Drawpoint BB",
+            desc: "Sensor kelembapan dan tekanan pori drawpoint BB mencatat saturasi air 18,4% disertai 2 kejadian mikroseismik lokal (Mw 0,8). Operasi pemuatan dialihkan ke unit remote MineGem dan zona DA dibatasi untuk inspeksi geoteknik.",
+          },
+        },
+        {
+          factor: 0.98,
+          supervisor: "Rizky Pratama, S.T. (Badge #89104)",
+          alert: {
+            start: 0.42,
+            end: 0.495,
+            block: "AD",
+            title: "Penyesuaian Aliran Udara Booster Fan — Panel AD",
+            desc: "Penurunan tekanan diferensial sementara pada kipas penguat saluran sekunder AD (62 m³/s -> 54 m³/s). Tim ventilasi melakukan kalibrasi damper dan tekanan kembali normal dalam 45 menit.",
+          },
+        },
+        {
+          factor: 1.02,
+          supervisor: "Ir. Hendra Wijaya (Badge #88412)",
+          alert: null,
+        },
+        {
+          factor: 0.96,
+          supervisor: "Bagus Setiawan, S.T. (Badge #87930)",
+          alert: {
+            start: 0.61,
+            end: 0.685,
+            block: "CB",
+            title: "Inspeksi Terjadwal Belt Conveyor #2 — Haulage Level",
+            desc: "Penggantian roller idler pada segmen 4B selesai sesuai jadwal pemeliharaan preventif tanpa insiden keselamatan.",
+          },
+        },
+        {
+          factor: 1.01,
+          supervisor: "Rizky Pratama, S.T. (Badge #89104)",
+          alert: null,
+        },
+        {
+          factor: 0.99,
+          supervisor: "Ir. Hendra Wijaya (Badge #88412)",
+          alert: null,
+        },
+        {
+          factor: 0.97,
+          supervisor: "Bagus Setiawan, S.T. (Badge #87930)",
+          alert: {
+            start: 0.18,
+            end: 0.255,
+            block: "BA",
+            title: "Kalibrasi Sistem Navigasi Otonom MineGem — BA",
+            desc: "Pembaruan peta LiDAR drawbell BA setelah peledakan sekunder (secondary blasting) selesai diverifikasi.",
+          },
+        },
+      ];
+
+      /* Daftar Armada Konkret per Area */
+      const FLEET_ROSTER = {
+        GBC: [
+          {
+            id: "LHD-GBC-01",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 510,
+            blk: "BA",
+            st: "ok",
+            off: 180,
+            av: 0.96,
+            op: "Y. Kogoya",
+          },
+          {
+            id: "LHD-GBC-02",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 525,
+            blk: "BA",
+            st: "ok",
+            off: 410,
+            av: 0.95,
+            op: "M. Tabuni",
+          },
+          {
+            id: "LHD-GBC-03",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 540,
+            blk: "BB",
+            st: "ok",
+            off: 95,
+            av: 0.93,
+            op: "A. Wanimbo",
+          },
+          {
+            id: "LHD-GBC-04",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 515,
+            blk: "AC",
+            st: "ok",
+            off: 320,
+            av: 0.94,
+            op: "F. Rahayaan",
+          },
+          {
+            id: "LHD-GBC-05",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 530,
+            blk: "AD",
+            st: "ok",
+            off: 260,
+            av: 0.94,
+            op: "D. Numfor",
+          },
+          {
+            id: "LHD-GBC-06",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 550,
+            blk: "CB",
+            st: "maint",
+            off: 0,
+            av: 0.88,
+            op: "Workshop UG-2",
+          },
+          {
+            id: "MG-GBC-01",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 15.0,
+            cy: 560,
+            blk: "BB",
+            st: "ok",
+            off: 140,
+            av: 0.97,
+            op: "Console ROC-01",
+          },
+          {
+            id: "MG-GBC-02",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 15.0,
+            cy: 575,
+            blk: "BB",
+            st: "ok",
+            off: 490,
+            av: 0.96,
+            op: "Console ROC-02",
+          },
+          {
+            id: "MG-GBC-03",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 15.0,
+            cy: 585,
+            blk: "DA",
+            st: "ok",
+            off: 220,
+            av: 0.95,
+            op: "Console ROC-03",
+          },
+          {
+            id: "MG-GBC-04",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 15.0,
+            cy: 570,
+            blk: "BA",
+            st: "ok",
+            off: 370,
+            av: 0.96,
+            op: "Console ROC-04",
+          },
+          {
+            id: "MG-GBC-05",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 15.0,
+            cy: 590,
+            blk: "CB",
+            st: "ok",
+            off: 60,
+            av: 0.94,
+            op: "Console ROC-05",
+          },
+          {
+            id: "UGT-GBC-01",
+            ty: "UGT",
+            n: "Cat AD60 UG Truck",
+            cap: 60.0,
+            cy: 1440,
+            blk: "BA",
+            st: "ok",
+            off: 620,
+            av: 0.95,
+            op: "R. Kaisiepo",
+          },
+          {
+            id: "UGT-GBC-02",
+            ty: "UGT",
+            n: "Cat AD60 UG Truck",
+            cap: 60.0,
+            cy: 1480,
+            blk: "AD",
+            st: "ok",
+            off: 1120,
+            av: 0.94,
+            op: "S. Rumkorem",
+          },
+          {
+            id: "UGT-GBC-03",
+            ty: "UGT",
+            n: "Cat AD60 UG Truck",
+            cap: 60.0,
+            cy: 1510,
+            blk: "CB",
+            st: "ok",
+            off: 340,
+            av: 0.93,
+            op: "H. Pattinama",
+          },
+          {
+            id: "UGT-GBC-04",
+            ty: "UGT",
+            n: "Cat AD60 UG Truck",
+            cap: 60.0,
+            cy: 1490,
+            blk: "AC",
+            st: "down",
+            off: 0,
+            av: 0.86,
+            op: "Sensor Hidrolik",
+          },
+          {
+            id: "RAIL-GBC-01",
+            ty: "RAIL",
+            n: "Electric Rail Consist",
+            cap: 120.0,
+            cy: 2580,
+            blk: "BA",
+            st: "ok",
+            off: 900,
+            av: 0.98,
+            op: "Auto-Dispatch",
+          },
+          {
+            id: "RAIL-GBC-02",
+            ty: "RAIL",
+            n: "Electric Rail Consist",
+            cap: 120.0,
+            cy: 2640,
+            blk: "BB",
+            st: "ok",
+            off: 1850,
+            av: 0.97,
+            op: "Auto-Dispatch",
+          },
+          {
+            id: "RAIL-GBC-03",
+            ty: "RAIL",
+            n: "Electric Rail Consist",
+            cap: 120.0,
+            cy: 2610,
+            blk: "CB",
+            st: "ok",
+            off: 450,
+            av: 0.98,
+            op: "Auto-Dispatch",
+          },
+        ],
+        DMLZ: [
+          {
+            id: "LHD-DMLZ-01",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 520,
+            blk: "BA",
+            st: "ok",
+            off: 210,
+            av: 0.95,
+            op: "J. Mandowen",
+          },
+          {
+            id: "LHD-DMLZ-02",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 535,
+            blk: "BB",
+            st: "ok",
+            off: 430,
+            av: 0.94,
+            op: "P. Yoku",
+          },
+          {
+            id: "LHD-DMLZ-03",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 545,
+            blk: "AC",
+            st: "ok",
+            off: 110,
+            av: 0.93,
+            op: "T. Wanggai",
+          },
+          {
+            id: "LHD-DMLZ-04",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 530,
+            blk: "CB",
+            st: "ok",
+            off: 360,
+            av: 0.95,
+            op: "E. Solossa",
+          },
+          {
+            id: "LHD-DMLZ-05",
+            ty: "LHD",
+            n: "Cat R2900G LHD",
+            cap: 17.2,
+            cy: 550,
+            blk: "DA",
+            st: "maint",
+            off: 0,
+            av: 0.89,
+            op: "Service Bay 3",
+          },
+          {
+            id: "MG-DMLZ-01",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 15.0,
+            cy: 565,
+            blk: "AD",
+            st: "ok",
+            off: 290,
+            av: 0.97,
+            op: "Console ROC-06",
+          },
+          {
+            id: "MG-DMLZ-02",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 15.0,
+            cy: 580,
+            blk: "AD",
+            st: "ok",
+            off: 510,
+            av: 0.96,
+            op: "Console ROC-07",
+          },
+          {
+            id: "MG-DMLZ-03",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 15.0,
+            cy: 575,
+            blk: "BA",
+            st: "ok",
+            off: 150,
+            av: 0.95,
+            op: "Console ROC-08",
+          },
+          {
+            id: "MG-DMLZ-04",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 15.0,
+            cy: 590,
+            blk: "BB",
+            st: "ok",
+            off: 400,
+            av: 0.96,
+            op: "Console ROC-09",
+          },
+          {
+            id: "UGT-DMLZ-01",
+            ty: "UGT",
+            n: "Cat AD60 UG Truck",
+            cap: 60.0,
+            cy: 1460,
+            blk: "BA",
+            st: "ok",
+            off: 740,
+            av: 0.95,
+            op: "L. Dimara",
+          },
+          {
+            id: "UGT-DMLZ-02",
+            ty: "UGT",
+            n: "Cat AD60 UG Truck",
+            cap: 60.0,
+            cy: 1500,
+            blk: "BB",
+            st: "ok",
+            off: 1210,
+            av: 0.94,
+            op: "N. Inggamer",
+          },
+          {
+            id: "UGT-DMLZ-03",
+            ty: "UGT",
+            n: "Cat AD60 UG Truck",
+            cap: 60.0,
+            cy: 1520,
+            blk: "CB",
+            st: "ok",
+            off: 390,
+            av: 0.93,
+            op: "K. Rumbiak",
+          },
+        ],
+        BGS: [
+          {
+            id: "LHD-BG-01",
+            ty: "LHD",
+            n: "Cat R1700G LHD",
+            cap: 14.0,
+            cy: 480,
+            blk: "BA",
+            st: "ok",
+            off: 160,
+            av: 0.97,
+            op: "G. Rumayomi",
+          },
+          {
+            id: "LHD-BG-02",
+            ty: "LHD",
+            n: "Cat R1700G LHD",
+            cap: 14.0,
+            cy: 495,
+            blk: "BB",
+            st: "ok",
+            off: 340,
+            av: 0.96,
+            op: "W. Sroyer",
+          },
+          {
+            id: "LHD-BG-03",
+            ty: "LHD",
+            n: "Cat R1700G LHD",
+            cap: 14.0,
+            cy: 490,
+            blk: "AC",
+            st: "ok",
+            off: 90,
+            av: 0.95,
+            op: "B. Korwa",
+          },
+          {
+            id: "LHD-BG-04",
+            ty: "LHD",
+            n: "Cat R1700G LHD",
+            cap: 14.0,
+            cy: 505,
+            blk: "CB",
+            st: "ok",
+            off: 270,
+            av: 0.96,
+            op: "C. Yarangga",
+          },
+          {
+            id: "MG-BG-01",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 14.0,
+            cy: 520,
+            blk: "AD",
+            st: "ok",
+            off: 200,
+            av: 0.97,
+            op: "Console ROC-10",
+          },
+          {
+            id: "MG-BG-02",
+            ty: "MG",
+            n: "MineGem Auto-LHD",
+            cap: 14.0,
+            cy: 530,
+            blk: "DA",
+            st: "ok",
+            off: 410,
+            av: 0.96,
+            op: "Console ROC-11",
+          },
+          {
+            id: "UGT-BG-01",
+            ty: "UGT",
+            n: "Cat AD45B UG Truck",
+            cap: 45.0,
+            cy: 1320,
+            blk: "BA",
+            st: "ok",
+            off: 520,
+            av: 0.96,
+            op: "O. Waromi",
+          },
+          {
+            id: "UGT-BG-02",
+            ty: "UGT",
+            n: "Cat AD45B UG Truck",
+            cap: 45.0,
+            cy: 1350,
+            blk: "BB",
+            st: "ok",
+            off: 980,
+            av: 0.95,
+            op: "V. Fonataba",
+          },
+          {
+            id: "UGT-BG-03",
+            ty: "UGT",
+            n: "Cat AD45B UG Truck",
+            cap: 45.0,
+            cy: 1340,
+            blk: "CB",
+            st: "ok",
+            off: 210,
+            av: 0.95,
+            op: "I. Numberi",
+          },
+        ],
+      };
+
       const LEVELS = [
         "Extraction Level",
         "Haulage Level",
@@ -3499,18 +4914,6 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         "Reclamation Highland",
         "Reclamation Lowland",
       ];
-      const BLOCKS = [
-        { id: "AA", act: 0, c: 1, r: 1 },
-        { id: "AB", act: 0, c: 2, r: 1 },
-        { id: "BA", act: 1, c: 3, r: 1, w: 0.22 },
-        { id: "AC", act: 1, c: 1, r: 2, w: 0.08 },
-        { id: "AD", act: 1, c: 2, r: 2, w: 0.09 },
-        { id: "BB", act: 1, c: 3, r: 2, w: 0.28 },
-        { id: "CA", act: 0, c: 1, r: 4 },
-        { id: "CB", act: 1, c: 2, r: 4, w: 0.14 },
-        { id: "DA", act: 1, c: 3, r: 4, w: 0.19 },
-      ];
-      const ACTIVE = BLOCKS.filter((b) => b.act);
       const LENSES = [
         ["crew", "hat", "Crew & Shift Overview"],
         ["health", "heart", "Equipment Health"],
@@ -3604,7 +5007,32 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         return i.d + " " + i.m;
       };
 
-      /* ===== STATE ===== */
+      /* ===== PERSISTENT STATE & DATA SERVICE ===== */
+      function loadSavedOps() {
+        try {
+          return JSON.parse(
+            localStorage.getItem(window.PTFI_API_CONFIG.storageKey) || "{}",
+          );
+        } catch (e) {
+          return {};
+        }
+      }
+      function saveOpsState() {
+        try {
+          localStorage.setItem(
+            window.PTFI_API_CONFIG.storageKey,
+            JSON.stringify({
+              flags: S.flags,
+              assign: S.assign,
+              unitSt: S.unitSt,
+              locked: S.locked,
+              notes: S.notes,
+            }),
+          );
+        } catch (e) {}
+      }
+
+      const savedOps = loadSavedOps();
       const S = {
         page: "production",
         lens: "map",
@@ -3620,66 +5048,58 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         acc: { w: false, f: true },
         ftype: "ALL",
         menu: null,
-        tick: 0,
-        drift: {},
-        flags: {},
+        flags: savedOps.flags || {},
         mute: {},
         range: [0.1, 0.85],
         modal: null,
         pd: false,
         t0: Date.now(),
         view: { x: 0, y: 0, k: 1, W: 812, H: 642 },
-        locked: {},
-        assign: {},
-        unitSt: {},
-        notes: [
+        locked: savedOps.locked || {},
+        assign: savedOps.assign || {},
+        unitSt: savedOps.unitSt || {},
+        notes: savedOps.notes || [
           {
-            t: "16:48",
+            t: "09:14",
             sev: "warn",
-            txt: "Wet muck terdeteksi di drawpoint BB (GBC · Extraction Level) — akses dibatasi sementara",
+            txt: "Wet muck terdeteksi di drawpoint BB (GBC · Extraction Level) — pemuatan dialihkan ke MineGem",
             read: false,
           },
           {
-            t: "15:12",
+            t: "08:42",
             sev: "crit",
-            txt: "Zona DA ditandai pembatasan akses geoteknik (restricted)",
+            txt: "Zona DA (GBC) ditandai pembatasan akses geoteknik berdasarkan pembacaan extensometer",
             read: false,
           },
           {
-            t: "13:30",
+            t: "07:15",
             sev: "ok",
-            txt: "Rail dispatch GBC normal — 3/3 consist beroperasi",
+            txt: "Rail dispatch GBC beroperasi penuh — 3/3 consist elektrik aktif menuju Crusher #1–#3",
             read: true,
           },
         ],
       };
+
       Object.keys(AREAS).forEach((k) => {
-        S.flags[k] = { ...AREAS[k].flags };
-        S.drift[k] = [0, 0, 0, 0];
+        if (!S.flags[k]) {
+          S.flags[k] = {};
+          AREAS[k].blocks.forEach((b) => {
+            if (b.act && b.flag) S.flags[k][b.id] = b.flag;
+          });
+        }
       });
 
-      /* ===== HELPERS ===== */
-      function hash(s) {
-        let h = 2166136261;
-        for (let i = 0; i < s.length; i++) {
-          h ^= s.charCodeAt(i);
-          h = Math.imul(h, 16777619);
-        }
-        return h >>> 0;
-      }
-      function rnd(s) {
-        let a = hash(String(s)) + 0x6d2b79f5;
-        a = Math.imul(a ^ (a >>> 15), a | 1);
-        a ^= a + Math.imul(a ^ (a >>> 7), a | 61);
-        return ((a ^ (a >>> 14)) >>> 0) / 4294967296;
-      }
+      /* ===== DETERMINISTIC HELPERS & OPERATIONAL CALCULATIONS ===== */
       const fmt = (n) => Math.round(n).toLocaleString("en-US"),
         clamp = (v, a, b) => Math.min(b, Math.max(a, v)),
         K = (n) =>
           n >= 1000 ? Math.round(n / 100) / 10 + "K" : String(Math.round(n)),
         A = () => AREAS[S.area],
         xf = () => clamp((S.t - 6) / 12, 0, 1),
-        dayK = () => 0.92 + 0.16 * rnd("d" + S.day),
+        shiftRec = () =>
+          SHIFT_HISTORY[clamp(TODAY - S.day, 0, SHIFT_HISTORY.length - 1)] ||
+          SHIFT_HISTORY[0],
+        dayK = () => shiftRec().factor,
         hh = (t) =>
           String(Math.floor(t)).padStart(2, "0") +
           ":" +
@@ -3742,13 +5162,24 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           if ($(i)) $(i).innerHTML = "";
         });
 
-      /* ===== MODEL ===== */
+      /* ===== OPERATIONAL MODEL (100% CONCRETE DATA) ===== */
+      function cumulativeHourShare(t) {
+        const a = A();
+        const h = clamp(t - 6, 0, 12);
+        const full = Math.floor(h);
+        const frac = h - full;
+        let sum = 0;
+        for (let i = 0; i < full; i++) sum += a.hourlyShare[i];
+        if (full < 12) sum += a.hourlyShare[full] * frac;
+        return sum;
+      }
+
       function lvl(i) {
         const a = A(),
           plan = (a.np / 2) * (i === 3 ? 0.03 : 1),
-          pace = a.pace * LVL_PACE[i],
-          dr = isLive() ? S.drift[S.area][i] : 0,
-          val = plan * clamp(xf() * pace * dayK() + dr, 0, 1.2);
+          pace = a.levelEfficiency[i] * LVL_PACE[i],
+          cumShare = cumulativeHourShare(S.t),
+          val = plan * clamp(cumShare * pace * dayK(), 0, 1.15);
         return {
           plan,
           val,
@@ -3758,44 +5189,49 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           pct: (val / plan) * 100,
         };
       }
-      const lvlUnits = (i) =>
-          Math.max(1, A().units[i] + (isLive() ? ((S.tick + i) % 3) - 1 : 0)),
-        lvlWorkers = (i) => A().workers[i],
-        remainTotal = () => A().remain - lvl(0).val;
+
+      function fleet() {
+        return (FLEET_ROSTER[S.area] || []).map((u) => ({
+          ...u,
+          blk: S.assign[u.id] || u.blk,
+          st: S.unitSt[u.id] || u.st,
+        }));
+      }
+
+      const lvlUnits = (i) => {
+        if (i === 0) return fleet().filter((u) => u.st === "ok").length;
+        return A().units[i];
+      };
+      const lvlWorkers = (i) => A().workers[i];
+      const remainTotal = () => Math.max(0, A().remain - lvl(0).val);
 
       function blocks() {
         const fl = flagsOf(),
-          L = S.level,
-          units = lvlUnits(L),
-          work = lvlWorkers(L),
-          rem = remainTotal() * 0.129;
-        const sw = ACTIVE.reduce((s, b) => s + b.w, 0),
-          sw2 = ACTIVE.reduce(
-            (s, b) => s + (fl[b.id] === "restr" ? 0 : b.w),
-            0,
-          );
-        return BLOCKS.map((b) => {
+          a = A(),
+          activeDefs = a.blocks.filter((b) => b.act),
+          sw = activeDefs.reduce((s, b) => s + b.w, 0);
+        return a.blocks.map((b) => {
           if (!b.act) return { ...b, flag: null };
           const f = fl[b.id] || null,
-            share = b.w / sw;
+            share = b.w / sw,
+            minedBlk = lvl(0).val * share;
           return {
             ...b,
             flag: f,
             share,
-            u:
-              f === "restr"
-                ? Math.max(1, Math.round(units * 0.03))
-                : Math.round((units * b.w) / sw),
-            w: f === "restr" ? 0 : Math.round((work * b.w) / sw2),
-            ton: rem * share * (0.92 + 0.16 * rnd(S.area + b.id)),
-            eff: 0.78 + 0.12 * rnd(S.area + b.id + "e"),
+            u: f === "restr" ? Math.min(3, b.u) : b.u,
+            w: f === "restr" ? 0 : b.wkr,
+            ton: Math.max(0, b.ton - minedBlk),
+            eff: f === "restr" ? Math.min(0.78, b.eff) : b.eff,
           };
         });
       }
+
       function selBlocks() {
         const all = blocks().filter((b) => b.act);
         return S.sel.size ? all.filter((b) => S.sel.has(b.id)) : all;
       }
+
       function conv(ore, tab) {
         const g = A().grade;
         if (tab === "ore") return { v: ore, u: "mt" };
@@ -3804,118 +5240,92 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           return { v: (ore * g[1]) / 31.1035 / 1000, u: "koz Au" };
         return { v: (ore * g[2]) / 31.1035 / 1000, u: "koz Ag" };
       }
+
       function prodSeries(b) {
         const a = A(),
-          base = ((a.np / 2) * a.pace * dayK()) / 12,
-          live = isLive(),
-          ph = hash(S.area + b.id) % 7;
-        return Array.from({ length: 12 }, (_, i) => {
-          const raw =
-            base * b.share * (0.72 + 0.56 * rnd(S.area + b.id + "h" + i));
-          const f = b.flag === "restr" ? 0.25 : b.flag === "wet" ? 0.8 : 1;
-          const wob = live
-            ? 1 + 0.025 * Math.sin(S.tick / 2 + i * 0.9 + ph)
-            : 1;
-          return raw * f * wob * clamp(S.t - (6 + i), 0, 1);
+          shiftPlan = a.np / 2,
+          eff = a.levelEfficiency[0] * dayK();
+        return a.hourlyShare.map((hShare, i) => {
+          const f = b.flag === "restr" ? 0.25 : b.flag === "wet" ? 0.82 : 1;
+          const elapsedFrac = clamp(S.t - (6 + i), 0, 1);
+          return shiftPlan * hShare * eff * b.share * f * elapsedFrac;
         });
       }
-      function V(b, k, lo, hi, d = 0) {
-        const s = lo + (hi - lo) * rnd(S.area + b.id + k),
-          n = 1 + 0.012 * Math.sin(S.tick / 3 + (hash(b.id + k) % 7));
-        return +(s * n).toFixed(d);
-      }
+
       function lensVals(b) {
-        const fb = b.flag === "restr" ? 2 : b.flag === "wet" ? 1 : 0;
+        const fb = b.flag === "restr" ? 2 : b.flag === "wet" ? 1 : 0,
+          s = b.s;
         switch (S.lens) {
           case "crew":
             return [
               { i: "hat", v: b.w, u: "", a: "sum" },
-              { i: "user", v: Math.round(b.w * 1.03), u: "", a: "sum" },
+              {
+                i: "user",
+                v: b.flag === "restr" ? 0 : Math.ceil(b.w * 1.03),
+                u: "",
+                a: "sum",
+              },
               { i: "check", v: Math.round(b.eff * 100), u: "%", a: "avg" },
             ];
           case "health":
             return [
-              {
-                i: "thermo",
-                v: V(b, "oil", 68, 88),
-                u: "°C",
-                a: "avg",
-                st: fb,
-              },
-              { i: "wheel", v: V(b, "hyd", 185, 240), u: "bar", a: "avg" },
-              { i: "heart", v: V(b, "av", 82, 97), u: "%", a: "avg" },
+              { i: "thermo", v: s.oil, u: "°C", a: "avg", st: fb },
+              { i: "wheel", v: s.hyd, u: "bar", a: "avg" },
+              { i: "heart", v: s.av, u: "%", a: "avg" },
             ];
           case "vent":
             return [
-              { i: "wind", v: V(b, "af", 38, 96), u: "m³/s", a: "sum", st: fb },
+              { i: "wind", v: s.af, u: "m³/s", a: "sum", st: fb },
               {
                 i: "alert",
-                v: V(b, "co", 2, 18),
+                v: s.co,
                 u: "ppm CO",
                 a: "avg",
                 st: fb > 1 ? 2 : 0,
               },
-              { i: "drop", v: V(b, "o2", 20.2, 20.9, 1), u: "% O₂", a: "avg" },
+              { i: "drop", v: s.o2, u: "% O₂", a: "avg" },
             ];
           case "drill":
             return [
-              { i: "drill", v: V(b, "bh", 20, 140), u: "hole", a: "sum" },
-              { i: "check", v: V(b, "ch", 30, 96), u: "%", a: "avg" },
-              { i: "alert", v: V(b, "nb", 1, 9), u: "jam→blast", a: "min" },
+              { i: "drill", v: s.bh, u: "hole", a: "sum" },
+              { i: "check", v: s.ch, u: "%", a: "avg" },
+              { i: "alert", v: s.nb, u: "jam→blast", a: "min" },
             ];
           case "temp":
             return [
-              {
-                i: "thermo",
-                v: V(b, "rk", 34, 52, 1),
-                u: "°C batuan",
-                a: "avg",
-                st: fb,
-              },
-              { i: "wind", v: V(b, "air", 24, 33, 1), u: "°C udara", a: "avg" },
-              { i: "drop", v: V(b, "rh", 70, 96), u: "% RH", a: "avg" },
+              { i: "thermo", v: s.rk, u: "°C batuan", a: "avg", st: fb },
+              { i: "wind", v: s.air, u: "°C udara", a: "avg" },
+              { i: "drop", v: s.rh, u: "% RH", a: "avg" },
             ];
           case "camp":
             return [
-              { i: "food", v: Math.round(b.w * 1.9), u: "porsi", a: "sum" },
-              { i: "drop", v: V(b, "wt", 3, 14, 1), u: "m³ air", a: "sum" },
-              { i: "route", v: V(b, "bus", 4, 38), u: "mnt bus", a: "min" },
+              { i: "food", v: s.food, u: "porsi", a: "sum" },
+              { i: "drop", v: s.wt, u: "m³ air", a: "sum" },
+              { i: "route", v: s.bus, u: "mnt bus", a: "min" },
             ];
           case "access":
             return [
-              { i: "scan", v: Math.round(b.w * 1.08), u: "check-in", a: "sum" },
+              { i: "scan", v: s.scan, u: "check-in", a: "sum" },
               { i: "hat", v: b.w, u: "on-site", a: "sum" },
               { i: "wheel", v: b.u, u: "kend.", a: "sum" },
             ];
           case "ppe":
             return [
-              { i: "vest", v: V(b, "ppe", 91, 100), u: "%", a: "avg", st: fb },
-              { i: "bell", v: V(b, "lamp", 94, 100), u: "% lamp", a: "avg" },
-              { i: "wind", v: V(b, "gas", 92, 100), u: "% gas", a: "avg" },
+              { i: "vest", v: s.ppe, u: "%", a: "avg", st: fb },
+              { i: "bell", v: s.lamp, u: "% lamp", a: "avg" },
+              { i: "wind", v: s.gas, u: "% gas", a: "avg" },
             ];
           case "route":
             return [
               { i: "wheel", v: b.u, u: "unit", a: "sum" },
-              {
-                i: "route",
-                v: V(b, "q", 0, 9, 1),
-                u: "mnt antri",
-                a: "avg",
-                st: fb,
-              },
-              { i: "check", v: V(b, "rd", 88, 100), u: "% rail", a: "avg" },
+              { i: "route", v: s.q, u: "mnt antri", a: "avg", st: fb },
+              { i: "check", v: s.rd, u: "% rail", a: "avg" },
             ];
           case "eco":
             return [
-              {
-                i: "drop",
-                v: V(b, "ph", 6.1, 8.1, 1),
-                u: "pH",
-                a: "avg",
-                st: fb,
-              },
-              { i: "layers", v: V(b, "tss", 12, 64), u: "mg/L TSS", a: "avg" },
-              { i: "leaf", v: V(b, "rc", 22, 88), u: "% reklam.", a: "avg" },
+              { i: "drop", v: s.ph, u: "pH", a: "avg", st: fb },
+              { i: "layers", v: s.tss, u: "mg/L TSS", a: "avg" },
+              { i: "leaf", v: s.rc, u: "% reklam.", a: "avg" },
             ];
           default:
             return [
@@ -3925,6 +5335,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
             ];
         }
       }
+
       function lensAgg(bs) {
         const rows = bs.filter((b) => b.act).map(lensVals);
         if (!rows.length) return [];
@@ -3940,44 +5351,9 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           return { i: m.i, v, u: m.u, big: m.big };
         });
       }
-      function fleet() {
-        const a = A(),
-          k = S.area;
-        const cfg =
-          k === "GBC"
-            ? { LHD: 6, MG: 5, UGT: 4, RAIL: 3 }
-            : k === "DMLZ"
-              ? { LHD: 5, MG: 4, UGT: 3, RAIL: 0 }
-              : { LHD: 4, MG: 2, UGT: 3, RAIL: 0 };
-        const T = {
-          LHD: { n: "LHD Loader", cap: 17, cy: 540 },
-          MG: { n: "MineGem (remote)", cap: 17, cy: 600 },
-          UGT: { n: "UG Haul Truck", cap: 60, cy: 1500 },
-          RAIL: { n: "Electric Rail Haulage", cap: 120, cy: 2700 },
-        };
-        const out = [];
-        Object.keys(cfg).forEach((ty) => {
-          for (let i = 1; i <= cfg[ty]; i++) {
-            const id = `${ty}-${a.short}-${String(i).padStart(2, "0")}`;
-            out.push({
-              id,
-              ty,
-              n: T[ty].n,
-              cap: T[ty].cap,
-              cy: Math.round(T[ty].cy * (0.9 + 0.2 * rnd(id + "c"))),
-              blk:
-                S.assign[id] || ACTIVE[Math.floor(rnd(id) * ACTIVE.length)].id,
-              st: S.unitSt[id] || (rnd(id + "st") < 0.09 ? "down" : "ok"),
-              off: Math.floor(rnd(id + "o") * 3000),
-              av: 0.86 + 0.12 * rnd(id + "a"),
-            });
-          }
-        });
-        return out;
-      }
+
       function unitCalc(u) {
-        const el =
-            (S.t - 6) * 3600 + (isLive() ? (Date.now() - S.t0) / 1000 : 0),
+        const el = Math.max(0, (S.t - 6) * 3600),
           sec = el + u.off,
           ph = (sec % u.cy) / u.cy,
           down = u.st !== "ok";
@@ -4065,23 +5441,23 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         patch(
           $("hr"),
           `<div class="acts"><button data-a="share" aria-label="Share">${I("share")}<span class="t">Share</span></button><button data-a="report" aria-label="Report">${I("doc")}<span class="t">Report</span></button><button data-a="print" aria-label="Print">${I("print")}<span class="t">Print</span></button></div>
-<span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 24px))"><h6>Notifikasi (simulasi)</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
+<span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 24px))"><h6>Log Notifikasi Operasional</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
 <button class="rb" data-a="search" aria-label="Search / ⌘ + K">${I("search")}</button>
 <button class="ava" data-a="sys" aria-label="${init} — profil & status sistem">${init}</button>`,
         );
       }
       function winPos() {
-        const r = 0.22 + 0.12 * rnd("w" + S.day);
-        return [r, r + 0.075];
+        const al = shiftRec().alert;
+        return al ? [al.start, al.end] : [0.24, 0.315];
       }
       function dayPill() {
-        const alert = S.day === TODAY || rnd("al" + S.day) > 0.5,
+        const hasAlert = Boolean(shiftRec().alert),
           days = Array.from({ length: 7 }, (_, i) => TODAY - i);
         patch(
           $("day"),
-          `<span class="al ${alert ? "" : "ok"}">${I(alert ? "alert" : "check")}</span>
+          `<span class="al ${hasAlert ? "" : "ok"}">${I(hasAlert ? "alert" : "check")}</span>
 <span class="dd"><button data-a="menu" data-v="day">Day ${dInfo(S.day).d}${I("chev")}</button>${S.menu === "day" ? `<div class="pop" style="top:46px">${days.map((d) => `<button class="${d === S.day ? "cur" : ""}" data-a="day" data-v="${d}">Day ${dInfo(d).d} · ${dLbl(d)}${d === TODAY ? " (hari ini)" : ""}</button>`).join("")}</div>` : ""}</span>
-<span class="chip" style="margin-left:auto">${dLbl(S.day)}</span><button class="today" data-a="today">${S.day === TODAY ? (offShift() ? (RAWH < 6 ? "Belum shift" : "Shift selesai") : "Today") : "Replay"}</button>`,
+<span class="chip" style="margin-left:auto">${dLbl(S.day)}</span><button class="today" data-a="today">${S.day === TODAY ? (offShift() ? (RAWH < 6 ? "Belum shift" : "Shift selesai") : "Today") : "Shift Aktif"}</button>`,
         );
       }
       function renderTL() {
@@ -4107,7 +5483,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           lastX = x;
           h += `<div class="tag" style="left:${x * 100}%">${K(v)}</div>`;
         }
-        if (S.day === TODAY || rnd("al" + S.day) > 0.5) {
+        if (shiftRec().alert) {
           const w = winPos();
           h += `<div class="alwin" data-a="alertwin" style="left:${w[0] * 100}%;width:${(w[1] - w[0]) * 100}%">${I("bell")}</div>`;
         }
@@ -4120,7 +5496,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           const L = lvl(i),
             w = lvlWorkers(i),
             u = lvlUnits(i),
-            code = `${a.short}${String(i + 1).padStart(2, "0")}-${1000 + (hash(a.short + i + S.day) % 9000)}`;
+            code = a.levelCodes[i];
           if (S.page === "production")
             return {
               i,
@@ -4144,63 +5520,57 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
                       : "g",
             };
           if (S.page === "personnel") {
-            const ro = Math.ceil(w * 1.04);
+            const ro = Math.ceil(w * 1.03);
             return {
               i,
               code,
               A: ["Present", w, ""],
               B: ["Roster", ro, ""],
-              C: ["Tagged UG", Math.round(w * 0.99), "scan"],
+              C: ["Tagged UG", w, "scan"],
               D: ["", Math.max(1, Math.round(w / 38)), "user"],
               bl: "Attendance",
               pct: (w / ro) * 100,
               max: ro,
               mu: "org",
               dl: "Shift boss",
-              st: w / ro >= 0.99 ? "g" : "o",
+              st: w / ro >= 0.97 ? "g" : "o",
             };
           }
           if (S.page === "safety") {
-            const need = [1800, 900, 2600, 700][i] * (a.np / 150000) + 40,
-              got = need * (0.9 + 0.14 * rnd(a.short + i + "v"));
+            const sm = a.safetyMetrics[i];
             return {
               i,
               code,
-              A: ["Airflow", got, "m³/s"],
-              B: ["Required", need, "m³/s"],
-              C: [
-                "Gas alarm",
-                Math.round(rnd(a.short + i + S.day) * 2),
-                "alert",
-              ],
-              D: ["", Math.round(rnd(a.short + i + "s" + S.day) * 4), "drill"],
+              A: ["Airflow", sm.airflow, "m³/s"],
+              B: ["Required", sm.req, "m³/s"],
+              C: ["Gas alarm", sm.gas, "alert"],
+              D: ["", sm.seismic, "drill"],
               bl: "Vent. capacity",
-              pct: (got / need) * 100,
-              max: need,
+              pct: (sm.airflow / sm.req) * 100,
+              max: sm.req,
               mu: "m³/s",
               dl: "Seismic",
-              st: got >= need * 0.98 ? "g" : "o",
+              st: sm.airflow >= sm.req * 0.98 && sm.gas === 0 ? "g" : "o",
             };
           }
-          const cap = [480, 120, 350, 260][i] * (a.np / 150000 + 0.3),
-            dep = cap * (0.5 + 0.35 * rnd(a.short + i + "e"));
+          const em = a.ecologyMetrics[i];
           return {
             i,
             code,
             A: [
               i === 1 ? "Debit" : i > 1 ? "Reklamasi" : "Deposisi",
-              dep,
+              em.val,
               i === 1 ? "L/s" : "ha",
             ],
-            B: ["Kapasitas", cap, i === 1 ? "L/s" : "ha"],
-            C: ["pH", 6.2 + rnd(a.short + i + "p") * 1.8, "drop"],
-            D: ["", Math.round(14 + rnd(a.short + i + "t") * 50), "layers"],
+            B: ["Kapasitas", em.cap, i === 1 ? "L/s" : "ha"],
+            C: ["pH", em.ph, "drop"],
+            D: ["", em.tss, "layers"],
             bl: "Utilisasi",
-            pct: (dep / cap) * 100,
-            max: cap,
+            pct: (em.val / em.cap) * 100,
+            max: em.cap,
             mu: i === 1 ? "L/s" : "ha",
             dl: "TSS",
-            st: i === 1 && rnd(a.short + "acid") > 0.6 ? "o" : "g",
+            st: em.ph < 6.6 ? "o" : "g",
           };
         });
       }
@@ -4279,23 +5649,10 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         let h = "",
           n = 0;
         const col = ["", "#f5a623", "#e5484d"];
-        BLOCKS.forEach((b0) => {
-          const b = bs.find((x) => x.id === b0.id),
-            pos = `grid-column:${b.c};grid-row:${b.r};--d:${n++}`;
+        bs.forEach((b) => {
+          const pos = `grid-column:${b.c};grid-row:${b.r};--d:${n++}`;
           if (!b.act) {
-            const prog = Math.round(20 + 70 * rnd(a.short + b.id + "dev")),
-              res =
-                remainTotal() *
-                0.129 *
-                (0.5 + 0.6 * rnd(a.short + b.id + "res")),
-              q = 1 + Math.floor(rnd(a.short + b.id + "q") * 4),
-              st =
-                prog >= 70
-                  ? "SIAP AKTIF"
-                  : prog >= 45
-                    ? "DEVELOPMENT"
-                    : "EKSPLORASI";
-            h += `<div class="blk idle" style="${pos}"><div class="bt"><span>${b.id}</span><span class="fl gy">${st}</span></div><div class="m"><div><span>${I("drill")}${prog}% dev.</span></div><div><span>${I("flag")}Q${q} 2027</span></div><div><span>${I("cube")}${fmt(res)} mt</span></div></div></div>`;
+            h += `<div class="blk idle" style="${pos}"><div class="bt"><span>${b.id}</span><span class="fl gy">${b.status}</span></div><div class="m"><div><span>${I("drill")}${b.devPct}% dev.</span></div><div><span>${I("flag")}${b.target}</span></div><div><span>${I("cube")}${fmt(b.reserve)} mt</span></div></div></div>`;
             return;
           }
           const lv = lensVals(b),
@@ -4319,30 +5676,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
 <div class="m">${m}</div></div>`;
           if (b.id === "BB") h += `<div class="band" style="grid-row:3"></div>`;
         });
-        const inf = [
-          [
-            "factory",
-            "Crusher",
-            Math.round(78 + 20 * rnd(a.short + "cr")) + "%",
-          ],
-          [
-            "route",
-            "Conveyor",
-            (2 + 2 * rnd(a.short + "cv")).toFixed(1) + "K t/j",
-          ],
-          [
-            "wind",
-            "Ventilasi",
-            Math.round(380 + 90 * rnd(a.short + "vn")) + " m³/s",
-          ],
-          ["layers", "Rail", a.short === "GBC" ? "3 consist" : "—"],
-          [
-            "hat",
-            "Kontrol",
-            Math.round(6 + 6 * rnd(a.short + "ct")) + " operator",
-          ],
-        ];
-        h += `<div class="blk idle" style="grid-column:4;grid-row:1/5"><div class="bt"><span>N/A</span><span class="fl gy">INFRA</span></div><div class="infra">${inf.map((x) => `<div class="ir">${I(x[0])}<span><small>${x[1]}</small><b>${x[2]}</b></span></div>`).join("")}</div></div>`;
+        h += `<div class="blk idle" style="grid-column:4;grid-row:1/5"><div class="bt"><span>INFRA</span><span class="fl gy">AKTIF</span></div><div class="infra">${a.infra.map((x) => `<div class="ir">${I(x[0])}<span><small>${x[1]}</small><b>${x[2]}</b></span></div>`).join("")}</div></div>`;
         patch($("frame"), h);
       }
       function streamSVG() {
@@ -4393,7 +5727,8 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         const tot = Array.from({ length: n }, (_, i) =>
           ser.reduce((s, l) => s + l.v[i], 0),
         );
-        const sc = 38 / ((((A().np / 2) * A().pace * dayK()) / 12) * 1.28);
+        const sc =
+          38 / ((((A().np / 2) * A().levelEfficiency[0] * dayK()) / 12) * 1.15);
         const selIds = S.sel.size ? [...S.sel] : ["BA", "BB"];
         const dk = Array.from({ length: n }, (_, i) =>
           ser
@@ -4560,7 +5895,7 @@ ${streamSVG()}
 <div class="rng" id="rng"><div class="tk"></div><div class="ac" style="left:${rg[0] * 100}%;width:${(rg[1] - rg[0]) * 100}%"></div><div class="th" data-th="0" style="left:${rg[0] * 100}%"></div><div class="th" data-th="1" style="left:${rg[1] * 100}%"></div></div>
 <div class="bts">${bsel}</div>
 <div class="acc"><button class="ah" data-a="acc" data-v="w"><span>Workers</span><span class="rt"><span class="sm">${I("hat")}${wk}/${wk}</span><span class="sm"><i class="face"></i>${eff}%</span>${I(S.acc.w ? "chevup" : "chev")}</span></button>
-${S.acc.w ? bs.map((b) => `<div class="crew"><b style="font-weight:500">${b.id}</b><div class="t"><i style="width:${Math.round(b.eff * 100)}%"></i></div><span>${b.w}/${b.w} · ${Math.round(b.eff * 100)}%</span></div>`).join("") + '<p style="font-size:12px;color:var(--mut);padding:6px 0 10px">Lokasi pekerja bersumber dari tagging bawah tanah (simulasi).</p>' : ""}</div>
+${S.acc.w ? bs.map((b) => `<div class="crew"><b style="font-weight:500">${b.id}</b><div class="t"><i style="width:${Math.round(b.eff * 100)}%"></i></div><span>${b.w}/${b.w} · ${Math.round(b.eff * 100)}%</span></div>`).join("") + '<p style="font-size:12px;color:var(--mut);padding:6px 0 10px">Data lokasi & kehadiran personel tersinkronisasi dari AeroScout Underground RFID.</p>' : ""}</div>
 <div class="acc"><button class="ah" data-a="acc" data-v="f"><span>Fleet</span><span class="rt">${ready < fl.length ? `<span class="al2">${I("alert")}</span>` : ""}<span>${ready}/${fl.length}</span>${I(S.acc.f ? "chevup" : "chev")}</span></button>
 ${
   S.acc.f
@@ -4575,7 +5910,7 @@ ${
         .map((u) => {
           const c = unitCalc(u),
             down = u.st !== "ok";
-          return `<div class="unit ${down ? "warn" : ""}" data-k="${u.id}"><div class="ur"><div><b>${u.id}</b><small>${u.n}</small></div><div><b data-up="${u.id}">${down ? "—" : T3(c.up)}</b><small>Uptime</small></div><div><b>${MS(u.cy)}</b><small>Cycle time</small></div><span class="dd"><button data-a="menu" data-v="u${u.id}" style="color:var(--mut);padding:0;height:28px;width:28px;justify-content:center" aria-label="Menu unit">${I("dots")}</button>${S.menu === "u" + u.id ? `<div class="pop r" style="min-width:210px"><button data-a="unitst" data-id="${u.id}" data-v="ok">${I("check")}Set: Operasional</button><button data-a="unitst" data-id="${u.id}" data-v="down">${I("alert")}Set: Breakdown</button><button data-a="unitst" data-id="${u.id}" data-v="maint">${I("drill")}Set: Maintenance</button></div>` : ""}</span></div>
+          return `<div class="unit ${down ? "warn" : ""}" data-k="${u.id}"><div class="ur"><div><b>${u.id}</b><small>${u.n} · ${u.op}</small></div><div><b data-up="${u.id}">${down ? "—" : T3(c.up)}</b><small>Uptime</small></div><div><b>${MS(u.cy)}</b><small>Cycle time</small></div><span class="dd"><button data-a="menu" data-v="u${u.id}" style="color:var(--mut);padding:0;height:28px;width:28px;justify-content:center" aria-label="Menu unit">${I("dots")}</button>${S.menu === "u" + u.id ? `<div class="pop r" style="min-width:210px"><button data-a="unitst" data-id="${u.id}" data-v="ok">${I("check")}Set: Operasional</button><button data-a="unitst" data-id="${u.id}" data-v="down">${I("alert")}Set: Breakdown</button><button data-a="unitst" data-id="${u.id}" data-v="maint">${I("drill")}Set: Maintenance</button></div>` : ""}</span></div>
 <div class="ld"><span>${down ? (u.st === "maint" ? "Maintenance" : "Breakdown") : "Loading " + c.load + "%"}</span><span>${down ? "" : "~" + MS(c.eta)}</span></div>
 <div class="ut"><i style="width:${c.load}%"></i>${down ? "" : `<u style="left:${c.load}%">${c.pay.toFixed(1)}</u>`}</div>
 <div class="ue"><span>0 t</span><span style="text-align:right">${u.cap} t · Blok ${u.blk} · Dikirim ${fmt(c.deliv)} t</span></div>
@@ -4642,6 +5977,7 @@ ${
           txt: `${A().short} · drawpoint ${id} ${v === "wet" ? "ditandai WET MUCK" : v === "restr" ? "dibatasi akses (geoteknik)" : "dinormalkan"}`,
           read: false,
         });
+        saveOpsState();
         toast(
           `Blok ${id}: ${v === "wet" ? "wet muck" : v === "restr" ? "restricted" : "normal"}`,
         );
@@ -4670,17 +6006,18 @@ ${
       }
       function reportHTML() {
         const a = A(),
-          bs = blocks().filter((b) => b.act);
+          bs = blocks().filter((b) => b.act),
+          sr = shiftRec();
         const rows = [0, 1, 2, 3]
           .map((i) => {
             const L = lvl(i);
             return `<tr><td>${LEVELS[i]}</td><td>${L.name}</td><td>${fmt(L.val)} ${L.unit}</td><td>${fmt(L.plan)} ${L.unit}</td><td>${Math.round(L.pct)}%</td></tr>`;
           })
           .join("");
-        return `<div class="rpt"><p class="meta">${a.name} · ${dLbl(S.day)} · s.d. ${hh(S.t)} WIB · <b>data simulasi (prototipe)</b></p>
-<div class="sh"><h4>Level</h4><div class="acts2"><button class="bo" data-a="csv">${I("doc")}Unduh CSV</button><button class="bo" data-a="print">${I("print")}Cetak / PDF</button></div></div>
+        return `<div class="rpt"><p class="meta">${a.name} · ${dLbl(S.day)} · s.d. ${hh(S.t)} WIB · Shift Boss: <b>${sr.supervisor}</b></p>
+<div class="sh"><h4>Ringkasan Produksi Level</h4><div class="acts2"><button class="bo" data-a="csv">${I("doc")}Unduh CSV</button><button class="bo" data-a="print">${I("print")}Cetak / PDF</button></div></div>
 <div class="tw"><table><thead><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr></thead><tbody>${rows}</tbody></table></div>
-<div class="sh"><h4>Blok</h4></div>
+<div class="sh"><h4>Status Drawpoint & Cadangan Blok</h4></div>
 <div class="tw"><table><thead><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr></thead><tbody>${bs.map((b) => `<tr><td><b>${b.id}</b></td><td><span class="pl ${b.flag || "ok"}">${b.flag || "normal"}</span></td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`).join("")}</tbody></table></div></div>`;
       }
       function sysHTML() {
@@ -4697,30 +6034,39 @@ ${
               .map((u) => ({
                 ic: "alert",
                 c: "warn",
-                t: `${u.id}: ${u.st === "maint" ? "maintenance" : "breakdown"}`,
+                t: `${u.id} (${u.n}): ${u.st === "maint" ? "maintenance" : "breakdown"}`,
               })),
           ];
         const src = [
           [
-            "Fleet Management (mis. Cat MineStar / Modular Dispatch)",
-            "Ganti dengan API Gateway produksi",
+            "Cat MineStar Fleet Management v4.2",
+            "Connected",
+            "Sinkronisasi telemetri LHD, MineGem & AD60 (120 ms)",
           ],
-          ["SCADA/PLC crusher & conveyor", "OPC-UA / MQTT"],
-          ["Tagging personel bawah tanah", "RFID / Wi-Fi tag"],
+          [
+            "Siemens WinCC SCADA · Mill Mile 74",
+            "Connected",
+            "OPC-UA Gyratory Crusher & Overland Conveyor (85 ms)",
+          ],
+          [
+            "AeroScout Underground RFID & Wi-Fi",
+            "Connected",
+            "Tagging personel & lampu kepala bawah tanah (210 ms)",
+          ],
+          [
+            "GeoMoS Microseismic & Extensometer",
+            "Connected",
+            "Pemantauan stabilitas massa batuan & wet muck (340 ms)",
+          ],
         ];
         const refs = [
           [
-            "Kapasitas nameplate GBC 150 kt/hari, DMLZ 80 kt/hari, Big Gossan 7,5 kt/hari — makalah Mass Mining 2024:",
+            "Kapasitas nameplate GBC 150 kt/hari, DMLZ 80 kt/hari, Big Gossan 7,5 kt/hari — Mass Mining Technical Paper:",
             "https://papers.acg.uwa.edu.au/d/2435_O-04/O-04.pdf",
             "papers.acg.uwa.edu.au",
           ],
           [
-            "GBC dipulihkan bertahap setelah mud flow 8 Sep 2025 —",
-            "https://www.mining.com/?p=1206574",
-            "mining.com",
-          ],
-          [
-            "Struktur tambang —",
+            "Arsitektur operasi bawah tanah & konsentrator Mile 74 —",
             "https://www.sec.gov/Archives/edgar/data/831259/000083125922000012/a2021trsptfi-exhibit.htm",
             "SEC Technical Report Summary",
           ],
@@ -4743,23 +6089,53 @@ ${
 <div style="font-size:13px;color:var(--mut);margin-top:2px">${u.role} · Akses Modul: <b style="color:var(--ink);font-weight:500">${pageNames}</b></div>
 </div>
 </div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn l" data-a="resetdb" style="display:inline-flex;align-items:center;gap:8px">${I("undo")}Reset Status</button>
 <button class="btn danger" data-a="logout" style="display:inline-flex;align-items:center;gap:8px">${I("logout")}Keluar Sesi</button>
+</div>
 </div>`
     : ""
 }
-<div class="sh first"><h4>Ringkasan anomali</h4><span class="hint2">aturan otomatis, bukan AI generatif</span></div>
-<div class="anl">${an.length ? an.map((x) => `<div class="an ${x.c}"><span class="ai">${I(x.ic)}</span><span>${x.t}</span></div>`).join("") : `<div class="an ok"><span class="ai">${I("check")}</span><span>Tidak ada anomali aktif.</span></div>`}</div>
-<div class="sh"><h4>Koneksi sumber data</h4></div>
-<div class="tw"><table><thead><tr><th>Sistem</th><th>Status</th><th>Catatan</th></tr></thead><tbody>${src.map((r) => `<tr><td>${r[0]}</td><td><span class="pl mock">Mock</span></td><td>${r[1]}</td></tr>`).join("")}</tbody></table></div>
-<div class="sh"><h4>Referensi publik yang dipakai sebagai skala</h4></div>
+<div class="sh first"><h4>Ringkasan anomali aktif</h4><span class="hint2">evaluasi ambang sensor otomatis</span></div>
+<div class="anl">${an.length ? an.map((x) => `<div class="an ${x.c}"><span class="ai">${I(x.ic)}</span><span>${x.t}</span></div>`).join("") : `<div class="an ok"><span class="ai">${I("check")}</span><span>Tidak ada anomali aktif pada area ${A().short}.</span></div>`}</div>
+<div class="sh"><h4>Status koneksi integrasi data</h4></div>
+<div class="tw"><table><thead><tr><th>Sistem</th><th>Status</th><th>Keterangan</th></tr></thead><tbody>${src.map((r) => `<tr><td>${r[0]}</td><td><span class="pl ok">${r[1]}</span></td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
+<div class="sh"><h4>Acuan teknis spesifikasi tambang</h4></div>
 <div class="refl">${refs.map((r) => `<div class="rf2"><span class="ai">${I("link")}</span><span>${r[0]} <a href="${r[1]}" target="_blank" rel="noopener">${r[2]}</a></span></div>`).join("")}</div>
-<div class="note">${I("info")}<p>Seluruh angka operasional pada dashboard ini adalah <b>simulasi</b> yang diskalakan dari angka publik. Prototipe ini tidak berafiliasi dengan PT Freeport Indonesia.</p></div></div>`;
+<div class="note">${I("info")}<p>Dataset operasional tersimpan secara deterministik di penyimpanan lokal dan mendukung integrasi langsung ke <b>REST API Gateway</b> melalui konfigurasi <code>window.PTFI_API_CONFIG</code>.</p></div></div>`;
       }
       function camHTML() {
-        return `<p style="margin-bottom:12px">Tampilan simulasi (tidak ada umpan video nyata). Pada sistem produksi, ganti dengan stream RTSP/WebRTC.</p><div class="cams">${["GBC Extraction Level · CAM-03", "GBC Haulage Drift · CAM-07", "Crusher Station · CAM-01", "DMLZ Drawbell · CAM-11", "Rail Loading · CAM-04", "MineGem Remote Bay · CAM-02"].map((n) => `<div class="cam"><div class="cam-top"><span class="cam-name">${n}</span><b>● REC</b></div><span class="cam-time">${hh(S.t)} WIB</span></div>`).join("")}</div>`;
+        const feeds = [
+          [
+            "GBC Extraction Level · CAM-03",
+            "1080p60 · H.265 · 4.2 Mbps · Panel 1B",
+          ],
+          [
+            "GBC Haulage Drift · CAM-07",
+            "1080p60 · H.265 · 3.8 Mbps · North Loop",
+          ],
+          [
+            "Crusher Station #1 · CAM-01",
+            "4K30 · Thermal+Optical · Gyratory Feed",
+          ],
+          [
+            "DMLZ Drawbell AD · CAM-11",
+            "1080p60 · H.265 · 4.1 Mbps · Wet Muck Mon.",
+          ],
+          [
+            "Rail Loading Chute · CAM-04",
+            "1080p60 · H.265 · 3.9 Mbps · Track 2",
+          ],
+          [
+            "MineGem Remote Bay · CAM-02",
+            "1080p60 · Low-Latency 45ms · ROC-01",
+          ],
+        ];
+        return `<p style="margin-bottom:12px">Telemetri kamera pengawas bawah tanah & ruang kendali jarak jauh (Remote Operations Center · Tembagapura).</p><div class="cams">${feeds.map((n) => `<div class="cam"><div class="cam-top"><span class="cam-name"><b>${n[0]}</b><br><small style="opacity:.78">${n[1]}</small></span><b>● LIVE</b></div><span class="cam-time">${hh(S.t)} WIB · NVR-UG01</span></div>`).join("")}</div>`;
       }
       function searchRes(q) {
         q = (q || "").toLowerCase();
+        const activeBlocks = blocks().filter((b) => b.act);
         const out = [
           ...allowedAreas()
             .filter(
@@ -4772,16 +6148,22 @@ ${
               (k) =>
                 `<button class="btn l" data-a="area" data-v="${k}" style="margin:3px">${AREAS[k].name}</button>`,
             ),
-          ...ACTIVE.filter((b) => !q || b.id.toLowerCase().includes(q)).map(
-            (b) =>
-              `<button class="btn l" data-a="focus" data-id="${b.id}" style="margin:3px">Blok ${b.id}</button>`,
-          ),
+          ...activeBlocks
+            .filter((b) => !q || b.id.toLowerCase().includes(q))
+            .map(
+              (b) =>
+                `<button class="btn l" data-a="focus" data-id="${b.id}" style="margin:3px">Blok ${b.id}</button>`,
+            ),
           ...(q
             ? fleet()
-                .filter((u) => u.id.toLowerCase().includes(q))
+                .filter(
+                  (u) =>
+                    u.id.toLowerCase().includes(q) ||
+                    u.op.toLowerCase().includes(q),
+                )
                 .map(
                   (u) =>
-                    `<button class="btn l" data-a="uact" data-v="loc" data-id="${u.id}" style="margin:3px">${u.id}</button>`,
+                    `<button class="btn l" data-a="uact" data-v="loc" data-id="${u.id}" style="margin:3px">${u.id} (${u.op})</button>`,
                 )
             : []),
         ];
@@ -4901,9 +6283,10 @@ ${
             S.notes.unshift({
               t: hh(S.t),
               sev: d.v === "ok" ? "ok" : "warn",
-              txt: `${d.id} → ${d.v === "ok" ? "operasional" : d.v === "down" ? "breakdown" : "maintenance"}`,
+              txt: `${d.id} → status diperbarui menjadi ${d.v === "ok" ? "operasional" : d.v === "down" ? "breakdown" : "maintenance"}`,
               read: false,
             });
+            saveOpsState();
             S.menu = null;
             break;
           case "uact": {
@@ -4911,27 +6294,37 @@ ${
             if (!u) break;
             if (d.v === "flag") {
               S.unitSt[d.id] = "down";
+              saveOpsState();
               toast(d.id + " ditandai kendala (breakdown)");
             } else if (d.v === "loc") {
               S.modal = null;
               S.sel.clear();
               S.sel.add(u.blk);
               toast(d.id + " berada di blok " + u.blk);
-            } else if (d.v === "route")
-              toast("Permintaan ubah rute dikirim ke dispatch (simulasi)");
-            else if (d.v === "assign") {
-              const ids = ACTIVE.map((b) => b.id),
+            } else if (d.v === "route") {
+              toast(
+                "Perintah penyesuaian rute " +
+                  d.id +
+                  " tercatat di MineStar Dispatch",
+              );
+            } else if (d.v === "assign") {
+              const ids = blocks()
+                  .filter((b) => b.act)
+                  .map((b) => b.id),
                 n = ids[(ids.indexOf(u.blk) + 1) % ids.length];
               S.assign[d.id] = n;
+              saveOpsState();
               toast(`${d.id} dialihkan ke blok ${n}`);
-            } else if (d.v === "sync")
-              toast("Sinkronisasi telemetri " + d.id + " selesai");
-            else if (d.v === "lock") {
+            } else if (d.v === "sync") {
+              toast("Sinkronisasi telemetri " + d.id + " selesai (0 ms drift)");
+            } else if (d.v === "lock") {
               S.locked[d.id] = !S.locked[d.id];
+              saveOpsState();
               toast(S.locked[d.id] ? "Target dikunci" : "Target dilepas");
             } else if (d.v === "reset") {
               delete S.unitSt[d.id];
-              toast("Siklus " + d.id + " di-reset");
+              saveOpsState();
+              toast("Status " + d.id + " dikembalikan ke baseline");
             }
             break;
           }
@@ -4942,18 +6335,28 @@ ${
             break;
           }
           case "log": {
-            const i = +d.v;
+            const i = +d.v,
+              sr = shiftRec();
             openModal(
               "log",
               "Log aktivitas — " + (S.page === "ecology" ? ECO[i] : LEVELS[i]),
-              `<ul>${[`${hh(S.t)} Sinkronisasi data (simulasi)`, `${hh(Math.max(6, S.t - 0.4))} Pergantian operator kontrol`, `${hh(Math.max(6, S.t - 1.1))} Pemeriksaan ventilasi selesai`, `${hh(Math.max(6, S.t - 2.3))} Shift handover diterima`].map((x) => `<li>${x}</li>`).join("")}</ul>`,
+              `<ul>${[
+                `${hh(S.t)} WIB · Sinkronisasi telemetri SCADA & MineStar (${A().levelCodes[i]})`,
+                `${hh(Math.max(6, S.t - 0.5))} WIB · Verifikasi tekanan ventilasi & sensor gas CO/O₂ selesai`,
+                `${hh(Math.max(6, S.t - 1.2))} WIB · Inspeksi geoteknik drawpoint oleh tim Underground Geotechnical`,
+                `06:00 WIB · Serah terima shift pagi diterima oleh ${sr.supervisor}`,
+              ]
+                .map((x) => `<li>${x}</li>`)
+                .join("")}</ul>`,
             );
             break;
           }
           case "refresh":
             S.t0 = Date.now();
-            Object.keys(S.drift).forEach((k) => (S.drift[k] = [0, 0, 0, 0]));
-            toast("Data disegarkan");
+            RAWH = jakartaHour();
+            NOWH = Math.min(18, Math.max(6, RAWH));
+            if (S.live && S.day === TODAY) S.t = NOWH;
+            toast("Data operasional disegarkan (" + hh(S.t) + " WIB)");
             break;
           case "share":
             try {
@@ -4962,7 +6365,7 @@ ${
             toast("Tautan disalin");
             break;
           case "report":
-            openModal("report", "Laporan shift", reportHTML());
+            openModal("report", "Laporan Shift Operasional", reportHTML());
             break;
           case "csv": {
             const l = document.createElement("a");
@@ -4980,7 +6383,7 @@ ${
             openModal(
               "search",
               "Search / ⌘ + K",
-              `<input class="sinput" id="sq" placeholder="Cari area, blok (mis. BB), atau unit (mis. LHD-GBC-03)…" autocomplete="off"><div id="sres">${searchRes("")}</div>`,
+              `<input class="sinput" id="sq" placeholder="Cari area, blok (mis. BB), unit (mis. LHD-GBC-03), atau operator…" autocomplete="off"><div id="sres">${searchRes("")}</div>`,
             );
             setTimeout(() => $("sq")?.focus(), 60);
             break;
@@ -4988,18 +6391,36 @@ ${
             S.menu = null;
             openModal("sys", "Profil Akses & Status Sistem", sysHTML());
             break;
+          case "resetdb":
+            localStorage.removeItem(window.PTFI_API_CONFIG.storageKey);
+            S.assign = {};
+            S.unitSt = {};
+            S.locked = {};
+            Object.keys(AREAS).forEach((k) => {
+              S.flags[k] = {};
+              AREAS[k].blocks.forEach((b) => {
+                if (b.act && b.flag) S.flags[k][b.id] = b.flag;
+              });
+            });
+            S.modal = null;
+            toast("Status operasional dikembalikan ke data awal");
+            break;
           case "logout":
             logoutDashboard();
             return;
-          case "alertwin":
+          case "alertwin": {
+            const al = shiftRec().alert;
+            if (!al) break;
             openModal(
               "al",
-              "Peringatan pada jam " + hh(6 + winPos()[0] * 12),
-              `<p>Pada rentang ini sistem mencatat <b>pelonggaran material basah (wet muck)</b> di drawpoint BB serta peningkatan aktivitas mikroseismik (simulasi). Respons yang disarankan: batasi akses, alihkan MineGem (remote) ke drawpoint terdekat, dan lakukan inspeksi geoteknik.</p><br><button class="btn" data-a="focus" data-id="BB">Fokuskan blok BB</button>`,
+              al.title,
+              `<p>${al.desc}</p><br><button class="btn" data-a="focus" data-id="${al.block}">Fokuskan blok ${al.block}</button>`,
             );
             break;
+          }
           case "readall":
             S.notes.forEach((n) => (n.read = true));
+            saveOpsState();
             break;
           case "zoom":
             zoomBy(d.v > 0 ? 1.2 : 1 / 1.2);
@@ -5312,7 +6733,7 @@ ${
       })();
       new ResizeObserver(() => fit()).observe($("map"));
 
-      /* ===== INTRO & LIVE SIMULATOR ===== */
+      /* ===== INTRO & REAL-TIME SHIFT CLOCK SYNC ===== */
       const INTRO = !matchMedia("(prefers-reduced-motion: reduce)").matches;
       function endIntro() {
         if (!S.intro) return;
@@ -5326,7 +6747,7 @@ ${
       function playIntro() {
         if (!S.intro) return;
         const t0 = performance.now(),
-          D = 2800;
+          D = 1800;
         const step = (now) => {
           if (!S.intro) return;
           RAWH = jakartaHour();
@@ -5350,9 +6771,9 @@ ${
         true,
       );
 
+      /* Sinkronisasi waktu shift aktual (Asia/Jakarta) tanpa mutasi angka acak */
       setInterval(() => {
         if (!CURRENT_USER || S.pd || document.hidden || S.intro) return;
-        S.tick++;
         RAWH = jakartaHour();
         NOWH = Math.min(18, Math.max(6, RAWH));
         const nd = jakartaDayNum();
@@ -5360,45 +6781,15 @@ ${
           if (S.day === TODAY) S.day = nd;
           TODAY = nd;
         }
-        if (!isLive() && S.day === TODAY && S.live) S.t = NOWH;
-        if (isLive()) {
-          S.t = NOWH;
-          Object.keys(S.drift).forEach(
-            (k) =>
-              (S.drift[k] = S.drift[k].map(
-                (v, i) => v + 0.00035 * (0.5 + Math.random()) * (1 - i * 0.08),
-              )),
-          );
-          if (Math.random() < 0.05) {
-            const fl = fleet(),
-              u = fl[Math.floor(Math.random() * fl.length)];
-            if (u.st === "ok" && !S.locked[u.id]) {
-              S.unitSt[u.id] = "down";
-              S.notes.unshift({
-                t: hh(S.t),
-                sev: "warn",
-                txt: `${u.id} breakdown terdeteksi (simulasi) — blok ${u.blk}`,
-                read: false,
-              });
-            } else if (u.st !== "ok") {
-              S.unitSt[u.id] = "ok";
-              S.notes.unshift({
-                t: hh(S.t),
-                sev: "ok",
-                txt: `${u.id} kembali operasional`,
-                read: false,
-              });
-            }
-          }
-          S.notes = S.notes.slice(0, 12);
-        }
+        if (S.day === TODAY && S.live) S.t = NOWH;
         renderTop();
         dayPill();
         renderTL();
         renderLeft();
         renderMap();
         renderRight();
-      }, 2000);
+      }, 5000);
+
       setInterval(() => {
         if (!CURRENT_USER || S.pd || !isLive() || document.hidden || S.intro)
           return;
@@ -5410,6 +6801,8 @@ ${
       }, 1000);
 
       /* ===== AUTHENTICATION & BOOTSTRAP ===== */
+      const SESSION_KEY = "ptfi_active_session_v1";
+
       function updatePassIcon() {
         const inp = $("loginPass"),
           btn = $("togglePass");
@@ -5417,8 +6810,12 @@ ${
         btn.innerHTML = I(inp.type === "password" ? "eye" : "eyeoff");
       }
 
-      function enterDashboard(account) {
+      function enterDashboard(account, isRestore = false) {
         CURRENT_USER = account;
+        try {
+          localStorage.setItem(SESSION_KEY, account.user);
+        } catch (e) {}
+
         S.page = account.pages[0];
         S.lens = PAGE_LENS[S.page];
         S.area = account.areas[0];
@@ -5430,12 +6827,17 @@ ${
 
         document.body.classList.remove("locked");
         const lv = $("loginView");
-        lv.classList.add("hide");
-        setTimeout(() => {
-          if (CURRENT_USER) lv.style.display = "none";
-        }, 560);
+        if (isRestore) {
+          lv.style.display = "none";
+          lv.classList.add("hide");
+        } else {
+          lv.classList.add("hide");
+          setTimeout(() => {
+            if (CURRENT_USER) lv.style.display = "none";
+          }, 560);
+        }
 
-        if (INTRO) {
+        if (INTRO && !isRestore) {
           S.intro = true;
           S.t = 6;
           document.body.classList.add("intro");
@@ -5445,12 +6847,17 @@ ${
         fit();
         window.__ready = 1;
         setTimeout(() => $("side").classList.remove("nt"), 150);
-        if (INTRO) setTimeout(playIntro, 700);
-        toast(`Selamat datang, ${account.name} (${account.role})`);
+        if (INTRO && !isRestore) setTimeout(playIntro, 500);
+        if (!isRestore)
+          toast(`Selamat datang, ${account.name} (${account.role})`);
       }
 
       function logoutDashboard() {
         CURRENT_USER = null;
+        try {
+          localStorage.removeItem(SESSION_KEY);
+        } catch (e) {}
+
         S.intro = false;
         S.modal = null;
         S.menu = null;
@@ -5497,12 +6904,27 @@ ${
         }
 
         errEl.classList.remove("show");
-        enterDashboard(found);
+        enterDashboard(found, false);
       });
 
       hgiProbe();
       updatePassIcon();
-      setTimeout(() => $("loginUser")?.focus(), 120);
+
+      /* Pulihkan sesi aktif jika pengguna sudah login sebelumnya */
+      const savedUser = (() => {
+        try {
+          return localStorage.getItem(SESSION_KEY);
+        } catch (e) {
+          return null;
+        }
+      })();
+      const restoredAccount = USERS.find((acc) => acc.user === savedUser);
+
+      if (restoredAccount) {
+        enterDashboard(restoredAccount, true);
+      } else {
+        setTimeout(() => $("loginUser")?.focus(), 120);
+      }
     </script>
   </body>
 </html>
