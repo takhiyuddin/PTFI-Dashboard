@@ -3028,6 +3028,197 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         }
       }
 
+      /* ===== Animasi Laporan ===== */
+      @keyframes qfModalIn {
+        from {
+          opacity: 0;
+          transform: translateY(40px) scale(0.93);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes qfBar {
+        from {
+          transform: scaleY(0);
+        }
+        to {
+          transform: scaleY(1);
+        }
+      }
+      @keyframes qfDraw {
+        from {
+          stroke-dashoffset: 1;
+          opacity: 0;
+        }
+        8% {
+          opacity: 1;
+        }
+        to {
+          stroke-dashoffset: 0;
+          opacity: 1;
+        }
+      }
+      @keyframes qfGrowX {
+        from {
+          transform: scaleX(0);
+        }
+        to {
+          transform: scaleX(1);
+        }
+      }
+      @keyframes qfPulse {
+        0% {
+          transform: scale(1);
+          opacity: 0.55;
+        }
+        100% {
+          transform: scale(2.8);
+          opacity: 0;
+        }
+      }
+      @keyframes qfTipIn {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%);
+        }
+      }
+
+      .modal:has(.qf) {
+        animation: qfModalIn 0.7s var(--spring);
+      }
+      .qf-ctl {
+        position: relative;
+        z-index: 5;
+      }
+      .qf-card {
+        transition:
+          box-shadow 0.35s var(--ease),
+          border-color 0.35s;
+      }
+      .qf-card:hover {
+        box-shadow: 0 12px 34px rgba(29, 32, 30, 0.06);
+        border-color: #dcdfdc;
+      }
+      .qf-tabs button {
+        transition:
+          color 0.25s,
+          background 0.25s;
+      }
+      .qf-tabs button:hover {
+        color: var(--ink);
+      }
+      .qf-tip.on {
+        animation: qfTipIn 0.28s var(--ease);
+      }
+
+      /* hanya saat dibuka (qf-in) atau ganti tab (qf-sw) */
+      .qf-in .qf-tabs {
+        animation: up 0.5s var(--ease) backwards;
+      }
+      .qf-in .qf-ctl {
+        animation: up 0.5s var(--ease) 0.06s backwards;
+      }
+      :is(.qf-in, .qf-sw) .qf-tabs button.on::after {
+        transform-origin: left;
+        animation: qfGrowX 0.5s var(--ease) 0.1s backwards;
+      }
+      :is(.qf-in, .qf-sw) .qf-body > * {
+        animation: up 0.65s var(--ease) backwards;
+      }
+      :is(.qf-in, .qf-sw) .qf-body > *:nth-child(1) {
+        animation-delay: 0.12s;
+      }
+      :is(.qf-in, .qf-sw) .qf-body > *:nth-child(2) {
+        animation-delay: 0.24s;
+      }
+      :is(.qf-in, .qf-sw) .qf-body > *:nth-child(3) {
+        animation-delay: 0.36s;
+      }
+      :is(.qf-in, .qf-sw) .kpi {
+        animation: pop 0.55s var(--spring) backwards;
+      }
+      :is(.qf-in, .qf-sw) .kpi:nth-child(1) {
+        animation-delay: 0.16s;
+      }
+      :is(.qf-in, .qf-sw) .kpi:nth-child(2) {
+        animation-delay: 0.23s;
+      }
+      :is(.qf-in, .qf-sw) .kpi:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      :is(.qf-in, .qf-sw) .kpi:nth-child(4) {
+        animation-delay: 0.37s;
+      }
+      :is(.qf-in, .qf-sw) .qf-tb tbody tr {
+        animation: up 0.5s var(--ease) backwards;
+      }
+      :is(.qf-in, .qf-sw) .qf-tb tbody tr:nth-child(1) {
+        animation-delay: 0.4s;
+      }
+      :is(.qf-in, .qf-sw) .qf-tb tbody tr:nth-child(2) {
+        animation-delay: 0.46s;
+      }
+      :is(.qf-in, .qf-sw) .qf-tb tbody tr:nth-child(3) {
+        animation-delay: 0.52s;
+      }
+      :is(.qf-in, .qf-sw) .qf-tb tbody tr:nth-child(4) {
+        animation-delay: 0.58s;
+      }
+      :is(.qf-in, .qf-sw) .qf-tb tbody tr:nth-child(5) {
+        animation-delay: 0.64s;
+      }
+      :is(.qf-in, .qf-sw) .qf-tb tbody tr:nth-child(n + 6) {
+        animation-delay: 0.7s;
+      }
+      :is(.qf-in, .qf-sw) .pcb i {
+        transform-origin: left;
+        animation: qfGrowX 0.9s var(--ease) 0.45s backwards;
+      }
+      :is(.qf-in, .qf-sw) .qf-bar {
+        transform-box: fill-box;
+        transform-origin: 50% 100%;
+        animation: qfBar 0.75s var(--ease) backwards;
+        animation-delay: calc(0.3s + var(--i, 0) * 50ms);
+      }
+      :is(.qf-in, .qf-sw) .qf-fade {
+        animation: fade 0.8s var(--ease) 1s backwards;
+      }
+
+      /* line chart */
+      .qf-line {
+        stroke-dasharray: 1 1;
+        stroke-dashoffset: 0;
+      }
+      :is(.qf-in, .qf-sw) .qf-line {
+        animation: qfDraw 1.5s var(--ease) backwards;
+        animation-delay: calc(0.35s + var(--i, 0) * 0.15s);
+      }
+      :is(.qf-in, .qf-sw) .qf-area {
+        animation: fade 1s var(--ease) 1s backwards;
+      }
+      .qf-dot,
+      .qf-pulse {
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+      :is(.qf-in, .qf-sw) .qf-dot {
+        animation: grow 0.5s var(--spring) 1.6s backwards;
+      }
+      .qf-pulse {
+        animation: qfPulse 2.2s ease-out infinite;
+      }
+
+      @media (max-width: 640px) {
+        .modal:has(.qf) {
+          animation: sl 0.55s var(--spring);
+        }
+      }
       @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
@@ -3266,6 +3457,923 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         }
         .mob-dock button.on .i {
           transform: scale(1.08);
+        }
+      }
+      /* TEMPEL tepat sebelum:  @media (prefers-reduced-motion: reduce) {  (gantikan report-patch.css v1) */
+
+      .rpt small {
+        display: block;
+        font-size: 11.5px;
+        color: var(--mut);
+      }
+      .rpt .rinfo {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 8px;
+        margin: 14px 0 4px;
+      }
+      .rpt .rinfo > div {
+        background: #f7f8f6;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 10px 12px;
+        min-width: 0;
+      }
+      .rpt .rinfo b {
+        font-weight: 500;
+        font-size: 13.5px;
+        overflow-wrap: anywhere;
+      }
+      .rpt .acts2 {
+        flex-wrap: wrap;
+      }
+      .rpt .kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 10px;
+      }
+      .rpt .kpi {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px 16px;
+      }
+      .rpt .kpi b {
+        display: block;
+        font-size: 24px;
+        font-weight: 500;
+        letter-spacing: -0.5px;
+        margin: 3px 0;
+      }
+      .rpt .kpi span {
+        font-size: 12.5px;
+        color: var(--mut);
+      }
+      .rpt .bdx {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 8px;
+        letter-spacing: 0;
+      }
+      .rpt .bdx.g {
+        background: #e3f2e4;
+        color: #2e7d32;
+      }
+      .rpt .bdx.y {
+        background: #fff1d6;
+        color: #8a5a00;
+      }
+      .rpt .bdx.r {
+        background: #fdecea;
+        color: #c0353a;
+      }
+      .rpt .pcw {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 130px;
+      }
+      .rpt .pcb {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: #e9ece9;
+        overflow: hidden;
+      }
+      .rpt .pcb i {
+        display: block;
+        height: 100%;
+        border-radius: 3px;
+      }
+      .rpt .pc-g {
+        background: #43a047;
+      }
+      .rpt .pc-y {
+        background: #f5a623;
+      }
+      .rpt .pc-r {
+        background: #e5484d;
+      }
+      .rpt .pct-g {
+        color: #2e7d32;
+      }
+      .rpt .pct-y {
+        color: #8a5a00;
+      }
+      .rpt .pct-r {
+        color: #c0353a;
+      }
+      .rpt .inc {
+        display: flex;
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .rpt .inc:last-child {
+        border: 0;
+      }
+      .rpt .inc time {
+        flex: none;
+        width: 96px;
+        color: var(--mut);
+        font-size: 13px;
+      }
+      .rpt .inc .sev {
+        flex: none;
+        margin-top: 7px;
+      }
+      .rpt .rnote {
+        width: 100%;
+        min-height: 84px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font: inherit;
+        font-size: 14px;
+        resize: vertical;
+        outline: 0;
+      }
+      .rpt .rnote:focus {
+        border-color: var(--ink);
+      }
+      .rpt .sign {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .rpt .sign > div {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+      .rpt .sign i {
+        display: block;
+        height: 54px;
+        border-bottom: 1px dashed #c9cdc9;
+        margin-bottom: 6px;
+      }
+      .rpt .legend {
+        font-size: 12.5px;
+        color: #555a57;
+        line-height: 1.6;
+        columns: 2;
+        column-gap: 24px;
+      }
+      .rpt .legend > div {
+        break-inside: avoid;
+        margin-bottom: 5px;
+      }
+      .rpt .legend b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+
+      .qf small {
+        display: block;
+        font-size: 11.5px;
+        color: var(--mut);
+      }
+      .qf .rinfo {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 8px;
+        margin: 14px 0 4px;
+      }
+      .qf .rinfo > div {
+        background: #f7f8f6;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 10px 12px;
+        min-width: 0;
+      }
+      .qf .rinfo b {
+        font-weight: 500;
+        font-size: 13.5px;
+        overflow-wrap: anywhere;
+      }
+      .qf .acts2 {
+        flex-wrap: wrap;
+      }
+      .qf .kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 10px;
+      }
+      .qf .kpi {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px 16px;
+      }
+      .qf .kpi b {
+        display: block;
+        font-size: 24px;
+        font-weight: 500;
+        letter-spacing: -0.5px;
+        margin: 3px 0;
+      }
+      .qf .kpi span {
+        font-size: 12.5px;
+        color: var(--mut);
+      }
+      .qf .bdx {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 8px;
+        letter-spacing: 0;
+      }
+      .qf .bdx.g {
+        background: #e3f2e4;
+        color: #2e7d32;
+      }
+      .qf .bdx.y {
+        background: #fff1d6;
+        color: #8a5a00;
+      }
+      .qf .bdx.r {
+        background: #fdecea;
+        color: #c0353a;
+      }
+      .qf .pcw {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 130px;
+      }
+      .qf .pcb {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: #e9ece9;
+        overflow: hidden;
+      }
+      .qf .pcb i {
+        display: block;
+        height: 100%;
+        border-radius: 3px;
+      }
+      .qf .pc-g {
+        background: #43a047;
+      }
+      .qf .pc-y {
+        background: #f5a623;
+      }
+      .qf .pc-r {
+        background: #e5484d;
+      }
+      .qf .pct-g {
+        color: #2e7d32;
+      }
+      .qf .pct-y {
+        color: #8a5a00;
+      }
+      .qf .pct-r {
+        color: #c0353a;
+      }
+      .qf .inc {
+        display: flex;
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .qf .inc:last-child {
+        border: 0;
+      }
+      .qf .inc time {
+        flex: none;
+        width: 96px;
+        color: var(--mut);
+        font-size: 13px;
+      }
+      .qf .inc .sev {
+        flex: none;
+        margin-top: 7px;
+      }
+      .qf .rnote {
+        width: 100%;
+        min-height: 84px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font: inherit;
+        font-size: 14px;
+        resize: vertical;
+        outline: 0;
+      }
+      .qf .rnote:focus {
+        border-color: var(--ink);
+      }
+      .qf .sign {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .qf .sign > div {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 13px;
+      }
+      .qf .sign i {
+        display: block;
+        height: 54px;
+        border-bottom: 1px dashed #c9cdc9;
+        margin-bottom: 6px;
+      }
+      .qf .legend {
+        font-size: 12.5px;
+        color: #555a57;
+        line-height: 1.6;
+        columns: 2;
+        column-gap: 24px;
+      }
+      .qf .legend > div {
+        break-inside: avoid;
+        margin-bottom: 5px;
+      }
+      .qf .legend b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      /* ===== Gaya QuikFin Reports ===== */
+      .modal:has(.qf) {
+        width: min(1180px, 100%);
+        padding: 30px 34px 34px;
+      }
+      .modal:has(.qf) h3 {
+        font-size: 30px;
+        letter-spacing: -0.6px;
+        margin-bottom: 20px;
+      }
+      .qf {
+        color: var(--ink);
+        font-size: 15px;
+      }
+      .qf-tabs {
+        display: flex;
+        gap: 6px;
+        border-bottom: 1px solid var(--line);
+        overflow-x: auto;
+        scrollbar-width: none;
+        margin-bottom: 26px;
+      }
+      .qf-tabs button {
+        padding: 14px 18px;
+        font-size: 17px;
+        color: #4b5563;
+        position: relative;
+        white-space: nowrap;
+      }
+      .qf-tabs button.on {
+        color: var(--ink);
+      }
+      .qf-tabs button.on::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        height: 2px;
+        background: var(--ink);
+      }
+      .qf-ctl {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+      }
+      .qf-wrap {
+        position: relative;
+        display: inline-flex;
+      }
+      .qf-dr {
+        position: relative;
+        display: block;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 10px 46px 10px 18px;
+        min-width: 230px;
+        background: #fff;
+      }
+      .qf-dr small {
+        display: block;
+        font-size: 13.5px;
+        color: #4b5563;
+      }
+      .qf-dr select {
+        appearance: none;
+        -webkit-appearance: none;
+        border: 0;
+        background: none;
+        font: inherit;
+        font-size: 17px;
+        font-weight: 500;
+        color: var(--ink);
+        outline: 0;
+        width: 100%;
+        cursor: pointer;
+        padding: 0;
+      }
+      .qf-dr::after {
+        content: "";
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        margin-top: -3px;
+        border: 6px solid transparent;
+        border-top: 7px solid #6b7280;
+        border-bottom: 0;
+        pointer-events: none;
+      }
+      .qf-fb {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 0 22px;
+        height: 66px;
+        font-size: 18px;
+        font-weight: 500;
+        background: #fff;
+      }
+      .qf-card {
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        padding: 24px;
+        margin-bottom: 24px;
+        background: #fff;
+      }
+      .qf .kpis {
+        margin-bottom: 24px;
+      }
+      .qf-top {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 14px;
+      }
+      .qf-ot {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-size: 14.5px;
+        font-weight: 500;
+        background: #fff;
+      }
+      .qf-gr {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 330px;
+        gap: 22px;
+        align-items: start;
+      }
+      .qf-plot {
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 14px 10px 8px;
+        min-width: 0;
+      }
+      .qf-svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .qf-ax {
+        font-size: 15px;
+        fill: #4b5563;
+      }
+      .qf-hit {
+        cursor: pointer;
+      }
+      .qf-tip {
+        display: none;
+        position: absolute;
+        top: -40px;
+        transform: translateX(-50%);
+        background: #f1f1f2;
+        border-radius: 18px;
+        padding: 12px 18px;
+        min-width: 268px;
+        box-shadow: 0 10px 30px rgba(20, 24, 22, 0.12);
+        z-index: 3;
+        pointer-events: none;
+      }
+      .qf-tip.on {
+        display: block;
+      }
+      .qf-tip div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 15.5px;
+        padding: 5px 0;
+      }
+      .qf-tip i {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        flex: none;
+      }
+      .qf-tip b {
+        margin-left: auto;
+        font-weight: 500;
+        font-size: 18px;
+        padding-left: 24px;
+      }
+      .qf-tip hr {
+        border: 0;
+        border-top: 1px solid #e0e0e2;
+        margin: 6px 0;
+      }
+      .qf-side {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .qf-sc {
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 22px 24px;
+      }
+      .qf-sc h5 {
+        font-size: 21px;
+        font-weight: 500;
+      }
+      .qf-sc .v {
+        font-size: 34px;
+        font-weight: 500;
+        letter-spacing: -0.8px;
+        margin: 18px 0 14px;
+      }
+      .qf-sc .v span {
+        font-size: 16px;
+        color: #6b7280;
+        margin-left: 8px;
+        font-weight: 400;
+        letter-spacing: 0;
+      }
+      .qf-dt {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #4b5563;
+        font-size: 15px;
+      }
+      .qf-lg {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        font-size: 16px;
+      }
+      .qf-lg span {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .qf-lg i {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+      }
+      .qf-th {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+      .qf-th h4 {
+        font-size: 28px;
+        font-weight: 500;
+        letter-spacing: -0.5px;
+      }
+      .qf-tl {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .qf-sq {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #f5f6f8;
+        border-radius: 16px;
+        height: 50px;
+        padding: 0 18px;
+        color: #6b7280;
+        min-width: 260px;
+      }
+      .qf-sq input {
+        border: 0;
+        background: none;
+        outline: 0;
+        font: inherit;
+        font-size: 16px;
+        width: 100%;
+        color: var(--ink);
+      }
+      .qf-ib {
+        width: 50px;
+        height: 50px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: #fff;
+        color: #374151;
+      }
+      .qf-ib:hover {
+        background: #f5f6f8;
+      }
+      .qf-add {
+        height: 50px;
+        padding: 0 20px;
+        border: 1px solid #a68df0;
+        border-radius: 12px;
+        color: #7c6be0;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        background: #fff;
+      }
+      .qf-pop {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+        padding: 6px;
+        z-index: 20;
+        min-width: 210px;
+      }
+      .qf-pop button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 14.5px;
+        white-space: nowrap;
+      }
+      .qf-pop button:hover,
+      .qf-pop button.cur {
+        background: #f1f3f0;
+      }
+      .qf-tb {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        overflow-x: auto;
+      }
+      .qf-tb table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 760px;
+      }
+      .qf-tb th {
+        text-align: left;
+        font-weight: 500;
+        color: #111;
+        font-size: 16.5px;
+        padding: 22px 16px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      .qf-tb td {
+        padding: 22px 16px;
+        font-size: 16.5px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      .qf-tb tbody tr:last-child td {
+        border-bottom: 0;
+      }
+      .qf-tb .r {
+        text-align: right;
+      }
+      .qf-cb {
+        width: 22px;
+        height: 22px;
+        border: 1.5px solid #d1d5db;
+        border-radius: 6px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 14px;
+      }
+      .qf-tb .pcw {
+        display: inline-flex;
+        min-width: 120px;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+      #qfprint {
+        display: none;
+      }
+      @media (max-width: 900px) {
+        .qf-gr {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 640px) {
+        .modal:has(.qf) {
+          padding: 20px 14px 26px;
+        }
+        .modal:has(.qf) h3 {
+          font-size: 22px;
+        }
+        .qf-tabs button {
+          font-size: 15px;
+          padding: 12px;
+        }
+        .qf-dr {
+          min-width: 0;
+          flex: 1;
+        }
+        .qf-fb {
+          height: 62px;
+          padding: 0 16px;
+          font-size: 16px;
+        }
+        .qf-card {
+          padding: 14px;
+          border-radius: 22px;
+        }
+        .qf-th h4 {
+          font-size: 22px;
+        }
+        .qf-ax {
+          font-size: 19px;
+        }
+        .qf-tip {
+          min-width: 210px;
+          padding: 10px 14px;
+        }
+        .qf-tip b {
+          font-size: 16px;
+        }
+        .qf-sq {
+          min-width: 0;
+          flex: 1 1 100%;
+        }
+        .qf-tb table {
+          min-width: 0;
+        }
+        .qf-tb thead {
+          display: none;
+        }
+        .qf-tb tr {
+          display: block;
+          padding: 8px 14px;
+          border-bottom: 1px solid var(--line);
+        }
+        .qf-tb td {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 14px;
+          padding: 6px 0;
+          border: 0;
+          white-space: normal;
+          text-align: right;
+          font-size: 15px;
+        }
+        .qf-tb td::before {
+          content: attr(data-l);
+          color: var(--mut);
+          font-size: 13px;
+          text-align: left;
+          flex: none;
+        }
+        .qf-tb td:first-child {
+          font-weight: 500;
+        }
+        .qf-tb td:first-child::before {
+          display: none;
+        }
+        .qf-tb td:empty {
+          display: none;
+        }
+      }
+      @media print {
+        @page {
+          margin: 12mm;
+        }
+        body.printing-rpt {
+          background: #fff;
+          overflow: visible !important;
+        }
+        body.printing-rpt .shell,
+        body.printing-rpt .mob-dock,
+        body.printing-rpt #modalroot,
+        body.printing-rpt #loginView,
+        .toast {
+          display: none !important;
+        }
+        body.printing-rpt #qfprint {
+          display: block;
+        }
+        #qfprint * {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        #qfprint .acts2 {
+          display: none !important;
+        }
+        #qfprint .tw {
+          overflow: visible;
+        }
+        #qfprint table {
+          min-width: 0;
+        }
+        #qfprint .kpi,
+        #qfprint tr,
+        #qfprint .sign > div,
+        #qfprint .inc {
+          break-inside: avoid;
+        }
+        #qfprint .rnote {
+          border: 0;
+          resize: none;
+        }
+        #qfprint h4 {
+          break-after: avoid;
+        }
+      }
+
+      .qf-fp {
+        min-width: 350px;
+        padding: 14px 16px;
+      }
+      .qf-fp h6 {
+        font-size: 12px;
+        color: var(--mut);
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        font-weight: 500;
+        margin: 10px 0 8px;
+      }
+      .qf-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .qf-fp .qf-chip {
+        display: inline-block;
+        width: auto;
+        padding: 8px 12px;
+        border-radius: 12px;
+        background: #f0f2ef;
+        font-size: 13.5px;
+        color: #4b5563;
+      }
+      .qf-fp .qf-chip.on,
+      .qf-fp .qf-chip.on:hover {
+        background: var(--ink);
+        color: #fff;
+      }
+      .qf-fa {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .qf-fa .btn {
+        display: inline-block;
+        width: auto;
+      }
+      .qf-fa .btn:hover {
+        background: #2f3431;
+        color: #fff;
+      }
+      .qf-fa .btn.l:hover {
+        background: #e3e6e2;
+        color: var(--ink);
+      }
+      .qf-bd {
+        background: #a68df0;
+        color: #fff;
+        border-radius: 10px;
+        font-size: 12px;
+        padding: 2px 8px;
+        font-weight: 600;
+      }
+      @media (max-width: 640px) {
+        .qf-fp {
+          min-width: 0;
+          width: calc(100vw - 60px);
         }
       }
     </style>
@@ -3690,10 +4798,10 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           : `<svg class="i ${c}" viewBox="0 0 24 24" aria-hidden="true">${PS[n] || ""}</svg>`;
 
       /* =====================================================================
-   CONCRETE OPERATIONAL DATA REPOSITORY (PT FREEPORT INDONESIA)
-   Terstruktur & deterministik tanpa angka acak; siap disambungkan ke
-   endpoint REST API produksi melalui window.PTFI_API_CONFIG.
-===================================================================== */
+         CONCRETE OPERATIONAL DATA REPOSITORY (PT FREEPORT INDONESIA)
+         Terstruktur & deterministik tanpa angka acak; siap disambungkan ke
+         endpoint REST API produksi melalui window.PTFI_API_CONFIG.
+      ===================================================================== */
       window.PTFI_API_CONFIG = {
         endpoint: "", // Isi URL endpoint JSON produksi jika tersedia, mis. "/api/v1/ptfi/operations"
         storageKey: "ptfi_ops_concrete_v2",
@@ -5622,21 +6730,21 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           uName = CURRENT_USER ? CURRENT_USER.name : "";
         s.className = "side" + (window.__ready ? "" : " nt");
         patch(
-  s,
-  `<div class="logo">${LOGO}<div class="logo-txt"><b>PT Freeport Indonesia</b><small>Operations Control</small></div></div>
-<div class="sec">MAIN</div>
-<nav class="nv">${pList.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}" title="${p[2]}">${I(p[1])}<span class="lb">${p[2]}</span></button>`).join("")}
-<div class="grp"><button class="it" aria-label="Lensa Peta">${I("layers")}<span class="lb">Lensa Peta</span></button>
-<div class="kids"><div class="ki">${LENSES.map((l) => `<button class="kid ${S.lens === l[0] ? "on" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div></div></div>
-</nav>
-<div class="sec">AREA</div>
-<div class="areas">${aList
-            .map(
-              (k) =>
-                `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}<span class="lb">${AREAS[k].short === "BG" ? "Big Gossan" : AREAS[k].short}</span></button>`,
-            )
-            .join("")}</div>
-<button class="usr nick" data-a="sys" aria-label="${init} — profil & status sistem" title="${CURRENT_USER ? CURRENT_USER.name + " (" + CURRENT_USER.role + ")" : ""}"><span class="nk">${init}</span><span class="usr-lbl">${uName}</span></button>`,
+          s,
+          `<div class="logo">${LOGO}<div class="logo-txt"><b>PT Freeport Indonesia</b><small>Operations Control</small></div></div>
+      <div class="sec">MAIN</div>
+      <nav class="nv">${pList.map((p) => `<button class="it ${S.page === p[0] ? "on" : ""}" data-a="page" data-v="${p[0]}" aria-label="${p[2]}" title="${p[2]}">${I(p[1])}<span class="lb">${p[2]}</span></button>`).join("")}
+      <div class="grp"><button class="it" aria-label="Lensa Peta">${I("layers")}<span class="lb">Lensa Peta</span></button>
+      <div class="kids"><div class="ki">${LENSES.map((l) => `<button class="kid ${S.lens === l[0] ? "on" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div></div></div>
+      </nav>
+      <div class="sec">AREA</div>
+      <div class="areas">${aList
+        .map(
+          (k) =>
+            `<button class="it ${k === S.area ? "on" : ""}" data-a="area" data-v="${k}" aria-label="${AREAS[k].name}" title="${AREAS[k].name}">${I(AREAS[k].ic)}<span class="lb">${AREAS[k].short === "BG" ? "Big Gossan" : AREAS[k].short}</span></button>`,
+        )
+        .join("")}</div>
+      <button class="usr nick" data-a="sys" aria-label="${init} — profil & status sistem" title="${CURRENT_USER ? CURRENT_USER.name + " (" + CURRENT_USER.role + ")" : ""}"><span class="nk">${init}</span><span class="usr-lbl">${uName}</span></button>`,
         );
       }
       function renderMobDock() {
@@ -5671,15 +6779,15 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         patch(
           $("sels"),
           `<span class="dd"><button data-a="menu" data-v="areaB">${a.short === "BG" ? "Big Gossan" : a.short}${I("chev")}</button>${S.menu === "areaB" ? areaPop : ""}</span>
-<span class="sep pgsep"></span><span class="dd pgsel"><button data-a="menu" data-v="pg">${(PAGES.find((p) => p[0] === S.page) || PAGES[0])[2]}${I("chev")}</button>${S.menu === "pg" ? `<div class="pop r" style="max-height:60dvh;overflow:auto"><h6>Halaman</h6>${pList.map((p) => `<button class="${S.page === p[0] ? "cur" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}${p[2]}</button>`).join("")}<h6>Lensa peta</h6>${LENSES.map((l) => `<button class="${S.lens === l[0] ? "cur" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>` : ""}</span>
-<span class="sep"></span><span class="dd"><button data-a="menu" data-v="level">${lvName()}${I("chev")}</button>${S.menu === "level" ? `<div class="pop r">${(S.page === "ecology" ? ECO : LEVELS).map((l, i) => `<button class="${i === S.level ? "cur" : ""}" data-a="level" data-v="${i}">${l}</button>`).join("")}</div>` : ""}</span>`,
+      <span class="sep pgsep"></span><span class="dd pgsel"><button data-a="menu" data-v="pg">${(PAGES.find((p) => p[0] === S.page) || PAGES[0])[2]}${I("chev")}</button>${S.menu === "pg" ? `<div class="pop r" style="max-height:60dvh;overflow:auto"><h6>Halaman</h6>${pList.map((p) => `<button class="${S.page === p[0] ? "cur" : ""}" data-a="page" data-v="${p[0]}">${I(p[1])}${p[2]}</button>`).join("")}<h6>Lensa peta</h6>${LENSES.map((l) => `<button class="${S.lens === l[0] ? "cur" : ""}" data-a="lens" data-v="${l[0]}">${I(l[1])}${l[2]}</button>`).join("")}</div>` : ""}</span>
+      <span class="sep"></span><span class="dd"><button data-a="menu" data-v="level">${lvName()}${I("chev")}</button>${S.menu === "level" ? `<div class="pop r">${(S.page === "ecology" ? ECO : LEVELS).map((l, i) => `<button class="${i === S.level ? "cur" : ""}" data-a="level" data-v="${i}">${l}</button>`).join("")}</div>` : ""}</span>`,
         );
         patch(
           $("hr"),
           `<div class="acts"><button data-a="share" aria-label="Share">${I("share")}<span class="t">Share</span></button><button data-a="report" aria-label="Report">${I("doc")}<span class="t">Report</span></button><button data-a="print" aria-label="Print">${I("print")}<span class="t">Print</span></button></div>
-<span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 24px))"><h6>Log Notifikasi Operasional</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
-<button class="rb" data-a="search" aria-label="Search / ⌘ + K">${I("search")}</button>
-<button class="ava" data-a="sys" aria-label="${init} — profil & status sistem">${init}</button>`,
+      <span class="dd"><button class="rb" data-a="menu" data-v="notif" aria-label="Notifikasi" style="padding:0">${I("bell")}${unread ? '<span class="dot"></span>' : ""}</button>${S.menu === "notif" ? `<div class="pop r nlist" style="width:min(380px,calc(100vw - 24px))"><h6>Log Notifikasi Operasional</h6>${S.notes.map((n) => `<button><span class="sev" style="background:${n.sev === "crit" ? "var(--red2)" : n.sev === "warn" ? "var(--or)" : "var(--green)"};margin-top:6px;flex:none"></span><span><b style="font-weight:500">${n.t}</b> — ${n.txt}</span></button>`).join("")}<button data-a="readall" style="color:var(--bl)">Tandai semua dibaca</button></div>` : ""}</span>
+      <button class="rb" data-a="search" aria-label="Search / ⌘ + K">${I("search")}</button>
+      <button class="ava" data-a="sys" aria-label="${init} — profil & status sistem">${init}</button>`,
         );
       }
       function winPos() {
@@ -5692,8 +6800,8 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         patch(
           $("day"),
           `<span class="al ${hasAlert ? "" : "ok"}">${I(hasAlert ? "alert" : "check")}</span>
-<span class="dd"><button data-a="menu" data-v="day">Day ${dInfo(S.day).d}${I("chev")}</button>${S.menu === "day" ? `<div class="pop" style="top:46px">${days.map((d) => `<button class="${d === S.day ? "cur" : ""}" data-a="day" data-v="${d}">Day ${dInfo(d).d} · ${dLbl(d)}${d === TODAY ? " (hari ini)" : ""}</button>`).join("")}</div>` : ""}</span>
-<span class="chip" style="margin-left:auto">${dLbl(S.day)}</span><button class="today" data-a="today">${S.day === TODAY ? (offShift() ? (RAWH < 6 ? "Belum shift" : "Shift selesai") : "Today") : "Shift Aktif"}</button>`,
+      <span class="dd"><button data-a="menu" data-v="day">Day ${dInfo(S.day).d}${I("chev")}</button>${S.menu === "day" ? `<div class="pop" style="top:46px">${days.map((d) => `<button class="${d === S.day ? "cur" : ""}" data-a="day" data-v="${d}">Day ${dInfo(d).d} · ${dLbl(d)}${d === TODAY ? " (hari ini)" : ""}</button>`).join("")}</div>` : ""}</span>
+      <span class="chip" style="margin-left:auto">${dLbl(S.day)}</span><button class="today" data-a="today">${S.day === TODAY ? (offShift() ? (RAWH < 6 ? "Belum shift" : "Shift selesai") : "Today") : "Shift Aktif"}</button>`,
         );
       }
       function renderTL() {
@@ -5835,22 +6943,22 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
                   pct = clamp(c.pct, 0, 100),
                   muted = S.mute[S.area + c.i];
                 return `<div class="cd ${S.level === c.i ? "sel" : ""}" data-a="level" data-v="${c.i}" style="--d:${c.i}">
-<div class="top2"><span class="bdg ${bd[0]}">${bd[1]}</span><span class="code">${c.code}</span></div>
-<div class="mg"><div><label>${c.A[0]} ${sup(c.A[2])}</label><div class="v">${val(c.A[1])}</div></div><div><label>${c.B[0]} ${sup(c.B[2])}</label><div class="v">${val(c.B[1])}</div></div>
-<div><label>${c.C[0]}</label><div class="v">${val(c.C[1])}${ic(c.C[2])}</div></div><div><label>${c.dl}</label><div class="v">${val(c.D[1])}${ic(c.D[2])}</div></div></div>
-<div class="bar"><div>${c.bl} ${Math.round(c.pct)}%</div><div class="btrack"><div class="bfill" style="width:${pct}%"></div><div class="bfade" style="left:${pct}%"></div><div class="bmk" style="left:${pct}%">${val(c.A[1])}</div></div>
-<div class="bend"><span>0 ${c.mu === "org" ? "" : c.mu}</span><span>${K(c.max)} ${c.mu === "org" ? "" : c.mu}</span></div></div>
-<div class="cfoot"><span class="dd"><button data-a="menu" data-v="cl${c.i}">${I("pin")}${A().name}${I("chev")}</button>${
-                  S.menu === "cl" + c.i
-                    ? `<div class="pop" style="bottom:100%;top:auto;margin-bottom:6px">${aList
-                        .map(
-                          (k) =>
-                            `<button class="${k === S.area ? "cur" : ""}" data-a="area" data-v="${k}">${AREAS[k].name}</button>`,
-                        )
-                        .join("")}</div>`
-                    : ""
-                }</span>
-<span class="ic"><button data-a="log" data-v="${c.i}" aria-label="Log aktivitas">${I("log")}</button><button data-a="mute" data-v="${c.i}" aria-label="Alarm">${I(muted ? "bellx" : "bell")}${S.notes.some((n) => !n.read && n.sev !== "ok") && c.i === 0 && !muted ? '<span class="rd"></span>' : ""}</button></span></div></div>`;
+      <div class="top2"><span class="bdg ${bd[0]}">${bd[1]}</span><span class="code">${c.code}</span></div>
+      <div class="mg"><div><label>${c.A[0]} ${sup(c.A[2])}</label><div class="v">${val(c.A[1])}</div></div><div><label>${c.B[0]} ${sup(c.B[2])}</label><div class="v">${val(c.B[1])}</div></div>
+      <div><label>${c.C[0]}</label><div class="v">${val(c.C[1])}${ic(c.C[2])}</div></div><div><label>${c.dl}</label><div class="v">${val(c.D[1])}${ic(c.D[2])}</div></div></div>
+      <div class="bar"><div>${c.bl} ${Math.round(c.pct)}%</div><div class="btrack"><div class="bfill" style="width:${pct}%"></div><div class="bfade" style="left:${pct}%"></div><div class="bmk" style="left:${pct}%">${val(c.A[1])}</div></div>
+      <div class="bend"><span>0 ${c.mu === "org" ? "" : c.mu}</span><span>${K(c.max)} ${c.mu === "org" ? "" : c.mu}</span></div></div>
+      <div class="cfoot"><span class="dd"><button data-a="menu" data-v="cl${c.i}">${I("pin")}${A().name}${I("chev")}</button>${
+        S.menu === "cl" + c.i
+          ? `<div class="pop" style="bottom:100%;top:auto;margin-bottom:6px">${aList
+              .map(
+                (k) =>
+                  `<button class="${k === S.area ? "cur" : ""}" data-a="area" data-v="${k}">${AREAS[k].name}</button>`,
+              )
+              .join("")}</div>`
+          : ""
+      }</span>
+      <span class="ic"><button data-a="log" data-v="${c.i}" aria-label="Log aktivitas">${I("log")}</button><button data-a="mute" data-v="${c.i}" aria-label="Alarm">${I(muted ? "bellx" : "bell")}${S.notes.some((n) => !n.read && n.sev !== "ok") && c.i === 0 && !muted ? '<span class="rd"></span>' : ""}</button></span></div></div>`;
               })
               .join("") +
             "</div>",
@@ -5908,8 +7016,8 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
               ? `<div class="p">${rows[0]}${rows[1]}</div><div>${rows[2]}</div>`
               : `<div>${rows[0]}</div><div>${rows[1]}</div><div>${rows[2]}</div>`;
           h += `<div class="${cls}" data-a="blk" data-id="${b.id}" style="${pos}" title="${b.flag === "wet" ? "Wet muck" : b.flag === "restr" ? "Akses dibatasi (geoteknik)" : "Normal"}">
-<div class="bt"><span>${b.id}</span>${b.flag ? `<span class="fl ${b.flag === "wet" ? "" : "rs"}">${b.flag === "wet" ? "WET MUCK" : "RESTRICTED"}</span>` : ""}<span class="dd"><button data-a="menu" data-v="b${b.id}" aria-label="Menu blok ${b.id}">${I("dots")}</button>${S.menu === "b" + b.id ? `<div class="pop ${b.c <= 2 ? "l" : "r"}" style="min-width:230px"><h6>Drawpoint ${b.id}</h6><button data-a="focus" data-id="${b.id}">${I("pin")}Fokuskan blok</button><button data-a="setflag" data-id="${b.id}" data-v="wet">${I("drop")}Tandai wet muck</button><button data-a="setflag" data-id="${b.id}" data-v="restr">${I("lock")}Batasi akses (geoteknik)</button><button data-a="setflag" data-id="${b.id}" data-v="">${I("check")}Normalkan</button></div>` : ""}</span></div>
-<div class="m">${m}</div></div>`;
+      <div class="bt"><span>${b.id}</span>${b.flag ? `<span class="fl ${b.flag === "wet" ? "" : "rs"}">${b.flag === "wet" ? "WET MUCK" : "RESTRICTED"}</span>` : ""}<span class="dd"><button data-a="menu" data-v="b${b.id}" aria-label="Menu blok ${b.id}">${I("dots")}</button>${S.menu === "b" + b.id ? `<div class="pop ${b.c <= 2 ? "l" : "r"}" style="min-width:230px"><h6>Drawpoint ${b.id}</h6><button data-a="focus" data-id="${b.id}">${I("pin")}Fokuskan blok</button><button data-a="setflag" data-id="${b.id}" data-v="wet">${I("drop")}Tandai wet muck</button><button data-a="setflag" data-id="${b.id}" data-v="restr">${I("lock")}Batasi akses (geoteknik)</button><button data-a="setflag" data-id="${b.id}" data-v="">${I("check")}Normalkan</button></div>` : ""}</span></div>
+      <div class="m">${m}</div></div>`;
           if (b.id === "BB") h += `<div class="band" style="grid-row:3"></div>`;
         });
         h += `<div class="blk idle" style="grid-column:4;grid-row:1/5"><div class="bt"><span>INFRA</span><span class="fl gy">AKTIF</span></div><div class="infra">${a.infra.map((x) => `<div class="ir">${I(x[0])}<span><small>${x[1]}</small><b>${x[2]}</b></span></div>`).join("")}</div></div>`;
@@ -6020,36 +7128,36 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
             .join("");
 
         return `<svg class="stream" viewBox="0 28 572 190" role="img" aria-label="Place of development">
-<defs><pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#f3f4f2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#dcdfdb" stroke-width="3.2"/></pattern></defs>
-<path d="${band(
-          top.map(([x, y]) => [x, y + 6]),
-          bot.map(([x, y]) => [x, y - 24]),
-        )}" fill="url(#ht)"/>
-<path d="${band(topE, botE)}" fill="#8b8d8e"/>
-<path d="${band(topE, dkE)}" fill="#2a2c2b"/>
-<path d="${curve(top)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
-<path d="${curve(bot)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
-${hl(top, tSegs)}${hl(bot, bSegs)}
-${top.map((p, i) => diamond(p, dNodes.has("t" + i))).join("")}
-${bot.map((p, i) => diamond(p, dNodes.has("b" + i))).join("")}
-<rect x="${tpx}" y="28" width="${Math.max(0, X1 + 10 - tpx)}" height="190" fill="rgba(255,255,255,.55)"/>
-<rect x="0" y="28" width="${r0}" height="190" fill="rgba(255,255,255,.5)"/>
-<rect x="${r1}" y="28" width="${Math.max(0, 572 - r1)}" height="190" fill="rgba(255,255,255,.5)"/>
-${[
-  ["AA", 73, 64],
-  ["AB", 175, 68],
-  ["BA", 277, 57],
-  ["CA", 376, 50],
-  ["DA", 478, 44],
-  ["AC", 73, 192],
-  ["AD", 175, 178],
-  ["BB", 277, 196],
-  ["CB", 376, 200],
-  ["DA", 478, 177],
-]
-  .map((l) => label(...l))
-  .join("")}
-</svg>`;
+      <defs><pattern id="ht" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#f3f4f2"/><line x1="0" y1="0" x2="0" y2="7" stroke="#dcdfdb" stroke-width="3.2"/></pattern></defs>
+      <path d="${band(
+        top.map(([x, y]) => [x, y + 6]),
+        bot.map(([x, y]) => [x, y - 24]),
+      )}" fill="url(#ht)"/>
+      <path d="${band(topE, botE)}" fill="#8b8d8e"/>
+      <path d="${band(topE, dkE)}" fill="#2a2c2b"/>
+      <path d="${curve(top)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+      <path d="${curve(bot)}" fill="none" stroke="#9a9e9b" stroke-width="1.2"/>
+      ${hl(top, tSegs)}${hl(bot, bSegs)}
+      ${top.map((p, i) => diamond(p, dNodes.has("t" + i))).join("")}
+      ${bot.map((p, i) => diamond(p, dNodes.has("b" + i))).join("")}
+      <rect x="${tpx}" y="28" width="${Math.max(0, X1 + 10 - tpx)}" height="190" fill="rgba(255,255,255,.55)"/>
+      <rect x="0" y="28" width="${r0}" height="190" fill="rgba(255,255,255,.5)"/>
+      <rect x="${r1}" y="28" width="${Math.max(0, 572 - r1)}" height="190" fill="rgba(255,255,255,.5)"/>
+      ${[
+        ["AA", 73, 64],
+        ["AB", 175, 68],
+        ["BA", 277, 57],
+        ["CA", 376, 50],
+        ["DA", 478, 44],
+        ["AC", 73, 192],
+        ["AD", 175, 178],
+        ["BB", 277, 196],
+        ["CB", 376, 200],
+        ["DA", 478, 177],
+      ]
+        .map((l) => label(...l))
+        .join("")}
+      </svg>`;
       }
       function renderRight() {
         const bs = selBlocks(),
@@ -6113,62 +7221,62 @@ ${[
         patch(
           $("rp"),
           `<div class="rh"><div><div class="big">${vtxt}<sup>${c.u}</sup></div><p>${lvName()} — ${names[S.tab]} remaining${S.sel.size ? ` (${[...S.sel].join(", ")})` : ""}</p></div><div style="display:flex;gap:8px"><span class="dd"><button class="cb" data-a="menu" data-v="flt" aria-label="Filter" style="padding:0">${I("funnel")}</button>${S.menu === "flt" ? `<div class="pop r"><h6>Filter blok</h6><button data-a="fsel" data-v="all">Semua blok aktif</button><button data-a="fsel" data-v="wet">${I("drop")}Hanya wet muck</button><button data-a="fsel" data-v="restr">${I("lock")}Hanya restricted</button><button data-a="fsel" data-v="ok">${I("check")}Hanya normal</button></div>` : ""}</span><button class="cb" data-a="clear" aria-label="Hapus pilihan">${I("x")}</button></div></div>
-<div class="tabs">${[
-            ["ore", "Ore"],
-            ["cu", "Cu"],
-            ["au", "Au"],
-            ["ag", "Ag"],
-          ]
-            .map(
-              (t) =>
-                `<button class="${S.tab === t[0] ? "on" : ""}" data-a="tab" data-v="${t[0]}">${t[1]}</button>`,
-            )
-            .join("")}</div>
-<div class="dv"><span>Place of development</span><span>Remaining</span></div>
-<div class="chips" style="justify-content:space-between"><div class="chips" style="margin:0">${dev.map((b) => `<span class="ch">${a.short}-${b.id}</span>`).join("") || '<span class="ch n">—</span>'}</div><span class="ch b">${sc.v >= 100 ? fmt(sc.v) : sc.v.toFixed(1)} ${c.u}</span></div>
-${streamSVG()}
-<div class="nums"><span>${dec(bef)}</span><b>${fmt(inn)}</b><span>${dec(aft)}</span></div>
-<div class="rng" id="rng"><div class="tk"></div><div class="ac" style="left:${rg[0] * 100}%;width:${(rg[1] - rg[0]) * 100}%"></div><div class="th" data-th="0" style="left:${rg[0] * 100}%"></div><div class="th" data-th="1" style="left:${rg[1] * 100}%"></div></div>
-<div class="bts">${bsel}</div>
-<div class="acc"><button class="ah" data-a="acc" data-v="w"><span>Workers</span><span class="rt"><span class="sm">${I("hat")}${wk}/${wk}</span><span class="sm"><i class="face"></i>${eff}%</span>${I(S.acc.w ? "chevup" : "chev")}</span></button>
-${S.acc.w ? bs.map((b) => `<div class="crew"><b style="font-weight:500">${b.id}</b><div class="t"><i style="width:${Math.round(b.eff * 100)}%"></i></div><span>${b.w}/${b.w} · ${Math.round(b.eff * 100)}%</span></div>`).join("") + '<p style="font-size:12px;color:var(--mut);padding:6px 0 10px">Data lokasi & kehadiran personel tersinkronisasi dari AeroScout Underground RFID.</p>' : ""}</div>
-<div class="acc"><button class="ah" data-a="acc" data-v="f"><span>Fleet</span><span class="rt">${ready < fl.length ? `<span class="al2">${I("alert")}</span>` : ""}<span>${ready}/${fl.length}</span>${I(S.acc.f ? "chevup" : "chev")}</span></button>
-${
-  S.acc.f
-    ? `<div class="fchips">${typeBtns
-        .filter((t) => t[0] === "ALL" || fl.some((u) => u.ty === t[0]))
+      <div class="tabs">${[
+        ["ore", "Ore"],
+        ["cu", "Cu"],
+        ["au", "Au"],
+        ["ag", "Ag"],
+      ]
         .map(
           (t) =>
-            `<button class="${S.ftype === t[0] ? "on" : ""}" data-a="ftype" data-v="${t[0]}">${t[1]}</button>`,
+            `<button class="${S.tab === t[0] ? "on" : ""}" data-a="tab" data-v="${t[0]}">${t[1]}</button>`,
         )
-        .join("")}</div>` +
-      (fsel
-        .map((u) => {
-          const c = unitCalc(u),
-            down = u.st !== "ok";
-          return `<div class="unit ${down ? "warn" : ""}" data-k="${u.id}"><div class="ur"><div><b>${u.id}</b><small>${u.n} · ${u.op}</small></div><div><b data-up="${u.id}">${down ? "—" : T3(c.up)}</b><small>Uptime</small></div><div><b>${MS(u.cy)}</b><small>Cycle time</small></div><span class="dd"><button data-a="menu" data-v="u${u.id}" style="color:var(--mut);padding:0;height:28px;width:28px;justify-content:center" aria-label="Menu unit">${I("dots")}</button>${S.menu === "u" + u.id ? `<div class="pop r" style="min-width:210px"><button data-a="unitst" data-id="${u.id}" data-v="ok">${I("check")}Set: Operasional</button><button data-a="unitst" data-id="${u.id}" data-v="down">${I("alert")}Set: Breakdown</button><button data-a="unitst" data-id="${u.id}" data-v="maint">${I("drill")}Set: Maintenance</button></div>` : ""}</span></div>
-<div class="ld"><span>${down ? (u.st === "maint" ? "Maintenance" : "Breakdown") : "Loading " + c.load + "%"}</span><span>${down ? "" : "~" + MS(c.eta)}</span></div>
-<div class="ut"><i style="width:${c.load}%"></i>${down ? "" : `<u style="left:${c.load}%">${c.pay.toFixed(1)}</u>`}</div>
-<div class="ue"><span>0 t</span><span style="text-align:right">${u.cap} t · Blok ${u.blk} · Dikirim ${fmt(c.deliv)} t</span></div>
-<div class="ua">${[
-            ["flag", "flag", "Tandai kendala"],
-            ["grid", "loc", "Lacak posisi"],
-            ["cursor", "route", "Ubah rute"],
-            ["split", "assign", "Alihkan blok"],
-            ["sync", "sync", "Sinkronisasi"],
-            ["lock", "lock", "Kunci target"],
-            ["undo", "reset", "Reset siklus"],
-          ]
-            .map(
-              (x) =>
-                `<button data-a="uact" data-id="${u.id}" data-v="${x[1]}" class="${x[1] === "assign" || (x[1] === "loc" && S.sel.has(u.blk)) || (x[1] === "lock" && S.locked[u.id]) ? "on" : ""}" aria-label="${x[2]}" title="${x[2]}">${I(x[0])}</button>`,
-            )
-            .join("")}</div></div>`;
-        })
-        .join("") ||
-        '<p style="font-size:13px;color:var(--mut);padding:8px 0">Tidak ada unit pada filter ini.</p>')
-    : ""
-}</div>`,
+        .join("")}</div>
+      <div class="dv"><span>Place of development</span><span>Remaining</span></div>
+      <div class="chips" style="justify-content:space-between"><div class="chips" style="margin:0">${dev.map((b) => `<span class="ch">${a.short}-${b.id}</span>`).join("") || '<span class="ch n">—</span>'}</div><span class="ch b">${sc.v >= 100 ? fmt(sc.v) : sc.v.toFixed(1)} ${c.u}</span></div>
+      ${streamSVG()}
+      <div class="nums"><span>${dec(bef)}</span><b>${fmt(inn)}</b><span>${dec(aft)}</span></div>
+      <div class="rng" id="rng"><div class="tk"></div><div class="ac" style="left:${rg[0] * 100}%;width:${(rg[1] - rg[0]) * 100}%"></div><div class="th" data-th="0" style="left:${rg[0] * 100}%"></div><div class="th" data-th="1" style="left:${rg[1] * 100}%"></div></div>
+      <div class="bts">${bsel}</div>
+      <div class="acc"><button class="ah" data-a="acc" data-v="w"><span>Workers</span><span class="rt"><span class="sm">${I("hat")}${wk}/${wk}</span><span class="sm"><i class="face"></i>${eff}%</span>${I(S.acc.w ? "chevup" : "chev")}</span></button>
+      ${S.acc.w ? bs.map((b) => `<div class="crew"><b style="font-weight:500">${b.id}</b><div class="t"><i style="width:${Math.round(b.eff * 100)}%"></i></div><span>${b.w}/${b.w} · ${Math.round(b.eff * 100)}%</span></div>`).join("") + '<p style="font-size:12px;color:var(--mut);padding:6px 0 10px">Data lokasi & kehadiran personel tersinkronisasi dari AeroScout Underground RFID.</p>' : ""}</div>
+      <div class="acc"><button class="ah" data-a="acc" data-v="f"><span>Fleet</span><span class="rt">${ready < fl.length ? `<span class="al2">${I("alert")}</span>` : ""}<span>${ready}/${fl.length}</span>${I(S.acc.f ? "chevup" : "chev")}</span></button>
+      ${
+        S.acc.f
+          ? `<div class="fchips">${typeBtns
+              .filter((t) => t[0] === "ALL" || fl.some((u) => u.ty === t[0]))
+              .map(
+                (t) =>
+                  `<button class="${S.ftype === t[0] ? "on" : ""}" data-a="ftype" data-v="${t[0]}">${t[1]}</button>`,
+              )
+              .join("")}</div>` +
+            (fsel
+              .map((u) => {
+                const c = unitCalc(u),
+                  down = u.st !== "ok";
+                return `<div class="unit ${down ? "warn" : ""}" data-k="${u.id}"><div class="ur"><div><b>${u.id}</b><small>${u.n} · ${u.op}</small></div><div><b data-up="${u.id}">${down ? "—" : T3(c.up)}</b><small>Uptime</small></div><div><b>${MS(u.cy)}</b><small>Cycle time</small></div><span class="dd"><button data-a="menu" data-v="u${u.id}" style="color:var(--mut);padding:0;height:28px;width:28px;justify-content:center" aria-label="Menu unit">${I("dots")}</button>${S.menu === "u" + u.id ? `<div class="pop r" style="min-width:210px"><button data-a="unitst" data-id="${u.id}" data-v="ok">${I("check")}Set: Operasional</button><button data-a="unitst" data-id="${u.id}" data-v="down">${I("alert")}Set: Breakdown</button><button data-a="unitst" data-id="${u.id}" data-v="maint">${I("drill")}Set: Maintenance</button></div>` : ""}</span></div>
+      <div class="ld"><span>${down ? (u.st === "maint" ? "Maintenance" : "Breakdown") : "Loading " + c.load + "%"}</span><span>${down ? "" : "~" + MS(c.eta)}</span></div>
+      <div class="ut"><i style="width:${c.load}%"></i>${down ? "" : `<u style="left:${c.load}%">${c.pay.toFixed(1)}</u>`}</div>
+      <div class="ue"><span>0 t</span><span style="text-align:right">${u.cap} t · Blok ${u.blk} · Dikirim ${fmt(c.deliv)} t</span></div>
+      <div class="ua">${[
+        ["flag", "flag", "Tandai kendala"],
+        ["grid", "loc", "Lacak posisi"],
+        ["cursor", "route", "Ubah rute"],
+        ["split", "assign", "Alihkan blok"],
+        ["sync", "sync", "Sinkronisasi"],
+        ["lock", "lock", "Kunci target"],
+        ["undo", "reset", "Reset siklus"],
+      ]
+        .map(
+          (x) =>
+            `<button data-a="uact" data-id="${u.id}" data-v="${x[1]}" class="${x[1] === "assign" || (x[1] === "loc" && S.sel.has(u.blk)) || (x[1] === "lock" && S.locked[u.id]) ? "on" : ""}" aria-label="${x[2]}" title="${x[2]}">${I(x[0])}</button>`,
+        )
+        .join("")}</div></div>`;
+              })
+              .join("") ||
+              '<p style="font-size:13px;color:var(--mut);padding:8px 0">Tidak ada unit pada filter ini.</p>')
+          : ""
+      }</div>`,
         );
       }
       function renderModal() {
@@ -6218,44 +7326,1442 @@ ${
           `Blok ${id}: ${v === "wet" ? "wet muck" : v === "restr" ? "restricted" : "normal"}`,
         );
       }
-      function csv() {
-        const a = A();
+      /* ===== PATCH V3 — GANTI semua kode dari `function csv() {` sampai tepat sebelum `function sysHTML() {` dengan isi file ini (v1 sudah tercakup). ===== */
+      const esc = (s) =>
+        String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      const fmtB = (n) =>
+        Math.abs(n) >= 1e6
+          ? (n / 1e6).toFixed(1).replace(".", ",") + " jt"
+          : Math.abs(n) >= 1e4
+            ? Math.round(n / 1e3) + " rb"
+            : fmt(n);
+      const fmtD = (v, n = 1) => v.toFixed(n).replace(".", ",");
+      const FLAGTXT = {
+        wet: "Wet muck (lumpur basah)",
+        restr: "Akses dibatasi",
+      };
+      const LVN = [
+        "Extraction Level",
+        "Haulage Level",
+        "Mill (Mile 74)",
+        "Portsite",
+      ];
+      const MET = ["Ditambang", "Diangkut", "Digiling", "Konsentrat"];
+      const SEVC = {
+        crit: "var(--red2)",
+        warn: "var(--or)",
+        ok: "var(--green)",
+      };
+      const ctx = (k, d, f) => {
+        const o = [S.area, S.day];
+        S.area = k;
+        S.day = d;
+        try {
+          return f();
+        } finally {
+          [S.area, S.day] = o;
+        }
+      };
+      const tgtNow = (i) => lvl(i).plan * cumulativeHourShare(S.t);
+      const capPct = (v, t) => (t > 0 ? (v / t) * 100 : 100);
+      const stOf = (p) =>
+        p >= 90
+          ? ["g", "On track"]
+          : p >= 80
+            ? ["y", "Perlu dipantau"]
+            : ["r", "Di bawah target"];
+      const docNo = () =>
+        `RPT/PTFI/${A().short}/${new Date(S.day * 864e5).toISOString().slice(0, 10).replace(/-/g, "")}/${S.page.slice(0, 3).toUpperCase()}`;
+      const reportTitle = () =>
+        ({
+          production: "Laporan Shift Operasional",
+          personnel: "Laporan Shift Personel",
+          safety: "Laporan Shift Keselamatan",
+          ecology: "Laporan Shift Ekologi",
+        })[S.page] || "Laporan Shift";
+
+      function hrChart() {
+        const a = A(),
+          pl = a.np / 2,
+          ef = a.levelEfficiency[0] * dayK(),
+          W = 600,
+          H = 130,
+          bw = W / 12,
+          mx = Math.max(...a.hourlyShare) * pl * 1.1;
         return (
-          "Area,Blok,Status,Unit aktif,Pekerja,Sisa ore (mt),Cu (t),Au (koz),Ag (koz)\n" +
-          blocks()
-            .filter((b) => b.act)
-            .map((b) =>
-              [
-                a.name,
-                b.id,
-                b.flag || "normal",
-                b.u,
-                b.w,
-                Math.round(b.ton),
-                Math.round(conv(b.ton, "cu").v),
-                conv(b.ton, "au").v.toFixed(1),
-                conv(b.ton, "ag").v.toFixed(1),
-              ].join(","),
-            )
-            .join("\n")
+          `<svg viewBox="0 0 ${W} ${H + 22}" style="width:100%;height:auto" role="img" aria-label="Produksi per jam">` +
+          a.hourlyShare
+            .map((s, i) => {
+              const p = s * pl,
+                ac = p * ef * clamp(S.t - (6 + i), 0, 1),
+                x = i * bw + 6,
+                w = bw - 12;
+              return `<rect x="${x}" y="${H - (p / mx) * H}" width="${w}" height="${(p / mx) * H}" rx="4" style="fill:var(--line)"/><rect x="${x}" y="${H - (ac / mx) * H}" width="${w}" height="${(ac / mx) * H}" rx="4" style="fill:var(--gp)"/><text x="${x + w / 2}" y="${H + 15}" text-anchor="middle" font-size="11" style="fill:var(--mut)">${6 + i}:00</text>`;
+            })
+            .join("") +
+          `</svg><p style="font-size:12px;color:var(--mut);margin-top:4px">Abu-abu = rencana per jam, hijau = aktual (jam berjalan terisi sebagian).</p>`
         );
       }
-      function reportHTML() {
+
+      function rptText() {
         const a = A(),
-          bs = blocks().filter((b) => b.act),
-          sr = shiftRec();
-        const rows = [0, 1, 2, 3]
-          .map((i) => {
-            const L = lvl(i);
-            return `<tr><td>${LEVELS[i]}</td><td>${L.name}</td><td>${fmt(L.val)} ${L.unit}</td><td>${fmt(L.plan)} ${L.unit}</td><td>${Math.round(L.pct)}%</td></tr>`;
-          })
-          .join("");
-        return `<div class="rpt"><p class="meta">${a.name} · ${dLbl(S.day)} · s.d. ${hh(S.t)} WIB · Shift Boss: <b>${sr.supervisor}</b></p>
-<div class="sh"><h4>Ringkasan Produksi Level</h4><div class="acts2"><button class="bo" data-a="csv">${I("doc")}Unduh CSV</button><button class="bo" data-a="print">${I("print")}Cetak / PDF</button></div></div>
-<div class="tw"><table><thead><tr><th>Level</th><th>Metrik</th><th>Aktual</th><th>Plan</th><th>%</th></tr></thead><tbody>${rows}</tbody></table></div>
-<div class="sh"><h4>Status Drawpoint & Cadangan Blok</h4></div>
-<div class="tw"><table><thead><tr><th>Blok</th><th>Status</th><th>Unit</th><th>Pekerja</th><th>Sisa ore (mt)</th></tr></thead><tbody>${bs.map((b) => `<tr><td><b>${b.id}</b></td><td><span class="pl ${b.flag || "ok"}">${b.flag || "normal"}</span></td><td>${b.u}</td><td>${b.w}</td><td>${fmt(b.ton)}</td></tr>`).join("")}</tbody></table></div></div>`;
+          pg = S.page,
+          L = [
+            `LAPORAN SHIFT ${pg.toUpperCase()} — ${a.name}`,
+            `${dLbl(S.day)} · data s.d. ${hh(S.t)} WIB · ${docNo()}`,
+            `Shift Boss: ${shiftRec().supervisor}`,
+            "",
+          ];
+        if (pg === "production") {
+          const L0 = lvl(0),
+            p0 = capPct(L0.val, tgtNow(0)),
+            act = blocks().filter((b) => b.act),
+            fl = fleet();
+          L.push(
+            `Status: ${stOf(p0)[1]} (${Math.round(p0)}% dari target s.d. jam ini)`,
+          );
+          [0, 1, 2, 3].forEach((i) => {
+            const l = lvl(i);
+            L.push(
+              `${LVN[i]} – ${MET[i]}: ${fmtB(l.val)} ${l.unit} (target s.d. jam ini ${fmtB(tgtNow(i))}, plan shift ${fmtB(l.plan)})`,
+            );
+          });
+          L.push(
+            `Blok bermasalah: ${
+              act
+                .filter((b) => b.flag)
+                .map((b) => b.id + " " + FLAGTXT[b.flag])
+                .join(", ") || "tidak ada"
+            }`,
+          );
+          L.push(
+            `Unit tidak siap: ${fl.filter((u) => u.st !== "ok").length}/${fl.length}`,
+          );
+          L.push(
+            `Logam: Cu ${fmt(conv(L0.val, "cu").v)} t · Au ${fmtD(conv(L0.val, "au").v)} koz · Ag ${fmtD(conv(L0.val, "ag").v)} koz`,
+          );
+        } else
+          cards().forEach((c) =>
+            L.push(
+              `${(pg === "ecology" ? ECO : LEVELS)[c.i]}: ${c.A[0]} ${dec(c.A[1])} / ${c.B[0]} ${dec(c.B[1])} (${Math.round(c.pct)}%)`,
+            ),
+          );
+        L.push(
+          "",
+          `Catatan serah terima: ${S.rnote || "-"}`,
+          `Dibuat oleh: ${CURRENT_USER ? CURRENT_USER.name : "-"}`,
+        );
+        return L.join("\n");
       }
+
+      function csvFor(k, d) {
+        return ctx(k, d, () => {
+          const a = A(),
+            dt = dLbl(d),
+            o = [],
+            add = (s, i, m, v, u = "") =>
+              o.push([s, a.short, dt, i, m, v, u].join(","));
+          [0, 1, 2, 3].forEach((i) => {
+            const L = lvl(i),
+              tg = tgtNow(i);
+            add(
+              "Level",
+              LVN[i] + " – " + MET[i],
+              "Aktual",
+              Math.round(L.val),
+              L.unit,
+            );
+            add(
+              "Level",
+              LVN[i] + " – " + MET[i],
+              "Target s.d. jam ini",
+              Math.round(tg),
+              L.unit,
+            );
+            add(
+              "Level",
+              LVN[i] + " – " + MET[i],
+              "Plan shift",
+              Math.round(L.plan),
+              L.unit,
+            );
+            add(
+              "Level",
+              LVN[i] + " – " + MET[i],
+              "Capaian vs target",
+              capPct(L.val, tg).toFixed(1),
+              "%",
+            );
+          });
+          blocks().forEach((b) => {
+            if (b.act) {
+              add("Blok aktif", b.id, "Status", FLAGTXT[b.flag] || "Normal");
+              add("Blok aktif", b.id, "Unit", b.u);
+              add("Blok aktif", b.id, "Pekerja", b.w);
+              add("Blok aktif", b.id, "Sisa ore", Math.round(b.ton), "mt");
+            } else {
+              add("Pengembangan", b.id, "Status", b.status);
+              add("Pengembangan", b.id, "Progres", b.devPct, "%");
+              add("Pengembangan", b.id, "Target aktif", b.target);
+              add("Pengembangan", b.id, "Cadangan", b.reserve, "mt");
+            }
+          });
+          const m = lvl(0).val,
+            f = fleet();
+          add("Logam", "Cu", "Terkandung", Math.round(conv(m, "cu").v), "t");
+          add("Logam", "Au", "Terkandung", conv(m, "au").v.toFixed(1), "koz");
+          add("Logam", "Ag", "Terkandung", conv(m, "ag").v.toFixed(1), "koz");
+          add("Armada", "Unit", "Siap", f.filter((u) => u.st === "ok").length);
+          add(
+            "Armada",
+            "Unit",
+            "Tidak siap",
+            f.filter((u) => u.st !== "ok").length,
+          );
+          add(
+            "Armada",
+            "Unit",
+            "Availability rata-rata",
+            (
+              (f.reduce((s, u) => s + u.av, 0) / Math.max(1, f.length)) *
+              100
+            ).toFixed(1),
+            "%",
+          );
+          return o;
+        });
+      }
+
+      function printHTML() {
+        const a = A(),
+          sr = shiftRec(),
+          pg = S.page,
+          u = CURRENT_USER || { name: "-", role: "-" },
+          isP = pg === "production";
+        const bs = blocks(),
+          act = bs.filter((b) => b.act),
+          off = bs.filter((b) => !b.act),
+          fl = fleet();
+        const sec = (t, x = "") => `<div class="sh"><h4>${t}</h4>${x}</div>`;
+        const kp = (k) =>
+          `<div class="kpis">${k.map((x) => `<div class="kpi"><small>${x[0]}</small><b>${x[1]}</b><span>${x[2]}</span></div>`).join("")}</div>`;
+        const bar = (p, s) =>
+          `<div class="pcw"><span class="pcb"><i class="pc-${s}" style="width:${clamp(p, 0, 100)}%"></i></span><b class="pct-${s}">${Math.round(p)}%</b></div>`;
+        const tbl = (head, rows) =>
+          `<div class="tw"><table class="rc"><thead><tr>${head.map((h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
+        const stamp =
+          new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }) +
+          " WIB";
+        const info = [
+          ["Area", a.name],
+          ["Tanggal & shift", dLbl(S.day) + " · Siang 06:00–18:00"],
+          ["Data s.d. jam", hh(S.t) + " WIB"],
+          ["Shift Boss", sr.supervisor],
+          ["No. dokumen", docNo()],
+          ["Dibuat oleh", `${u.name} · ${u.role}`],
+          ["Dibuat pada", stamp],
+        ];
+        const acts = `<div class="acts2"><button class="bo" data-a="copyrpt">${I("doc")}Salin ringkasan</button><button class="bo" data-a="mailrpt">${I("share")}Email</button><button class="bo" data-a="csv" data-v="area">${I("doc")}CSV area ini</button><button class="bo" data-a="csv" data-v="all">${I("doc")}CSV semua area</button><button class="bo" data-a="csv" data-v="week">${I("doc")}CSV 7 hari</button><button class="bo" data-a="print">${I("print")}Cetak / PDF</button></div>`;
+
+        /* insiden */
+        const ev = [],
+          al = sr.alert;
+        if (al)
+          ev.push([
+            `${hh(6 + al.start * 12)}–${hh(6 + al.end * 12)}`,
+            "warn",
+            `<b>${al.title}</b><br>${al.desc}`,
+          ]);
+        act
+          .filter((b) => b.flag)
+          .forEach((b) =>
+            ev.push([
+              "—",
+              b.flag === "restr" ? "crit" : "warn",
+              `<b>Drawpoint ${b.id}</b> — ${FLAGTXT[b.flag]}`,
+            ]),
+          );
+        fl.filter((x) => x.st !== "ok").forEach((x) =>
+          ev.push([
+            "—",
+            x.st === "maint" ? "warn" : "crit",
+            `<b>${x.id}</b> (${x.n}) — ${x.st === "maint" ? "maintenance" : "breakdown"} · ${x.op}`,
+          ]),
+        );
+        if (S.day === TODAY)
+          S.notes
+            .slice(0, 6)
+            .forEach((n) =>
+              ev.push([n.t + " WIB", n.sev, `Log notifikasi: ${n.txt}`]),
+            );
+        const incHTML = ev.length
+          ? ev
+              .map(
+                (e) =>
+                  `<div class="inc"><time>${e[0]}</time><span class="sev" style="background:${SEVC[e[1]] || SEVC.ok}"></span><span>${e[2]}</span></div>`,
+              )
+              .join("")
+          : `<p>Tidak ada insiden tercatat pada shift ini.</p>`;
+
+        const notes =
+          sec("Catatan serah terima & persetujuan") +
+          `<textarea class="rnote" id="rnote" placeholder="Catatan serah terima untuk shift berikutnya…">${esc(S.rnote || "")}</textarea><div class="sign"><div><small>Dibuat oleh</small><i></i><b>${u.name}</b><br>${u.role}<br><small>${stamp}</small></div><div><small>Diperiksa (Shift Boss)</small><i></i><b>${sr.supervisor}</b></div><div><small>Disetujui</small><i></i><b>(......................)</b></div></div>`;
+
+        let body = "";
+        if (isP) {
+          const L0 = lvl(0),
+            tg0 = tgtNow(0),
+            p0 = capPct(L0.val, tg0),
+            s0 = stOf(p0),
+            bad = act.filter((b) => b.flag),
+            dn = fl.filter((x) => x.st === "down").length,
+            mt = fl.filter((x) => x.st === "maint").length;
+          const lvRows = [0, 1, 2, 3]
+            .map((i) => {
+              const L = lvl(i),
+                tg = tgtNow(i),
+                p = capPct(L.val, tg),
+                s = stOf(p);
+              return `<tr><td data-l="Level"><b>${LVN[i]}</b> – ${MET[i]}</td><td data-l="Aktual" title="${fmt(L.val)} ${L.unit}">${fmtB(L.val)} ${L.unit}</td><td data-l="Target s.d. jam ini">${fmtB(tg)} ${L.unit}</td><td data-l="Plan shift">${fmtB(L.plan)} ${L.unit}</td><td data-l="Capaian">${bar(p, s[0])}<span class="bdx ${s[0]}">${s[1]}</span> <small style="display:inline">${Math.round(L.pct)}% dari plan shift</small></td></tr>`;
+            })
+            .join("");
+          const g = a.grade,
+            m = L0.val,
+            ready = fl.filter((x) => x.st === "ok").length,
+            av =
+              (fl.reduce((s, x) => s + x.av, 0) / Math.max(1, fl.length)) * 100;
+          const idx = clamp(TODAY - S.day, 0, 6),
+            f0 = dayK(),
+            yd = SHIFT_HISTORY[idx + 1],
+            avg7 =
+              SHIFT_HISTORY.reduce((s, h) => s + h.factor, 0) /
+              SHIFT_HISTORY.length;
+          const cmp = [
+            ["Hari ini", f0],
+            ["Kemarin", yd && yd.factor],
+            ["Rata-rata 7 hari", avg7],
+          ]
+            .map(([l, f], j) => {
+              if (f == null)
+                return `<tr><td data-l="Pembanding">${l}</td><td data-l="Ditambang">—</td><td data-l="Selisih">Data tidak tersedia</td></tr>`;
+              const v = (L0.val / f0) * f,
+                d = v > 0 ? (L0.val / v - 1) * 100 : 0;
+              return `<tr><td data-l="Pembanding"><b>${l}</b></td><td data-l="Ditambang (jam yang sama)">${fmtB(v)} mt</td><td data-l="Selisih hari ini">${j === 0 ? "—" : `<b class="pct-${d >= 0 ? "g" : "r"}">${d >= 0 ? "+" : ""}${fmtD(d)}%</b>`}</td></tr>`;
+            })
+            .join("");
+          const glos = [
+            ["Drawpoint", "titik tempat bijih ditarik dari bawah tanah"],
+            ["Wet muck", "material basah/berlumpur, sulit dimuat dan berisiko"],
+            [
+              "Akses dibatasi",
+              "area ditutup sementara karena pertimbangan geoteknik",
+            ],
+            ["mt / dmt", "metrik ton / dry metric ton (ton kering)"],
+            ["koz", "ribu troy ounce (untuk emas dan perak)"],
+            ["Extraction Level", "level tempat bijih ditambang"],
+            ["Haulage Level", "level pengangkutan bijih ke crusher"],
+            ["Mill (Mile 74)", "pabrik penggilingan bijih di Mile 74"],
+            ["Portsite", "pelabuhan Amamapare tempat konsentrat dikapalkan"],
+            ["Availability", "persentase waktu unit siap beroperasi"],
+          ];
+          body =
+            sec("Ringkasan eksekutif") +
+            kp([
+              [
+                "Produksi (ditambang)",
+                fmtB(L0.val) + " mt",
+                `Target s.d. jam ini ${fmtB(tg0)} mt · Plan shift ${fmtB(L0.plan)} mt`,
+              ],
+              [
+                "Status keseluruhan",
+                `<span class="bdx ${s0[0]}">${s0[1]}</span>`,
+                `${Math.round(p0)}% dari target s.d. jam ini`,
+              ],
+              [
+                "Blok bermasalah",
+                `${bad.length} / ${act.length}`,
+                bad.length
+                  ? bad
+                      .map((b) => b.id + " (" + FLAGTXT[b.flag] + ")")
+                      .join(", ")
+                  : "Semua blok normal",
+              ],
+              [
+                "Unit rusak / maintenance",
+                `${dn + mt} / ${fl.length}`,
+                `${dn} breakdown · ${mt} maintenance`,
+              ],
+            ]) +
+            sec(
+              "Capaian per level",
+              `<span class="hint2">Target s.d. jam ini = plan × porsi produksi hingga ${hh(S.t)}</span>`,
+            ) +
+            tbl(
+              [
+                "Level – Metrik",
+                "Aktual",
+                "Target s.d. jam ini",
+                "Plan shift",
+                "Capaian",
+              ],
+              lvRows,
+            ) +
+            sec("Produksi per jam") +
+            hrChart() +
+            sec("Kandungan logam (dari bijih ditambang)") +
+            kp([
+              [
+                "Tembaga (Cu)",
+                fmt(conv(m, "cu").v) + " t",
+                `kadar ${fmtD(g[0], 2)}%`,
+              ],
+              [
+                "Emas (Au)",
+                fmtD(conv(m, "au").v) + " koz",
+                `kadar ${fmtD(g[1], 2)} g/t`,
+              ],
+              [
+                "Perak (Ag)",
+                fmtD(conv(m, "ag").v) + " koz",
+                `kadar ${fmtD(g[2], 2)} g/t`,
+              ],
+            ]) +
+            sec("Ringkasan armada") +
+            kp([
+              [
+                "Unit siap",
+                `${ready} / ${fl.length}`,
+                `${Math.round((ready / Math.max(1, fl.length)) * 100)}% dari armada`,
+              ],
+              [
+                "Unit tidak siap",
+                String(fl.length - ready),
+                `${dn} breakdown · ${mt} maintenance`,
+              ],
+              [
+                "Availability rata-rata",
+                fmtD(av) + "%",
+                "rata-rata seluruh unit",
+              ],
+            ]) +
+            sec("Perbandingan produksi (jam yang sama)") +
+            tbl(["Pembanding", "Ditambang", "Selisih hari ini"], cmp) +
+            sec("Insiden & kejadian shift") +
+            incHTML +
+            sec("Sisa ore per blok aktif") +
+            tbl(
+              ["Blok", "Status", "Unit", "Pekerja", "Sisa ore"],
+              act
+                .map(
+                  (b) =>
+                    `<tr><td data-l="Blok"><b>${b.id}</b></td><td data-l="Status"><span class="pl ${b.flag || "ok"}">${FLAGTXT[b.flag] || "Normal"}</span></td><td data-l="Unit">${b.u}</td><td data-l="Pekerja">${b.w}</td><td data-l="Sisa ore" title="${fmt(b.ton)} mt">${fmtB(b.ton)} mt</td></tr>`,
+                )
+                .join(""),
+            ) +
+            sec("Blok pengembangan & cadangan (belum aktif)") +
+            tbl(
+              ["Blok", "Status", "Progres", "Target aktif", "Cadangan"],
+              off
+                .map(
+                  (b) =>
+                    `<tr><td data-l="Blok"><b>${b.id}</b></td><td data-l="Status"><span class="pl mock">${b.status}</span></td><td data-l="Progres">${bar(b.devPct, "g")}</td><td data-l="Target aktif">${b.target}</td><td data-l="Cadangan" title="${fmt(b.reserve)} mt">${fmtB(b.reserve)} mt</td></tr>`,
+                )
+                .join(""),
+            ) +
+            notes +
+            sec("Legenda istilah") +
+            `<div class="legend">${glos.map((x) => `<div><b>${x[0]}</b> — ${x[1]}</div>`).join("")}</div>`;
+        } else {
+          const cs = cards(),
+            c0 = cs[0],
+            sum = (f) => cs.reduce((s, c) => s + f(c), 0),
+            warn = cs.filter((c) => c.st === "o").length,
+            uT = (x) => (x && !PS[x] ? " " + x : "");
+          const kR =
+            {
+              personnel: [
+                [
+                  "Personel hadir",
+                  fmt(sum((c) => c.A[1])),
+                  `dari roster ${fmt(sum((c) => c.B[1]))}`,
+                ],
+                [
+                  "Kehadiran",
+                  Math.round((sum((c) => c.A[1]) / sum((c) => c.B[1])) * 100) +
+                    "%",
+                  "seluruh level",
+                ],
+                ["Shift boss", String(sum((c) => c.D[1])), "orang bertugas"],
+                ["Level perlu perhatian", `${warn} / 4`, ""],
+              ],
+              safety: [
+                ["Alarm gas", String(sum((c) => c.C[1])), "seluruh level"],
+                [
+                  "Kejadian seismik",
+                  String(sum((c) => c.D[1])),
+                  "seluruh level",
+                ],
+                [
+                  "Ventilasi terendah",
+                  Math.round(Math.min(...cs.map((c) => c.pct))) + "%",
+                  "terhadap kebutuhan",
+                ],
+                ["Level perlu perhatian", `${warn} / 4`, ""],
+              ],
+              ecology: [
+                [
+                  "pH terendah",
+                  fmtD(Math.min(...cs.map((c) => c.C[1]))),
+                  "batas aman ≥ 6,6",
+                ],
+                [
+                  "TSS tertinggi",
+                  fmt(Math.max(...cs.map((c) => c.D[1]))) + " mg/L",
+                  "seluruh titik",
+                ],
+                [
+                  "Utilisasi tertinggi",
+                  Math.round(Math.max(...cs.map((c) => c.pct))) + "%",
+                  "terhadap kapasitas",
+                ],
+                ["Titik perlu perhatian", `${warn} / 4`, ""],
+              ],
+            }[pg] || [];
+          const rows = cs
+            .map((c) => {
+              const ok = c.st !== "o" && c.st !== "r",
+                s = ok ? "g" : "y";
+              return `<tr><td data-l="Level"><b>${(pg === "ecology" ? ECO : LEVELS)[c.i]}</b></td><td data-l="${c.A[0]}">${dec(c.A[1])}${uT(c.A[2])}</td><td data-l="${c.B[0]}">${dec(c.B[1])}${uT(c.B[2])}</td><td data-l="${c.bl}">${bar(c.pct, s)}</td><td data-l="${c.C[0]}">${dec(c.C[1])}</td><td data-l="${c.dl}">${dec(c.D[1])}</td><td data-l="Status"><span class="bdx ${s}">${ok ? "Normal" : "Perlu perhatian"}</span></td></tr>`;
+            })
+            .join("");
+          body =
+            sec("Ringkasan eksekutif") +
+            kp(kR) +
+            sec("Status per level") +
+            tbl(
+              ["Level", c0.A[0], c0.B[0], c0.bl, c0.C[0], c0.dl, "Status"],
+              rows,
+            ) +
+            sec("Insiden & kejadian shift") +
+            incHTML +
+            notes;
+        }
+        return `<div class="rpt">${acts}<div class="rinfo">${info.map((x) => `<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join("")}</div>${body}</div>`;
+      }
+
+      /* ======================= TAMPILAN BARU (gaya QuikFin Reports) ======================= */
+      Object.assign(PS, {
+        cal: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+        dl: '<path d="M12 4v12M7 11l5 5 5-5M5 20h14"/>',
+        mail: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/>',
+        gear: '<circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/>',
+        copy: '<rect x="8" y="8" width="12" height="12" rx="3"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+        sliders:
+          '<path d="M5 4v6M5 14v6M12 4v2M12 10v10M19 4v10M19 18v2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="8" r="2"/><circle cx="19" cy="16" r="2"/>',
+      });
+      const QF_C = { a: "#a68df0", b: "#5ccbfa", n: "#fb8c3c" };
+      const niceStep = (r) => {
+        const q = r / 5 || 1,
+          p = Math.pow(10, Math.floor(Math.log10(q))),
+          m = q / p;
+        return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p;
+      };
+      const GLOSS = [
+        ["Drawpoint", "titik tempat bijih ditarik dari bawah tanah"],
+        ["Wet muck", "material basah/berlumpur, sulit dimuat dan berisiko"],
+        [
+          "Akses dibatasi",
+          "area ditutup sementara karena pertimbangan geoteknik",
+        ],
+        ["mt / dmt", "metrik ton / dry metric ton (ton kering)"],
+        ["koz", "ribu troy ounce (emas dan perak)"],
+        ["Extraction Level", "level tempat bijih ditambang"],
+        ["Haulage Level", "level pengangkutan bijih ke crusher"],
+        ["Mill (Mile 74)", "pabrik penggilingan bijih di Mile 74"],
+        ["Portsite", "pelabuhan Amamapare tempat konsentrat dikapalkan"],
+        ["Availability", "persentase waktu unit siap beroperasi"],
+      ];
+
+      function fltHTML() {
+        const li = S.rlvl || 0,
+          bk = S.rblk || "all",
+          stt = S.rstat || "all",
+          n = (li ? 1 : 0) + (bk !== "all" ? 1 : 0) + (stt !== "all" ? 1 : 0);
+        const chip = (a, v, t, on) =>
+          `<button class="qf-chip ${on ? "on" : ""}" data-a="${a}" data-v="${v}">${t}</button>`;
+        const ids = blocks()
+          .filter((b) => b.act)
+          .map((b) => b.id);
+        const panel =
+          S.rpop === "flt"
+            ? `<div class="qf-pop qf-fp" style="left:0;right:auto"><h6>Level</h6><div class="qf-chips">${LVN.map((x, i) => chip("rlvl", i, `${x} – ${MET[i]}`, i === li)).join("")}</div><h6>Blok</h6><div class="qf-chips">${chip("rblk", "all", "Semua", bk === "all")}${ids.map((id) => chip("rblk", id, id, bk === id)).join("")}</div><h6>Status</h6><div class="qf-chips">${[
+                ["all", "Semua"],
+                ["ok", "Normal"],
+                ["wet", "Wet muck"],
+                ["restr", "Akses dibatasi"],
+              ]
+                .map((x) => chip("rstat", x[0], x[1], stt === x[0]))
+                .join(
+                  "",
+                )}</div><div class="qf-fa"><button class="btn l" data-a="rreset">Reset</button><button class="btn" data-a="rpop" data-v="flt">Selesai</button></div></div>`
+            : "";
+        return `<span class="qf-wrap"><button class="qf-fb" data-a="rpop" data-v="flt">Filters ${I("sliders")}${n ? `<b class="qf-bd">${n}</b>` : ""}</button>${panel}</span>`;
+      }
+      function pd() {
+        const a = A(),
+          bs = blocks(),
+          act = bs.filter((b) => b.act),
+          fl = fleet(),
+          L0 = lvl(0),
+          tg0 = tgtNow(0),
+          p0 = capPct(L0.val, tg0);
+        return {
+          a,
+          bs,
+          act,
+          off: bs.filter((b) => !b.act),
+          fl,
+          L0,
+          tg0,
+          p0,
+          s0: stOf(p0),
+          bad: act.filter((b) => b.flag),
+          dn: fl.filter((x) => x.st === "down").length,
+          mt: fl.filter((x) => x.st === "maint").length,
+          ready: fl.filter((x) => x.st === "ok").length,
+          av: (fl.reduce((s, x) => s + x.av, 0) / Math.max(1, fl.length)) * 100,
+        };
+      }
+      function evList() {
+        const sr = shiftRec(),
+          P = pd(),
+          ev = [],
+          al = sr.alert;
+        if (al)
+          ev.push([
+            `${hh(6 + al.start * 12)}–${hh(6 + al.end * 12)}`,
+            "warn",
+            `<b>${al.title}</b><br>${al.desc}`,
+          ]);
+        P.bad.forEach((b) =>
+          ev.push([
+            "—",
+            b.flag === "restr" ? "crit" : "warn",
+            `<b>Drawpoint ${b.id}</b> — ${FLAGTXT[b.flag]}`,
+          ]),
+        );
+        P.fl
+          .filter((x) => x.st !== "ok")
+          .forEach((x) =>
+            ev.push([
+              "—",
+              x.st === "maint" ? "warn" : "crit",
+              `<b>${x.id}</b> (${x.n}) — ${x.st === "maint" ? "maintenance" : "breakdown"} · ${x.op}`,
+            ]),
+          );
+        if (S.day === TODAY)
+          S.notes
+            .slice(0, 6)
+            .forEach((n) =>
+              ev.push([n.t + " WIB", n.sev, `Log notifikasi: ${n.txt}`]),
+            );
+        return ev.length
+          ? ev
+              .map(
+                (e) =>
+                  `<div class="inc"><time>${e[0]}</time><span class="sev" style="background:${SEVC[e[1]] || SEVC.ok}"></span><span>${e[2]}</span></div>`,
+              )
+              .join("")
+          : `<p>Tidak ada insiden tercatat pada shift ini.</p>`;
+      }
+
+      function qfData() {
+        const a = A(),
+          pg = S.page,
+          li = S.rlvl || 0,
+          g = S.rgran || 2;
+        if (pg === "production") {
+          const L = lvl(li),
+            k = L.pace * dayK(),
+            G = [],
+            p2 = (n) => String(n).padStart(2, "0"),
+            bk = S.rblk || "all",
+            bb = blocks().find((b) => b.id === bk),
+            bs0 = bb && bb.act ? bb.share : 1;
+          for (let s = 0; s < 12; s += g) {
+            let tg = 0,
+              ac = 0,
+              el = 0;
+            for (let h = s; h < s + g; h++) {
+              const sh = a.hourlyShare[h],
+                ef = clamp(S.t - (6 + h), 0, 1);
+              tg += L.plan * sh * bs0;
+              ac += L.plan * sh * k * ef * bs0;
+              el += ef;
+            }
+            G.push({
+              l: g === 1 ? `${p2(6 + s)}:00` : `${p2(6 + s)}–${p2(6 + s + g)}`,
+              a: ac,
+              b: tg,
+              n: el > 0 ? ac - tg : null,
+            });
+          }
+          return {
+            G,
+            nm: ["Aktual", "Target", "Selisih"],
+            un: L.unit,
+            ttl: `Total ${MET[li]}${bb && bb.act ? " · Blok " + bk : ""}`,
+            total: `${fmt(L.val * bs0)}<span>${L.unit}</span>`,
+          };
+        }
+        const cs = cards(),
+          c0 = cs[0],
+          sh =
+            pg === "ecology"
+              ? ["Tailings", "ARD", "Highland", "Lowland"]
+              : ["Extraction", "Haulage", "Mill", "Portsite"];
+        return {
+          G: cs.map((c) => ({
+            l: sh[c.i],
+            a: c.A[1],
+            b: c.B[1],
+            n: c.A[1] - c.B[1],
+          })),
+          nm: [c0.A[0], c0.B[0], "Selisih"],
+          un: "",
+          ttl: `Total ${c0.A[0]}`,
+          total: fmt(cs.reduce((s, c) => s + c.A[1], 0)),
+        };
+      }
+
+      function qfChart(G, nm, un) {
+        const mob = matchMedia("(max-width:640px)").matches,
+          W = mob ? 520 : 1000,
+          H = 400,
+          L = mob ? 56 : 84,
+          R = 20,
+          T = 28,
+          B = 52,
+          pw = W - L - R,
+          ph = H - T - B;
+        const mx0 = Math.max(1, ...G.map((x) => Math.max(x.a, x.b))),
+          mn0 =
+            Math.min(0, ...G.filter((x) => x.n != null).map((x) => x.n)) * 1.15;
+        const st = niceStep(mx0 - mn0),
+          yMax = Math.ceil(mx0 / st) * st,
+          yMin = Math.floor(mn0 / st) * st;
+        const y = (v) => T + ((yMax - v) / (yMax - yMin)) * ph,
+          cw = pw / G.length,
+          bw = Math.min(34, cw * 0.22),
+          gap = 3,
+          cx = (i) => L + cw * (i + 0.5);
+        let s = `<svg viewBox="0 0 ${W} ${H}" class="qf-svg" role="img" aria-label="Grafik">`,
+          hits = "";
+        for (let v = yMin; v <= yMax + st / 1000; v += st)
+          s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="#e9ebef"/><text x="${L - 12}" y="${y(v) + 5}" text-anchor="end" class="qf-ax">${v < 0 ? "-" : ""}${K(Math.abs(v))}</text>`;
+        const bar = (v, x, c, i) =>
+          v > 0
+            ? `<rect class="qf-bar" style="--i:${i}" x="${x}" y="${y(v)}" width="${bw}" height="${y(0) - y(v)}" rx="8" fill="${c}"/>`
+            : "";
+        const pts = [];
+        G.forEach((x, i) => {
+          s +=
+            bar(x.b, cx(i) - bw - gap / 2, QF_C.b, i) +
+            bar(x.a, cx(i) + gap / 2, QF_C.a, i) +
+            `<text x="${cx(i)}" y="${H - 16}" text-anchor="middle" class="qf-ax">${x.l}</text>`;
+          hits += `<rect class="qf-hit" data-i="${i}" x="${cx(i) - cw / 2}" y="${T}" width="${cw}" height="${ph}" fill="transparent"/>`;
+          if (x.n != null) pts.push([cx(i), y(x.n)]);
+        });
+        if (pts.length > 1) {
+          let d = `M${pts[0][0]},${pts[0][1]}`;
+          for (let i = 0; i < pts.length - 1; i++) {
+            const p0 = pts[i - 1] || pts[i],
+              p1 = pts[i],
+              p2 = pts[i + 1],
+              p3 = pts[i + 2] || p2;
+            d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
+          }
+          s += `<path d="${d}" fill="none" stroke="${QF_C.n}" stroke-width="1.4" stroke-dasharray="3 3"/>`;
+        }
+        s +=
+          pts
+            .map(
+              (p) =>
+                `<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${QF_C.n}"/>`,
+            )
+            .join("") +
+          hits +
+          "</svg>";
+        const f = (v) => (v == null ? "—" : dec(v) + (un ? " " + un : "")),
+          on = Math.max(0, G.map((x) => x.n != null).lastIndexOf(true));
+        const tips = G.map(
+          (x, i) =>
+            `<div class="qf-tip ${i === on ? "on" : ""}" data-i="${i}" style="left:clamp(15%,${(cx(i) / W) * 100}%,85%)"><div><i style="background:${QF_C.a}"></i>${nm[0]}<b>${f(x.a)}</b></div><div><i style="background:${QF_C.b}"></i>${nm[1]}<b>${f(x.b)}</b></div><hr><div><i style="background:${QF_C.n}"></i>${nm[2]}<b>${f(x.n)}</b></div></div>`,
+        ).join("");
+        return s + tips;
+      }
+
+      const qfSmooth = (pts) => {
+        let d = `M${pts[0][0]},${pts[0][1]}`;
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p0 = pts[i - 1] || pts[i],
+            p1 = pts[i],
+            p2 = pts[i + 1],
+            p3 = pts[i + 2] || p2;
+          d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
+        }
+        return d;
+      };
+
+      function qfLine() {
+        const a = A(),
+          pl = a.np / 2,
+          pace = a.levelEfficiency[0],
+          idx = clamp(TODAY - S.day, 0, 6),
+          f0 = dayK(),
+          yd = SHIFT_HISTORY[idx + 1],
+          avg7 =
+            SHIFT_HISTORY.reduce((s, h) => s + h.factor, 0) /
+            SHIFT_HISTORY.length,
+          cum = (t, f) =>
+            pl * clamp(cumulativeHourShare(t) * pace * f, 0, 1.15);
+        const ser = [
+          { n: "Hari ini", c: QF_C.a, f: f0, upto: S.t, main: 1 },
+          { n: "Kemarin", c: QF_C.b, f: yd && yd.factor, upto: 18 },
+          { n: "Rata-rata 7 hari", c: QF_C.n, f: avg7, upto: 18 },
+          { n: "Target", c: "#9aa09c", f: 1 / pace, upto: 18, dash: 1 },
+        ].filter((s) => s.f != null);
+
+        const mob = matchMedia("(max-width:640px)").matches,
+          W = mob ? 520 : 1000,
+          H = 400,
+          Lm = mob ? 56 : 84,
+          R = 24,
+          T = 28,
+          B = 52,
+          pw = W - Lm - R,
+          ph = H - T - B;
+        const peak = Math.max(1, ...ser.map((s) => cum(18, s.f))),
+          st = niceStep(peak),
+          yMax = Math.ceil(peak / st) * st;
+        const x = (h) => Lm + ((h - 6) / 12) * pw,
+          y = (v) => T + (1 - v / yMax) * ph,
+          hs = Array.from({ length: 13 }, (_, i) => 6 + i);
+        const pts = (s) => {
+          const ts = hs.filter((h) => h < s.upto);
+          ts.push(s.upto);
+          return ts.map((t) => [x(t), y(cum(t, s.f))]);
+        };
+
+        let svg = `<svg viewBox="0 0 ${W} ${H}" class="qf-svg" role="img" aria-label="Perbandingan produksi kumulatif">
+      <defs><linearGradient id="qfg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${QF_C.a}" stop-opacity=".28"/><stop offset="1" stop-color="${QF_C.a}" stop-opacity="0"/></linearGradient></defs>`;
+        for (let v = 0; v <= yMax + st / 1000; v += st)
+          svg += `<line x1="${Lm}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="#e9ebef"/><text x="${Lm - 12}" y="${y(v) + 5}" text-anchor="end" class="qf-ax">${K(v)}</text>`;
+        for (let h = 6; h <= 18; h += mob ? 3 : 2)
+          svg += `<text x="${x(h)}" y="${H - 16}" text-anchor="middle" class="qf-ax">${hh(h)}</text>`;
+        svg += `<line x1="${x(S.t)}" x2="${x(S.t)}" y1="${T}" y2="${y(0)}" stroke="#c9cdc9" stroke-dasharray="4 4"/>`;
+
+        ser
+          .slice()
+          .reverse()
+          .forEach((s) => {
+            const p = pts(s),
+              i = ser.indexOf(s);
+            if (p.length < 2) return;
+            if (s.main)
+              svg += `<path class="qf-area" d="${qfSmooth(p)} L${p[p.length - 1][0]},${y(0)} L${p[0][0]},${y(0)}Z" fill="url(#qfg)"/>`;
+            svg += s.dash
+              ? `<path class="qf-fade" d="${qfSmooth(p)}" fill="none" stroke="${s.c}" stroke-width="2" stroke-dasharray="6 6"/>`
+              : `<path class="qf-line" style="--i:${ser.length - 1 - i}" pathLength="1" d="${qfSmooth(p)}" fill="none" stroke="${s.c}" stroke-width="${s.main ? 3.5 : 2.5}" stroke-linecap="round" stroke-linejoin="round"/>`;
+          });
+
+        const m = ser.find((s) => s.main),
+          mp = pts(m).pop();
+        svg += `<circle class="qf-pulse" cx="${mp[0]}" cy="${mp[1]}" r="7" fill="${m.c}"/><circle class="qf-dot" cx="${mp[0]}" cy="${mp[1]}" r="6.5" fill="${m.c}" stroke="#fff" stroke-width="3"/>`;
+        svg +=
+          hs
+            .map(
+              (h, i) =>
+                `<rect class="qf-hit" data-i="${i}" x="${x(h) - pw / 24}" y="${T}" width="${pw / 12}" height="${ph}" fill="transparent"/>`,
+            )
+            .join("") + "</svg>";
+
+        const f = (v) => fmtB(v) + " mt",
+          on = clamp(Math.floor(S.t) - 6, 0, 12);
+        const tips = hs
+          .map(
+            (h, i) =>
+              `<div class="qf-tip ${i === on ? "on" : ""}" data-i="${i}" style="left:clamp(15%,${(x(h) / W) * 100}%,85%)"><div style="color:var(--mut);font-size:13px">${hh(h)} WIB</div>${ser.map((s) => `<div><i style="background:${s.c}"></i>${s.n}<b>${h <= s.upto + 1e-9 ? f(cum(h, s.f)) : "—"}</b></div>`).join("")}</div>`,
+          )
+          .join("");
+        return { html: svg + tips, ser };
+      }
+      function reportHTML(mode = "") {
+        const pg = S.page,
+          isP = pg === "production",
+          li = S.rlvl || 0,
+          g = S.rgran || 2,
+          fil = S.rfil || "all",
+          u = CURRENT_USER || { name: "-", role: "-" },
+          sr = shiftRec();
+        const tabs = isP
+          ? [
+              ["sum", "Ringkasan"],
+              ["inc", "Insiden"],
+              ["prod", "Produksi"],
+              ["met", "Logam"],
+              ["flt", "Armada"],
+              ["cmp", "Perbandingan"],
+              ["hnd", "Serah Terima"],
+            ]
+          : [
+              ["sum", "Ringkasan"],
+              ["inc", "Insiden"],
+              [
+                "prod",
+                {
+                  personnel: "Personel",
+                  safety: "Keselamatan",
+                  ecology: "Ekologi",
+                }[pg] || "Status",
+              ],
+              ["hnd", "Serah Terima"],
+            ];
+        const tab = tabs.some((t) => t[0] === S.rtab) ? S.rtab : "sum";
+        const yr = new Date(S.day * 864e5).getUTCFullYear(),
+          stamp =
+            new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }) +
+            " WIB";
+        const card = (t, x, ex = "") =>
+          `<div class="qf-card"><div class="qf-th"><h4>${t}</h4>${ex}</div>${x}</div>`;
+        const kp = (k) =>
+          `<div class="kpis">${k.map((x) => `<div class="kpi"><small>${x[0]}</small><b>${x[1]}</b><span>${x[2]}</span></div>`).join("")}</div>`;
+        const bar = (p, s) =>
+          `<div class="pcw"><span class="pcb"><i class="pc-${s}" style="width:${clamp(p, 0, 100)}%"></i></span><b class="pct-${s}">${Math.round(p)}%</b></div>`;
+        const tb = (head, rows) =>
+          `<div class="qf-tb"><table><thead><tr>${head.map((h) => `<th${h[0] === "!" ? ' class="r"' : ""}>${h.replace(/^!/, "")}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
+        const pop = (k, items) =>
+          S.rpop === k
+            ? `<div class="qf-pop">${items.map((x) => `<button class="${x[3] ? "cur" : ""}" data-a="${x[0]}" data-v="${x[1]}">${x[2]}</button>`).join("")}</div>`
+            : "";
+        const days = Array.from({ length: 7 }, (_, i) => TODAY - i);
+        const ctl = `<div class="qf-ctl"><label class="qf-dr"><small>Rentang Data</small><select id="qfday">${days.map((d) => `<option value="${d}" ${d === S.day ? "selected" : ""}>${dLbl(d)} ${yr}${d === TODAY ? " (hari ini)" : ""}</option>`).join("")}</select></label>${isP ? fltHTML() : ""}</div>`;
+        const tool = (withFil) =>
+          `<div class="qf-tl"><label class="qf-sq">${I("search")}<input id="qfsq" placeholder="Cari…" autocomplete="off"></label>${
+            withFil
+              ? `<span class="qf-wrap"><button class="qf-ib" data-a="rpop" data-v="fil" aria-label="Filter tabel" title="Filter tabel">${I("funnel")}</button>${pop(
+                  "fil",
+                  [
+                    ["all", "Semua blok"],
+                    ["act", "Drawpoint aktif"],
+                    ["issue", "Bermasalah"],
+                    ["dev", "Pengembangan"],
+                  ].map((x) => ["rfil", x[0], x[1], fil === x[0]]),
+                )}</span>`
+              : ""
+          }<button class="qf-ib" data-a="copyrpt" aria-label="Salin ringkasan" title="Salin ringkasan">${I("copy")}</button><span class="qf-wrap"><button class="qf-ib" data-a="rpop" data-v="dl" aria-label="Unduh CSV" title="Unduh CSV">${I("dl")}</button>${pop(
+            "dl",
+            [
+              ["csv", "area", "CSV area ini"],
+              ["csv", "all", "CSV semua area"],
+              ["csv", "week", "CSV 7 hari"],
+            ],
+          )}</span><button class="qf-ib" data-a="mailrpt" aria-label="Email" title="Kirim via email">${I("mail")}</button><button class="qf-ib" data-a="print" data-v="rpt" aria-label="Cetak / PDF" title="Cetak / PDF">${I("print")}</button><button class="qf-add" data-a="rnoteadd">${I("plus")}Catatan</button></div>`;
+        const P = isP ? pd() : null,
+          cs = isP ? null : cards();
+        let body = "";
+
+        if (tab === "prod") {
+          const D = qfData();
+          const chart = `<div class="qf-card"><div class="qf-top">${isP ? `<button class="qf-ot" data-a="rgran">Per ${g} jam</button>` : `<span class="qf-ot">Per level</span>`}</div><div class="qf-gr"><div class="qf-plot">${qfChart(D.G, D.nm, D.un)}</div><div class="qf-side"><div class="qf-sc"><h5>${D.ttl}</h5><div class="v">${D.total}</div><div class="qf-dt">${I("cal")}${dLbl(S.day)} ${yr} · 06:00 – ${hh(S.t)} WIB</div></div><div class="qf-sc"><div class="qf-lg">${D.nm.map((n, i) => `<span><i style="background:${[QF_C.a, QF_C.b, QF_C.n][i]}"></i>${n}</span>`).join("")}</div></div></div></div></div>`;
+          let rows, head, title;
+          if (isP) {
+            title = "Aktivitas Blok";
+            head = [
+              "Blok",
+              "Pembaruan",
+              "Status",
+              "Unit",
+              "Pekerja",
+              "Kategori",
+              "!Sisa Ore",
+              "!" + I("gear"),
+            ];
+            const list = P.bs
+              .filter(
+                (b) =>
+                  fil === "all" ||
+                  (fil === "act" && b.act) ||
+                  (fil === "issue" && b.act && b.flag) ||
+                  (fil === "dev" && !b.act),
+              )
+              .filter((b) => (S.rblk || "all") === "all" || b.id === S.rblk)
+              .filter((b) => {
+                const s2 = S.rstat || "all";
+                return (
+                  s2 === "all" ||
+                  (b.act && (s2 === "ok" ? !b.flag : b.flag === s2))
+                );
+              });
+            rows =
+              list
+                .map((b) => {
+                  const st = b.act ? FLAGTXT[b.flag] || "Normal" : b.status,
+                    cat = b.act
+                      ? "Drawpoint aktif"
+                      : `Pengembangan ${b.devPct}%`,
+                    v = b.act ? b.ton : b.reserve;
+                  return `<tr data-t="${(b.id + " " + st + " " + cat).toLowerCase()}"><td data-l="Blok"><i class="qf-cb"></i>${b.id}</td><td data-l="Pembaruan">${hh(S.t)} WIB</td><td data-l="Status"${b.flag ? ` class="pct-${b.flag === "restr" ? "r" : "y"}"` : ""}>${st}</td><td data-l="Unit">${b.act ? b.u : "-"}</td><td data-l="Pekerja">${b.act ? b.w : "-"}</td><td data-l="Kategori">${cat}</td><td class="r" data-l="Sisa ore" title="${fmt(v)} mt">${fmtB(v)} mt</td><td></td></tr>`;
+                })
+                .join("") || `<tr><td colspan="8">Tidak ada data.</td></tr>`;
+          } else {
+            const c0 = cs[0];
+            title = "Status per Level";
+            head = ["Level", c0.A[0], c0.B[0], c0.bl, c0.C[0], c0.dl, "Status"];
+            const uT = (x) => (x && !PS[x] ? " " + x : "");
+            rows = cs
+              .map((c) => {
+                const ok = c.st !== "o" && c.st !== "r",
+                  s = ok ? "g" : "y",
+                  nm2 = (pg === "ecology" ? ECO : LEVELS)[c.i];
+                return `<tr data-t="${nm2.toLowerCase()}"><td data-l="Level"><i class="qf-cb"></i>${nm2}</td><td data-l="${c.A[0]}">${dec(c.A[1])}${uT(c.A[2])}</td><td data-l="${c.B[0]}">${dec(c.B[1])}${uT(c.B[2])}</td><td data-l="${c.bl}">${bar(c.pct, s)}</td><td data-l="${c.C[0]}">${dec(c.C[1])}</td><td data-l="${c.dl}">${dec(c.D[1])}</td><td data-l="Status"><span class="bdx ${s}">${ok ? "Normal" : "Perlu perhatian"}</span></td></tr>`;
+              })
+              .join("");
+          }
+          body = chart + card(title, tb(head, rows), tool(isP));
+        } else if (tab === "sum") {
+          if (isP) {
+            const lvRows = [0, 1, 2, 3]
+              .map((i) => {
+                const L = lvl(i),
+                  tg = tgtNow(i),
+                  p = capPct(L.val, tg),
+                  s = stOf(p);
+                return `<tr><td data-l="Level"><b>${LVN[i]}</b> – ${MET[i]}</td><td data-l="Aktual" title="${fmt(L.val)} ${L.unit}">${fmtB(L.val)} ${L.unit}</td><td data-l="Target s.d. jam ini">${fmtB(tg)} ${L.unit}</td><td data-l="Plan shift">${fmtB(L.plan)} ${L.unit}</td><td data-l="Capaian">${bar(p, s[0])}<span class="bdx ${s[0]}">${s[1]}</span></td></tr>`;
+              })
+              .join("");
+            body =
+              kp([
+                [
+                  "Produksi (ditambang)",
+                  fmtB(P.L0.val) + " mt",
+                  `Target s.d. jam ini ${fmtB(P.tg0)} mt · Plan ${fmtB(P.L0.plan)} mt`,
+                ],
+                [
+                  "Status keseluruhan",
+                  `<span class="bdx ${P.s0[0]}">${P.s0[1]}</span>`,
+                  `${Math.round(P.p0)}% dari target s.d. jam ini`,
+                ],
+                [
+                  "Blok bermasalah",
+                  `${P.bad.length} / ${P.act.length}`,
+                  P.bad.length
+                    ? P.bad
+                        .map((b) => b.id + " (" + FLAGTXT[b.flag] + ")")
+                        .join(", ")
+                    : "Semua blok normal",
+                ],
+                [
+                  "Unit rusak / maintenance",
+                  `${P.dn + P.mt} / ${P.fl.length}`,
+                  `${P.dn} breakdown · ${P.mt} maintenance`,
+                ],
+              ]) +
+              card(
+                "Capaian per Level",
+                tb(
+                  [
+                    "Level – Metrik",
+                    "Aktual",
+                    "Target s.d. jam ini",
+                    "Plan shift",
+                    "Capaian",
+                  ],
+                  lvRows,
+                ),
+                `<span class="hint2">Target = plan × porsi produksi hingga ${hh(S.t)}</span>`,
+              );
+          } else {
+            const sum = (f) => cs.reduce((s, c) => s + f(c), 0),
+              warn = cs.filter((c) => c.st === "o").length;
+            const kR =
+              {
+                personnel: [
+                  [
+                    "Personel hadir",
+                    fmt(sum((c) => c.A[1])),
+                    `dari roster ${fmt(sum((c) => c.B[1]))}`,
+                  ],
+                  [
+                    "Kehadiran",
+                    Math.round(
+                      (sum((c) => c.A[1]) / sum((c) => c.B[1])) * 100,
+                    ) + "%",
+                    "seluruh level",
+                  ],
+                  ["Shift boss", String(sum((c) => c.D[1])), "orang bertugas"],
+                  ["Level perlu perhatian", `${warn} / 4`, ""],
+                ],
+                safety: [
+                  ["Alarm gas", String(sum((c) => c.C[1])), "seluruh level"],
+                  [
+                    "Kejadian seismik",
+                    String(sum((c) => c.D[1])),
+                    "seluruh level",
+                  ],
+                  [
+                    "Ventilasi terendah",
+                    Math.round(Math.min(...cs.map((c) => c.pct))) + "%",
+                    "terhadap kebutuhan",
+                  ],
+                  ["Level perlu perhatian", `${warn} / 4`, ""],
+                ],
+                ecology: [
+                  [
+                    "pH terendah",
+                    fmtD(Math.min(...cs.map((c) => c.C[1]))),
+                    "batas aman ≥ 6,6",
+                  ],
+                  [
+                    "TSS tertinggi",
+                    fmt(Math.max(...cs.map((c) => c.D[1]))) + " mg/L",
+                    "seluruh titik",
+                  ],
+                  [
+                    "Utilisasi tertinggi",
+                    Math.round(Math.max(...cs.map((c) => c.pct))) + "%",
+                    "terhadap kapasitas",
+                  ],
+                  ["Titik perlu perhatian", `${warn} / 4`, ""],
+                ],
+              }[pg] || [];
+            body = kp(kR);
+          }
+        } else if (tab === "inc")
+          body = card("Insiden & Kejadian Shift", evList());
+        else if (tab === "met") {
+          const m = P.L0.val,
+            gr = P.a.grade;
+          body = card(
+            "Kandungan Logam",
+            kp([
+              [
+                "Tembaga (Cu)",
+                fmt(conv(m, "cu").v) + " t",
+                `kadar ${fmtD(gr[0], 2)}%`,
+              ],
+              [
+                "Emas (Au)",
+                fmtD(conv(m, "au").v) + " koz",
+                `kadar ${fmtD(gr[1], 2)} g/t`,
+              ],
+              [
+                "Perak (Ag)",
+                fmtD(conv(m, "ag").v) + " koz",
+                `kadar ${fmtD(gr[2], 2)} g/t`,
+              ],
+            ]),
+            `<span class="hint2">dari bijih ditambang s.d. ${hh(S.t)}</span>`,
+          );
+        } else if (tab === "flt") {
+          const bad = P.fl.filter((x) => x.st !== "ok");
+          body = card(
+            "Ringkasan Armada",
+            kp([
+              [
+                "Unit siap",
+                `${P.ready} / ${P.fl.length}`,
+                `${Math.round((P.ready / Math.max(1, P.fl.length)) * 100)}% dari armada`,
+              ],
+              [
+                "Unit tidak siap",
+                String(P.fl.length - P.ready),
+                `${P.dn} breakdown · ${P.mt} maintenance`,
+              ],
+              [
+                "Availability rata-rata",
+                fmtD(P.av) + "%",
+                "rata-rata seluruh unit",
+              ],
+            ]) +
+              (bad.length
+                ? `<div style="height:18px"></div>` +
+                  tb(
+                    ["Unit", "Tipe", "Blok", "Status", "Keterangan"],
+                    bad
+                      .map(
+                        (x) =>
+                          `<tr><td data-l="Unit">${x.id}</td><td data-l="Tipe">${x.n}</td><td data-l="Blok">${x.blk}</td><td data-l="Status" class="pct-${x.st === "down" ? "r" : "y"}">${x.st === "down" ? "Breakdown" : "Maintenance"}</td><td data-l="Keterangan">${x.op}</td></tr>`,
+                      )
+                      .join(""),
+                  )
+                : ""),
+          );
+        } else if (tab === "cmp") {
+          const C = qfLine(),
+            idx = clamp(TODAY - S.day, 0, 6),
+            f0 = dayK(),
+            yd = SHIFT_HISTORY[idx + 1],
+            avg7 =
+              SHIFT_HISTORY.reduce((s, h) => s + h.factor, 0) /
+              SHIFT_HISTORY.length;
+          const rows = [
+            ["Hari ini", f0],
+            ["Kemarin", yd && yd.factor],
+            ["Rata-rata 7 hari", avg7],
+          ]
+            .map(([l, f], j) => {
+              if (f == null)
+                return `<tr><td data-l="Pembanding">${l}</td><td data-l="Ditambang">—</td><td data-l="Selisih">Data tidak tersedia</td></tr>`;
+              const v = (P.L0.val / f0) * f,
+                d = v > 0 ? (P.L0.val / v - 1) * 100 : 0;
+              return `<tr><td data-l="Pembanding"><b>${l}</b></td><td data-l="Ditambang (jam yang sama)">${fmtB(v)} mt</td><td data-l="Selisih hari ini">${j === 0 ? "—" : `<b class="pct-${d >= 0 ? "g" : "r"}">${d >= 0 ? "+" : ""}${fmtD(d)}%</b>`}</td></tr>`;
+            })
+            .join("");
+          const gr = `<div class="qf-gr"><div class="qf-plot">${C.html}</div><div class="qf-side"><div class="qf-sc"><h5>Ditambang s.d. ${hh(S.t)}</h5><div class="v">${fmtB(P.L0.val)}<span>mt</span></div><div class="qf-dt">${I("cal")}${dLbl(S.day)} ${yr}</div></div><div class="qf-sc"><div class="qf-lg">${C.ser.map((s) => `<span><i style="background:${s.c}"></i>${s.n}</span>`).join("")}</div></div></div></div>`;
+          body =
+            card(
+              "Perbandingan Produksi",
+              gr,
+              `<span class="hint2">Kumulatif ditambang per jam (mt)</span>`,
+            ) +
+            card(
+              "Rincian Perbandingan",
+              tb(
+                ["Pembanding", "Ditambang (jam yang sama)", "Selisih hari ini"],
+                rows,
+              ),
+            );
+        } else {
+          const info = [
+            ["No. dokumen", docNo()],
+            ["Dibuat oleh", `${u.name} · ${u.role}`],
+            ["Dibuat pada", stamp],
+            ["Shift Boss", sr.supervisor],
+          ];
+          body =
+            card(
+              "Catatan Serah Terima & Persetujuan",
+              `<div class="rinfo" style="margin-top:0">${info.map((x) => `<div><small>${x[0]}</small><b>${x[1]}</b></div>`).join("")}</div><div style="height:14px"></div><textarea class="rnote" id="rnote" placeholder="Catatan serah terima untuk shift berikutnya…">${esc(S.rnote || "")}</textarea><div class="sign"><div><small>Dibuat oleh</small><i></i><b>${u.name}</b><br>${u.role}</div><div><small>Diperiksa (Shift Boss)</small><i></i><b>${sr.supervisor}</b></div><div><small>Disetujui</small><i></i><b>(......................)</b></div></div>`,
+            ) +
+            (isP
+              ? card(
+                  "Legenda Istilah",
+                  `<div class="legend">${GLOSS.map((x) => `<div><b>${x[0]}</b> — ${x[1]}</div>`).join("")}</div>`,
+                )
+              : "");
+        }
+        return `<div class="qf${mode ? " qf-" + mode : ""}"><div class="qf-tabs" role="tablist">${tabs.map((t) => `<button class="${t[0] === tab ? "on" : ""}" data-a="rtab" data-v="${t[0]}" role="tab">${t[1]}</button>`).join("")}</div>${ctl}<div class="qf-body">${body}</div></div>`;
+      }
+
+      function refreshReport(mode) {
+        const q = document.querySelector(".qf");
+        if (q) q.outerHTML = reportHTML(mode);
+      }
+      function printReport() {
+        let p = $("qfprint");
+        if (!p) {
+          p = document.createElement("div");
+          p.id = "qfprint";
+          document.body.appendChild(p);
+        }
+        p.innerHTML = printHTML();
+        document.body.classList.add("printing-rpt");
+        const done = () => {
+          document.body.classList.remove("printing-rpt");
+          window.removeEventListener("afterprint", done);
+        };
+        window.addEventListener("afterprint", done);
+        window.print();
+      }
+
+      /* Dipanggil di baris pertama act(): jika true, aksi sudah ditangani */
+      function qfAct(a, d) {
+        switch (a) {
+          case "report":
+            S.menu = null;
+            S.rtab = "sum"; // halaman pertama = Ringkasan
+            S.rpop = null;
+            openModal("report", reportTitle(), reportHTML("in"));
+            renderAll();
+            return true;
+          case "rtab":
+            S.rtab = d.v;
+            S.rpop = null;
+            refreshReport("sw");
+            return true;
+          case "rgran":
+            S.rgran = (S.rgran || 2) === 2 ? 1 : 2;
+            refreshReport("sw");
+            return true;
+          case "rlvl":
+            S.rlvl = +d.v;
+            refreshReport();
+            return true;
+          case "rblk":
+            S.rblk = d.v;
+            refreshReport();
+            return true;
+          case "rstat":
+            S.rstat = d.v;
+            refreshReport();
+            return true;
+          case "rreset":
+            S.rlvl = 0;
+            S.rblk = "all";
+            S.rstat = "all";
+            refreshReport();
+            return true;
+          case "rfil":
+            S.rfil = d.v;
+            S.rpop = null;
+            refreshReport();
+            return true;
+          case "rpop":
+            S.rpop = S.rpop === d.v ? null : d.v;
+            refreshReport();
+            return true;
+          case "rnoteadd":
+            S.rtab = "hnd";
+            S.rpop = null;
+            refreshReport();
+            setTimeout(() => $("rnote") && $("rnote").focus(), 30);
+            return true;
+          case "copyrpt": {
+            const txt = rptText();
+            const ok = () => toast("Ringkasan disalin"),
+              fb = () => {
+                const t = document.createElement("textarea");
+                t.value = txt;
+                t.style.cssText = "position:fixed;opacity:0";
+                document.body.appendChild(t);
+                t.select();
+                let r = false;
+                try {
+                  r = document.execCommand("copy");
+                } catch (x) {}
+                t.remove();
+                toast(r ? "Ringkasan disalin" : "Gagal menyalin");
+              };
+            try {
+              navigator.clipboard.writeText(txt).then(ok, fb);
+            } catch (x) {
+              fb();
+            }
+            return true;
+          }
+          case "mailrpt":
+            location.href =
+              "mailto:?subject=" +
+              encodeURIComponent(
+                `${reportTitle()} ${A().short} ${dLbl(S.day)}`,
+              ) +
+              "&body=" +
+              encodeURIComponent(rptText());
+            return true;
+          case "csv": {
+            const sc = d.v || "area",
+              ks = sc === "all" ? allowedAreas() : [S.area],
+              ds =
+                sc === "week"
+                  ? SHIFT_HISTORY.map((_, i) => TODAY - i)
+                  : [S.day],
+              rows = ["Seksi,Area,Tanggal,Item,Metrik,Nilai,Satuan"];
+            ks.forEach((k) => ds.forEach((dd) => rows.push(...csvFor(k, dd))));
+            const l = document.createElement("a");
+            l.href = URL.createObjectURL(
+              new Blob(["\ufeff" + rows.join("\n")], { type: "text/csv" }),
+            );
+            l.download = `ptfi-${sc === "all" ? "semua-area" : A().short}-${sc === "week" ? "7hari" : dLbl(S.day).replace(" ", "-")}.csv`;
+            document.body.appendChild(l);
+            l.click();
+            l.remove();
+            S.rpop = null;
+            refreshReport();
+            toast("CSV diunduh");
+            return true;
+          }
+          case "print":
+            if (d.v !== "rpt") return false;
+            printReport();
+            return true;
+        }
+        return false;
+      }
+      document.addEventListener("input", (e) => {
+        const t = e.target;
+        if (t.id === "rnote") S.rnote = t.value;
+        if (t.id === "qfsq") {
+          const q = t.value.toLowerCase();
+          document
+            .querySelectorAll(".qf-tb tbody tr[data-t]")
+            .forEach(
+              (r) => (r.style.display = r.dataset.t.includes(q) ? "" : "none"),
+            );
+        }
+      });
+      document.addEventListener("change", (e) => {
+        if (e.target.id === "qfday") {
+          S.day = +e.target.value;
+          S.live = S.day === TODAY;
+          if (S.live) S.t = NOWH;
+          S.rpop = null;
+          renderAll();
+          refreshReport();
+        }
+      });
+      const qfTip = (e) => {
+        const h = e.target.closest && e.target.closest(".qf-hit");
+        if (!h) return;
+        h.closest(".qf-plot")
+          .querySelectorAll(".qf-tip")
+          .forEach((t) =>
+            t.classList.toggle("on", t.dataset.i === h.dataset.i),
+          );
+      };
+      document.addEventListener("mouseover", qfTip);
+      const QF_ACTS = new Set([
+        "report",
+        "rtab",
+        "rgran",
+        "rlvl",
+        "rblk",
+        "rstat",
+        "rreset",
+        "rfil",
+        "rpop",
+        "rnoteadd",
+        "copyrpt",
+        "mailrpt",
+        "csv",
+        "print",
+      ]);
+      document.addEventListener(
+        "click",
+        (e) => {
+          if (!CURRENT_USER) return;
+          qfTip(e);
+          const el = e.target.closest && e.target.closest("[data-a]");
+          if (
+            el &&
+            QF_ACTS.has(el.dataset.a) &&
+            qfAct(el.dataset.a, el.dataset)
+          ) {
+            e.stopPropagation();
+            return;
+          }
+          if (S.rpop && !e.target.closest(".qf-pop,[data-a=rpop]")) {
+            S.rpop = null;
+            refreshReport();
+          }
+        },
+        true,
+      );
+
+      /* TIDAK PERLU mengedit act(): klik ditangani otomatis oleh listener di atas. */
       function sysHTML() {
         const f = flagsOf(),
           u = CURRENT_USER,
@@ -6315,30 +8821,30 @@ ${
               .join(", ")
           : "";
         return `<div class="rpt sys">
-${
-  u
-    ? `<div class="usr-box">
-<div class="usr-info">
-<div class="usr-badge">${u.initials}</div>
-<div>
-<div style="font-weight:500;font-size:15.5px">${u.name}</div>
-<div style="font-size:13px;color:var(--mut);margin-top:2px">${u.role} · Akses Modul: <b style="color:var(--ink);font-weight:500">${pageNames}</b></div>
-</div>
-</div>
-<div style="display:flex;gap:8px;flex-wrap:wrap">
-<button class="btn l" data-a="resetdb" style="display:inline-flex;align-items:center;gap:8px">${I("undo")}Reset Status</button>
-<button class="btn danger" data-a="logout" style="display:inline-flex;align-items:center;gap:8px">${I("logout")}Keluar Sesi</button>
-</div>
-</div>`
-    : ""
-}
-<div class="sh first"><h4>Ringkasan anomali aktif</h4><span class="hint2">evaluasi ambang sensor otomatis</span></div>
-<div class="anl">${an.length ? an.map((x) => `<div class="an ${x.c}"><span class="ai">${I(x.ic)}</span><span>${x.t}</span></div>`).join("") : `<div class="an ok"><span class="ai">${I("check")}</span><span>Tidak ada anomali aktif pada area ${A().short}.</span></div>`}</div>
-<div class="sh"><h4>Status koneksi integrasi data</h4></div>
-<div class="tw"><table><thead><tr><th>Sistem</th><th>Status</th><th>Keterangan</th></tr></thead><tbody>${src.map((r) => `<tr><td>${r[0]}</td><td><span class="pl ok">${r[1]}</span></td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
-<div class="sh"><h4>Acuan teknis spesifikasi tambang</h4></div>
-<div class="refl">${refs.map((r) => `<div class="rf2"><span class="ai">${I("link")}</span><span>${r[0]} <a href="${r[1]}" target="_blank" rel="noopener">${r[2]}</a></span></div>`).join("")}</div>
-<div class="note">${I("info")}<p>Dataset operasional tersimpan secara deterministik di penyimpanan lokal dan mendukung integrasi langsung ke <b>REST API Gateway</b> melalui konfigurasi <code>window.PTFI_API_CONFIG</code>.</p></div></div>`;
+      ${
+        u
+          ? `<div class="usr-box">
+      <div class="usr-info">
+      <div class="usr-badge">${u.initials}</div>
+      <div>
+      <div style="font-weight:500;font-size:15.5px">${u.name}</div>
+      <div style="font-size:13px;color:var(--mut);margin-top:2px">${u.role} · Akses Modul: <b style="color:var(--ink);font-weight:500">${pageNames}</b></div>
+      </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn l" data-a="resetdb" style="display:inline-flex;align-items:center;gap:8px">${I("undo")}Reset Status</button>
+      <button class="btn danger" data-a="logout" style="display:inline-flex;align-items:center;gap:8px">${I("logout")}Keluar Sesi</button>
+      </div>
+      </div>`
+          : ""
+      }
+      <div class="sh first"><h4>Ringkasan anomali aktif</h4><span class="hint2">evaluasi ambang sensor otomatis</span></div>
+      <div class="anl">${an.length ? an.map((x) => `<div class="an ${x.c}"><span class="ai">${I(x.ic)}</span><span>${x.t}</span></div>`).join("") : `<div class="an ok"><span class="ai">${I("check")}</span><span>Tidak ada anomali aktif pada area ${A().short}.</span></div>`}</div>
+      <div class="sh"><h4>Status koneksi integrasi data</h4></div>
+      <div class="tw"><table><thead><tr><th>Sistem</th><th>Status</th><th>Keterangan</th></tr></thead><tbody>${src.map((r) => `<tr><td>${r[0]}</td><td><span class="pl ok">${r[1]}</span></td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
+      <div class="sh"><h4>Acuan teknis spesifikasi tambang</h4></div>
+      <div class="refl">${refs.map((r) => `<div class="rf2"><span class="ai">${I("link")}</span><span>${r[0]} <a href="${r[1]}" target="_blank" rel="noopener">${r[2]}</a></span></div>`).join("")}</div>
+      <div class="note">${I("info")}<p>Dataset operasional tersimpan secara deterministik di penyimpanan lokal dan mendukung integrasi langsung ke <b>REST API Gateway</b> melalui konfigurasi <code>window.PTFI_API_CONFIG</code>.</p></div></div>`;
       }
       function camHTML() {
         const feeds = [
