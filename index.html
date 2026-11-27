@@ -4589,6 +4589,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
       /* ===== ROLE-BASED ACCESS CONTROL (RBAC) ===== */
       const USERS = [
         {
+          empId: "FI-240117",
           user: "mine.director",
           pass: "Tz4#vR8mQ!2kLp",
           name: "G. Hartanto",
@@ -4598,6 +4599,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           areas: ["GBC", "DMLZ", "BGS"],
         },
         {
+          empId: "FI-240283",
           user: "ops.prod",
           pass: "Kp9$wX3nB@7dHe",
           name: "C. Wibisono",
@@ -4607,6 +4609,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           areas: ["GBC", "DMLZ", "BGS"],
         },
         {
+          empId: "FI-240451",
           user: "hr.workforce",
           pass: "Mv6&jT2cY#5rZq",
           name: "N. Anggraeni",
@@ -4616,6 +4619,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           areas: ["GBC", "DMLZ", "BGS"],
         },
         {
+          empId: "FI-240569",
           user: "ug.safety",
           pass: "Qd3!sL8xN$4gWb",
           name: "I. Firmansyah",
@@ -4625,6 +4629,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           areas: ["GBC", "DMLZ", "BGS"],
         },
         {
+          empId: "FI-240736",
           user: "env.tailings",
           pass: "Hf8@rB5kV#1tXm",
           name: "L. Puspitasari",
@@ -8828,8 +8833,7 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
       <div class="usr-badge">${u.initials}</div>
       <div>
       <div style="font-weight:500;font-size:15.5px">${u.name}</div>
-      <div style="font-size:13px;color:var(--mut);margin-top:2px">${u.role} · Akses Modul: <b style="color:var(--ink);font-weight:500">${pageNames}</b></div>
-      </div>
+<div style="font-size:13px;color:var(--mut);margin-top:2px">${u.role} · ID: <b style="color:var(--ink);font-weight:500">${u.empId}</b> · Akses Modul: <b style="color:var(--ink);font-weight:500">${pageNames}</b></div>      </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn l" data-a="resetdb" style="display:inline-flex;align-items:center;gap:8px">${I("undo")}Reset Status</button>
@@ -9633,7 +9637,10 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         const card = $("loginCard");
 
         const found = USERS.find(
-          (acc) => acc.user.toLowerCase() === uVal && acc.pass === pVal,
+          (acc) =>
+            (acc.user.toLowerCase() === uVal ||
+              acc.empId.toLowerCase() === uVal) &&
+            acc.pass === pVal,
         );
 
         if (!found) {
