@@ -7649,10 +7649,10 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
         line-height: 1;
       }
       .modal:has(.qf) h3::before {
-        content: "PT Freeport Indonesia  ·  Laporan Resmi Shift";
+        content: "PT Freeport Indonesia";
       }
       .modal:has(.sx) h3::before {
-        content: "PT Freeport Indonesia  ·  Kontrol Akses & Integrasi";
+        content: "PT Freeport Indonesia";
       }
 
       /* aksen garis hijau di bawah judul */
@@ -7711,6 +7711,292 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           width: 38px !important;
           height: 38px !important;
         }
+      }
+      /* =====================================================================
+   PATCH ANIMASI MASUK — Navigasi laporan + Rentang Data + Filters
+   TEMPEL di AKHIR <style> (paling bawah, setelah semua patch lain)
+   Murni CSS. Hanya berjalan saat laporan DIBUKA (class .qf-in),
+   tidak berulang saat ganti tab / refresh. Mati otomatis jika
+   pengguna memilih "kurangi gerakan" (aturan global sudah ada).
+   ===================================================================== */
+
+      @keyframes qxTitleIn {
+        from {
+          opacity: 0;
+          transform: translateY(-14px);
+          letter-spacing: 7px;
+          filter: blur(6px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+          filter: none;
+        }
+      }
+      @keyframes qxNavIn {
+        from {
+          opacity: 0;
+          transform: translateY(-24px) scale(0.96);
+          filter: blur(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+          filter: none;
+        }
+      }
+      @keyframes qxTabIn {
+        from {
+          opacity: 0;
+          transform: translateY(16px) scale(0.84);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes qxIconPop {
+        0% {
+          opacity: 0;
+          transform: scale(0.35) rotate(-45deg);
+        }
+        70% {
+          opacity: 1;
+          transform: scale(1.14) rotate(6deg);
+        }
+        100% {
+          transform: none;
+        }
+      }
+      @keyframes qxBdPop {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        60% {
+          opacity: 1;
+          transform: scale(1.25);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes qxSheen {
+        from {
+          left: -45%;
+        }
+        to {
+          left: 120%;
+        }
+      }
+      @keyframes qxCtlIn {
+        from {
+          opacity: 0;
+          transform: translateY(26px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes qxDayIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px) scale(0.7);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes qxSlideL {
+        from {
+          opacity: 0;
+          transform: translateX(-26px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes qxSlideR {
+        from {
+          opacity: 0;
+          transform: translateX(26px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes qxDayOn {
+        0%,
+        100% {
+          transform: none;
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      /* ---------- Judul modal (hanya sekali, saat dibuka) ---------- */
+      .modal:has(.qf) h3,
+      .modal:has(.sx) h3 {
+        animation: qxTitleIn 0.85s var(--ease) 0.1s backwards;
+      }
+
+      /* ---------- Kartu navigasi ---------- */
+      .qf.qf-in .qf-nav {
+        overflow: hidden;
+        animation: qxNavIn 0.8s var(--ease) 0.05s backwards;
+      }
+      /* kilau yang menyapu kartu navigasi satu kali */
+      .qf.qf-in .qf-nav::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -45%;
+        width: 38%;
+        pointer-events: none;
+        background: linear-gradient(
+          100deg,
+          transparent,
+          rgba(255, 255, 255, 0.95),
+          transparent
+        );
+        transform: skewX(-18deg);
+        animation: qxSheen 1.1s var(--ease) 0.5s both;
+      }
+
+      /* tab muncul berurutan dari kiri ke kanan */
+      .qf.qf-in .qf-tabs button {
+        animation: qxTabIn 0.6s var(--spring) backwards;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(1) {
+        animation-delay: 0.2s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(2) {
+        animation-delay: 0.255s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(3) {
+        animation-delay: 0.31s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(4) {
+        animation-delay: 0.365s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(5) {
+        animation-delay: 0.42s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(6) {
+        animation-delay: 0.475s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(7) {
+        animation-delay: 0.53s;
+      }
+
+      /* ikon tab berputar masuk */
+      .qf.qf-in .qf-tabs button .qt-ic {
+        animation: qxIconPop 0.65s var(--spring) backwards;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(1) .qt-ic {
+        animation-delay: 0.3s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(2) .qt-ic {
+        animation-delay: 0.355s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(3) .qt-ic {
+        animation-delay: 0.41s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(4) .qt-ic {
+        animation-delay: 0.465s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(5) .qt-ic {
+        animation-delay: 0.52s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(6) .qt-ic {
+        animation-delay: 0.575s;
+      }
+      .qf.qf-in .qf-tabs button:nth-child(7) .qt-ic {
+        animation-delay: 0.63s;
+      }
+
+      /* badge angka membal */
+      .qf.qf-in .qt-bd {
+        animation: qxBdPop 0.55s var(--spring) 0.75s backwards;
+      }
+
+      /* baris progres + batang progres */
+      .qf.qf-in .qf-prog-row {
+        animation: fade 0.6s var(--ease) 0.6s backwards;
+      }
+      .qf.qf-in .qf-prog i {
+        animation-delay: 0.7s;
+      }
+
+      /* ---------- Rentang Data + Filters ---------- */
+      .qf.qf-in .qx-ctl {
+        animation: qxCtlIn 0.7s var(--spring) 0.45s backwards;
+      }
+      .qf.qf-in .qx-rd {
+        animation: qxSlideL 0.7s var(--ease) 0.5s backwards;
+      }
+      .qf.qf-in .qx-rd-i {
+        animation: qxIconPop 0.65s var(--spring) 0.65s backwards;
+      }
+      .qf.qf-in .qx-rd-t {
+        animation: fade 0.6s var(--ease) 0.7s backwards;
+      }
+
+      .qf.qf-in .qx-days button {
+        animation: qxDayIn 0.5s var(--spring) backwards;
+      }
+      .qf.qf-in .qx-days button:nth-child(1) {
+        animation-delay: 0.7s;
+      }
+      .qf.qf-in .qx-days button:nth-child(2) {
+        animation-delay: 0.74s;
+      }
+      .qf.qf-in .qx-days button:nth-child(3) {
+        animation-delay: 0.78s;
+      }
+      .qf.qf-in .qx-days button:nth-child(4) {
+        animation-delay: 0.82s;
+      }
+      .qf.qf-in .qx-days button:nth-child(5) {
+        animation-delay: 0.86s;
+      }
+      .qf.qf-in .qx-days button:nth-child(6) {
+        animation-delay: 0.9s;
+      }
+      .qf.qf-in .qx-days button:nth-child(7) {
+        animation-delay: 0.94s;
+      }
+      /* hari terpilih berdenyut sekali setelah semua hari muncul */
+      .qf.qf-in .qx-days button.on {
+        animation:
+          qxDayIn 0.5s var(--spring) 0.94s backwards,
+          qxDayOn 0.6s var(--spring) 1.35s;
+      }
+
+      .qf.qf-in .qx-fl {
+        animation: qxSlideR 0.7s var(--ease) 0.7s backwards;
+      }
+
+      /* ---------- Isi laporan menunggu kontrol selesai muncul ---------- */
+      .qf.qf-in .qf-body > *:nth-child(1) {
+        animation-delay: 0.6s;
+      }
+      .qf.qf-in .qf-body > *:nth-child(2) {
+        animation-delay: 0.72s;
+      }
+      .qf.qf-in .qf-body > *:nth-child(3) {
+        animation-delay: 0.84s;
+      }
+
+      /* ---------- Pager bawah ikut muncul ---------- */
+      .qf.qf-in .qf-pager {
+        animation: up 0.6s var(--ease) 1s backwards;
       }
     </style>
   </head>
