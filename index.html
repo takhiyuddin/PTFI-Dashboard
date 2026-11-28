@@ -5460,6 +5460,73 @@ RESPONSIVE BREAKPOINTS (4 TIER DEVICE MATRIX)
           font-size: 32px;
         }
       }
+      /* ===== Profil Akses & Status Sistem: Layar Penuh ===== */
+      .mbg:has(.sx) {
+        padding: 0;
+        align-items: stretch;
+        justify-items: stretch;
+        backdrop-filter: none;
+        background: #fff;
+      }
+      .modal:has(.sx) {
+        width: 100vw;
+        max-width: none;
+        height: 100dvh;
+        max-height: none;
+        border-radius: 0;
+        box-shadow: none;
+        padding: calc(18px + env(safe-area-inset-top)) clamp(14px, 3vw, 40px)
+          calc(28px + env(safe-area-inset-bottom));
+        overflow-y: auto;
+        animation: qfModalIn 0.7s var(--spring);
+      }
+
+      /* Judul + tombol tutup tetap terlihat saat scroll */
+      .modal:has(.sx) h3 {
+        position: sticky;
+        top: calc(-18px - env(safe-area-inset-top));
+        z-index: 8;
+        background: #fff;
+        margin: calc(-18px - env(safe-area-inset-top)) 0 18px;
+        padding: calc(18px + env(safe-area-inset-top)) 0 12px;
+        font-size: 30px;
+        letter-spacing: -0.6px;
+      }
+
+      /* Konten dibatasi lebar agar nyaman dibaca di monitor besar */
+      .modal:has(.sx) h3,
+      .modal:has(.sx) .sx {
+        max-width: 1480px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .modal:has(.sx) .sx {
+        padding: clamp(14px, 2vw, 28px);
+      }
+      .modal:has(.sx) .sx-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 24px;
+      }
+      @media (max-width: 900px) {
+        .modal:has(.sx) .sx-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 640px) {
+        .mbg:has(.sx) {
+          align-items: stretch;
+        }
+        .modal:has(.sx) {
+          border-radius: 0;
+          max-height: none;
+          padding-left: 14px;
+          padding-right: 14px;
+          animation: sl 0.55s var(--spring);
+        }
+        .modal:has(.sx) h3 {
+          font-size: 22px;
+        }
+      }
     </style>
   </head>
   <body class="locked">
